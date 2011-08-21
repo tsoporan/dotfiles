@@ -2,6 +2,16 @@
 
 set nocompatible "removes compatibility with vi
 
+
+set undofile "allow for persistent undo, i.e after closing file
+set undodir=/tmp  "don't litter working dir with persistent undo files
+
+cnoreabbrev Wq wq "treat Wq as wg 
+cnoreabbrev W w " treat W as w
+
+" always display the status line
+set laststatus=2
+
 "256 color
 set t_Co=256
 colorscheme maroloccio 
