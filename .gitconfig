@@ -1,0 +1,6 @@
+[user]
+	name = Titus Soporan
+	email = titus@tsoporan.com
+[core]
+	editor = vim
+	autocrlf = input
