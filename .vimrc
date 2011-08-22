@@ -1,4 +1,4 @@
-"tsoporan's config ~ tsoporan@gmail.com
+"tsoporan's config ~ titus@tsoporan.com 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
