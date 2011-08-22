@@ -1,25 +1,31 @@
-urxvt*loginShell:true
-urxvt*transparent:true
-urxvt*shading: 30
-urxvt*background:Black
-urxvt*foreground:White
-urxvt*scrollBar:false
-urxvt*scrollBar_right:true
-urxvt*transpscrollbar:true
-urxvt*saveLines:32767
-urxvt*urgentOnBell: True
-urxvt*visualBell: False
-urxvt*skipScroll: True
-urxvt*font: xft:Terminus:autohint=true:antialias=true:size=10
-
-urxvt.perl-ext-common: default,matcher
-urxvt.urlLauncher: chromium-browser 
-urxvt.matcher.button: 1
-urxvt.underlineURLs: true
+URxvt*loginShell:true
+URxvt*transparent:true
+URxvt*shading: 30
+URxvt*background:Black
+URxvt*foreground:White
+URxvt*scrollBar:false
+URxvt*transpscrollbar:true
+URxvt*saveLines:32767
+URxvt*urgentOnBell: True
+URxvt*visualBell: False
+URxvt*skipScroll: True
 
 
+!Fonts
 Xft.dpi:		 96
 Xft.antialias:           true 
 Xft.hinting:             true
-Xft.hintstyle:           hintfull
-Xft.rgba:		 rgb
+Xt.hintstyle:           hintfull
+Xft.lcdfilter:           lcdfilter
+Xft.rgba:		 vrgb
+
+URxvt.font:xft:EnvyCodeR:autohint=true:antialias=true:size=10
+
+!Clickable URLS
+URxvt.perl-ext-common: default,matcher
+URxvt.urlLauncher: /usr/bin/chromium 
+URxvt.matcher.button: 1
+URxvt.keysym.C-Delete: perl:matcher
+URxvt.underlineURLs: true
+
+
