@@ -1,7 +1,8 @@
 "tsoporan's config ~ tsoporan@gmail.com
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 
 set nocompatible "removes compatibility with vi
-
 
 set undofile "allow for persistent undo, i.e after closing file
 set undodir=/tmp  "don't litter working dir with persistent undo files
@@ -12,9 +13,14 @@ cnoreabbrev W w " treat W as w
 " always display the status line
 set laststatus=2
 
-"256 color
-set t_Co=256
-colorscheme maroloccio 
+"Colorz
+
+set background=dark
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
+colorscheme solarized
 
 "better completion
 set wildmenu
@@ -58,9 +64,8 @@ set novisualbell
 set noerrorbells
 
 set ttyfast
-set ruler
+"set ruler
 set backspace=indent,eol,start
-set laststatus=2
 
 "set relativenumber
 
@@ -80,14 +85,21 @@ autocmd BufReadPost *
 
 syntax on
 
+filetype on
 filetype plugin on
 filetype plugin indent on
 
-filetype plugin on
-autocmd FileType python set complete+=k~/.vim/syntax/python3.0.vim isk+=.,(
 
-"autocmd FileType html set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
-"autocmd FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+autocmd FileType html set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+autocmd FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
+
+"CloseTag only load for html/xml like files
+autocmd FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=1
+autocmd FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
+
+"omnicomplete supertab
+let g:SuperTabDefaultCompletionType = "context"
+
 
 "Map nerdtree to f2
 map <F2> :NERDTreeToggle<CR>
