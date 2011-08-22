@@ -7,14 +7,17 @@ set nocompatible "removes compatibility with vi
 set undofile "allow for persistent undo, i.e after closing file
 set undodir=/tmp  "don't litter working dir with persistent undo files
 
-cnoreabbrev Wq wq "treat Wq as wg 
-cnoreabbrev W w " treat W as w
+"treat Wq as wg 
+cnoreabbrev Wq wq 
+"treat W as w
+cnoreabbrev W w 
+"treat Q as q
+cnoreabbrev Q q 
 
-" always display the status line
+"always display the status line
 set laststatus=2
 
-"Colorz
-
+"colorz
 set background=dark
 let g:solarized_termtrans=1
 let g:solarized_termcolors=256
@@ -31,9 +34,9 @@ set fileencoding=utf-8
 scriptencoding utf-8
 
 
-set history=50    " keep 50 lines of command line history
-set showcmd   " display incomplete commands
-set incsearch   " do incremental searching
+set history=50  "keep 50 lines of command line history
+set showcmd   "display incomplete commands
+set incsearch   "do incremental searching
 set autoindent
 
 
