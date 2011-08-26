@@ -1,33 +1,43 @@
+! ----------------------------------------------------------------------------
+! file:     ~/.Xresources
+! author:   Titus Soporan - http://tsoporan.com
+! modified: August 2011
+! ----------------------------------------------------------------------------
+
+
+! -- URxvt Settings
 urxvt*loginShell:true
+urxvt*saveLines: 1000
+urxvt*urgentOnBell: True
+urxvt*visualBell: False
+urxvt*scrollBar:false
+
+! -- Terminal Colors
 urxvt*transparent:true
 urxvt*shading: 30
 urxvt*background:Black
 urxvt*foreground:White
-urxvt*scrollBar:false
-urxvt*transpscrollbar:true
-urxvt*saveLines:32767
-urxvt*urgentOnBell: True
-urxvt*visualBell: False
-urxvt*skipScroll: True
 
-!Fonts
+! -- Xft Settings
 Xft.dpi:		 96
 Xft.antialias:           true 
 Xft.hinting:             true
 Xt.hintstyle:            hintfull
 Xft.rgba:		 rgb
 
+! -- Fonts
 !urxvt*font: xft:Monaco:Regular:autohint=true:antialias=true:pixelsize=10
-urxvt*font:                     xft:monaco:size=8:antialias=true 
+urxvt*font:                     xft:inconsolata:size=10:antialias=true:autohint=true 
 !urxvt*boldFont:boldFont xft:terminus:size=10
-
 !urxvt*font:xft:DejaVuSansMono:pixelsize=12
 
-!Clickable URLS
+! -- Clickable URLS
 urxvt.perl-ext-common: default,matcher
 urxvt.urlLauncher: /usr/bin/chromium 
 urxvt.matcher.button: 1
 urxvt.keysym.C-Delete: perl:matcher
 urxvt.underlineURLs: true
 
+! -- Xcursor
+Xcursor.theme: whiteglass
 
