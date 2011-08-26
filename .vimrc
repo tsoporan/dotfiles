@@ -1,6 +1,6 @@
 "tsoporan's config ~ titus@tsoporan.com 
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+call pathogen#infect()
 
 set nocompatible "removes compatibility with vi
 
@@ -101,7 +101,7 @@ autocmd FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=
 autocmd FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
 
 
-"omnicomplete supertab
+"Omnicomplete supertab
 let g:SuperTabDefaultCompletionType = "context"
 
 "Map nerdtree to f2
@@ -117,4 +117,7 @@ hi IndentGuidesEven ctermbg=233
 
 "Gundo
 nnoremap <F5> :GundoToggle<CR>
+
+"Sets mouse to active 
+set mouse=a
 
