@@ -100,9 +100,21 @@ autocmd FileType javascript set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab
 autocmd FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=1
 autocmd FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
 
+
 "omnicomplete supertab
 let g:SuperTabDefaultCompletionType = "context"
 
-
 "Map nerdtree to f2
 map <F2> :NERDTreeToggle<CR>
+
+"Vim indent guides stuff
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_auto_colors = 0
+hi IndentGuidesOdd  ctermbg=236
+hi IndentGuidesEven ctermbg=233
+
+"Gundo
+nnoremap <F5> :GundoToggle<CR>
+
