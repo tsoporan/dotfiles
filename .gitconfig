@@ -1,6 +1,22 @@
 [user]
-	name = Titus Soporan
-	email = titus@tsoporan.com
+    name = Titus Soporan
+    email = titus@tsoporan.com
 [core]
-	editor = vim
-	autocrlf = input
+    editor = vim
+    autocrlf = input
+[color]
+    ui = true
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
