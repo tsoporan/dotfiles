@@ -18,6 +18,35 @@ urxvt*shading: 30
 urxvt*background:Black
 urxvt*foreground:White
 
+! tangoesque scheme
+*background:  #222222
+*foreground:  #aaaaaa
+! Black
+*color0:      #000000
+*color8:      #555753
+! Red
+*color1:      #ff6565
+*color9:      #ff8d8d
+! Green
+*color2:      #93d44f
+*color10:     #c8e7a8
+! Yellow
+*color3:      #eab93d
+*color11:     #ffc123
+! Blue
+*color4:      #204a87
+*color12:     #3465a4
+! Mangenta
+*color5:      #ce5c00
+*color13:     #f57900
+! Cyan 
+*color6:      #89b6e2
+*color14:     #46a4ff
+! White
+*color7:      #cccccc
+*color15:     #ffffff
+
+
 ! -- Xft Settings
 Xft.dpi:		 96
 Xft.antialias:           true 
@@ -37,7 +66,3 @@ urxvt.urlLauncher: /usr/bin/chromium
 urxvt.matcher.button: 1
 urxvt.keysym.C-Delete: perl:matcher
 urxvt.underlineURLs: true
-
-! -- Xcursor
-Xcursor.theme: whiteglass
-
