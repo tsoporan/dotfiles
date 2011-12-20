@@ -32,9 +32,12 @@ alias rm='rm -i'
 alias mv='mv -i'
 
 #Git Aliases
-alias glog='git log --pretty=format:"%Cgreen%h %Creset %s %Cblueby %an (%ar) %Cred %d" --graph'
-alias gdiff='git diff --color'
-alias gstat='git status'
+alias gcomm='git commit'
+alias gadd='git add'
+alias gpush='git push'
+alias gstat="git status"
+alias glog="git log --graph --decorate --pretty=oneline --abbrev-commit --color"
+alias gdiff="git diff --color"
 
 #PS1="\[\e[1;32m\]\u \[\e[1;34m\]\w\[\e[1;37m\] $\[\033[0m\] "
 
@@ -56,3 +59,5 @@ BROWSER="chromium"
 alias sv="sudo $EDITOR"
 alias v="$EDITOR"
 
+#nyan cat!
+#nc miku.acm.uiuc.edu 23
