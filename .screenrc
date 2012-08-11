@@ -94,5 +94,5 @@ bind } history
 
 
 #Start rtorrent with screen
-screen -t rtorrent rtorrent
+#screen -t rtorrent rtorrent
 
