@@ -20,7 +20,7 @@ set backspace=indent,eol,start "allow backspacing in insert mode
 set history=50 "keep command history
 set showcmd "show partial commands
 set list "show tab chars, visual whitespace
-set listchars=tab:>.
+set listchars=trail:<
 set ignorecase
 set scs "smart search
 set laststatus=2 "status line at bottom of window
@@ -53,14 +53,27 @@ set undolevels=1000
 set undoreload=10000
 
 "gundo
-nnoremap <silent> F5 :GundoToggle<CR>
+nnoremap <silent> <F5> :GundoToggle<CR>
 
 "nerdtree
-nnoremap <silent> F2 :NERDTreeToggle<CR>
+nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
 "tagbar
-nnoremap <silent> F9 :TagbarToggle<CR>
+nnoremap <silent> <F9> :TagbarToggle<CR>
 
+"rainbow parens on!
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+"indent guides
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+let g:indent_guides_auto_colors = 0
+hi IndentGuidesOdd  ctermbg=236
+hi IndentGuidesEven ctermbg=233
 
 " Return to last edit position when opening files (You want this!)
  autocmd BufReadPost *
