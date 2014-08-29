@@ -18,6 +18,11 @@ Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 "Plugin 'sjl/gundo'
 Plugin 'rking/ag.vim'
+Plugin 'luochen1990/rainbow'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'ervandew/supertab'
+Plugin 'bling/vim-airline'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -87,6 +92,9 @@ nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
 "tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
+
+"rainbow parans
+let g:rainbow_active=1
 
 "quick esc
 imap jj <ESC>
