@@ -1,3 +1,7 @@
+Setting up vIM:
+===============
+
+
 ```
   git clone https://github.com/tsoporan/dotfiles.git dotfiles
 ```
