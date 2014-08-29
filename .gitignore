@@ -1,8 +1,0 @@
-~/.vim/undo
-
-*.o
-*.pyc
-*.pyo
-*.bak
-*.so
-*
