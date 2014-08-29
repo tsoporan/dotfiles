@@ -1,20 +1,38 @@
-"loads bundles via pathogen
-call pathogen#infect()
+" Vundle start up ...
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+"  PLUGINS!
+Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
+Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'nanotech/jellybeans.vim'
+Plugin 'jiangmiao/auto-pairs'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 "basics
 syntax on
-filetype plugin indent on
 
-set nocompatible "use vim settings
 set number
-set autoindent smartindent
-set expandtab "spaces instead of tabs
+set autoindent
+set smartindent
+set cindent
+
 set smarttab "be smart when using tabs
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4 "4 spaces
-set textwidth=79
-set colorcolumn=79
+set expandtab "spaces instead of tabs
+set textwidth=0
 set foldmethod=marker
 set backspace=indent,eol,start "allow backspacing in insert mode
 set history=50 "keep command history
@@ -26,11 +44,13 @@ set scs "smart search
 set laststatus=2 "status line at bottom of window
 
 set showmatch "show matching bracket
+set matchtime=5 "bracket blinks
+
 set hlsearch "highlight search
 set wildmenu
-set wildignore=*.o,*~,*.pyc
 set ruler "show current position
 set incsearch
+set nowrap
 
 set noerrorbells
 set novisualbell
@@ -44,7 +64,7 @@ set noswapfile
 
 "colors using solarized
 set background=dark
-colorscheme solarized
+colorscheme jellybeans
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -61,24 +81,9 @@ nnoremap <silent> <F2> :NERDTreeToggle<CR>
 "tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
 
-"rainbow parens on!
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-
-"indent guides
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_start_level=2
-let g:indent_guides_guide_size=1
-let g:indent_guides_auto_colors = 0
-hi IndentGuidesOdd  ctermbg=236
-hi IndentGuidesEven ctermbg=233
 
 " Return to last edit position when opening files (You want this!)
- autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif 
+
 " Remember info about open buffers on close
 set viminfo^=%
