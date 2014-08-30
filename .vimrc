@@ -102,5 +102,8 @@ imap jj <ESC>
 " Return to last edit position when opening files (You want this!)
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif 
 
+" Set tabs depending on file type
+au FileType javascript setlocal shiftwidth=2 tabstop=2
+
 " Remember info about open buffers on close
 set viminfo^=%
