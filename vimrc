@@ -105,6 +105,8 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "norma
 
 " Set tabs depending on file type
 au FileType javascript setlocal shiftwidth=2 tabstop=2
+au FileType css setlocal shiftwidth=2 tabstop=2
+au FileType less setlocal shiftwidth=2 tabstop=2
 
 " Remember info about open buffers on close
 set viminfo^=%
