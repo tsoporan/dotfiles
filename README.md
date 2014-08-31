@@ -27,3 +27,14 @@ Startup vim and run the plugin installer:
   :PluginInstall
 ```
 
+
+Setting up tmux
+===============
+
+Make sure you have tmux installed.
+
+Symlink tmux.conf
+```
+ln -s dotfiles/tmux.conf ~/.tmux.conf
+```
+
