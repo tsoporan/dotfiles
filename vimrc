@@ -23,7 +23,7 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'ervandew/supertab'
 Plugin 'bling/vim-airline'
 Plugin 'groenewege/vim-less'
-
+"Plugin 'lsdr/monokai'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -76,8 +76,9 @@ set nowritebackup
 set noswapfile
 
 "colors
-set background=dark
-colorscheme jellybeans
+"set background=dark
+colorscheme molokai
+set t_Co=256
 
 "persistent undo
 set undodir=~/.vim/undo
