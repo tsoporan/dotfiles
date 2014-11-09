@@ -77,7 +77,7 @@ set noswapfile
 
 "colors
 "set background=dark
-colorscheme molokai
+colorscheme jellybeans 
 set t_Co=256
 
 "persistent undo
