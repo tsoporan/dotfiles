@@ -38,3 +38,7 @@ Symlink tmux.conf
 ln -s dotfiles/tmux.conf ~/.tmux.conf
 ```
 
+Start tmux in forced 256 color mode
+```
+tmux -2
+```
