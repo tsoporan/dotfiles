@@ -1,23 +1,23 @@
 ! ----------------------------------------------------------------------------
 ! file:     ~/.Xresources
 ! author:   Titus Soporan - http://tsoporan.com
-! modified: August 2012
+! modified: Nov 10 2014
 ! ----------------------------------------------------------------------------
 
 !general settings
-Xft.dpi:		 	      96
-Xft.antialias:           	      true 
-Xft.hinting:             	      true
-Xt.hintstyle:            	      hintfull
-Xft.rgba:		 	      rgb
+Xft.dpi:                              96
+Xft.antialias:                        true
+Xft.hinting:                          true
+Xt.hintstyle:                         hintfull
+Xft.rgba:                             rgb
 
 !urxvt general settings
-urxvt*loginShell:true
-urxvt*saveLines: 1000
+urxvt*loginShell:                     true
+urxvt*saveLines:                      1000
 URxvt*:borderLess:                    true
 URxvt*cursorBlink:                    true
-URxvt*font: 			      xft:DejaVu Sans Mono:antialias=true:pixelsize=12
-URxvt*boldFont: 		      xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=12
+URxvt*font:                           xft:DejaVu Sans Mono:antialias=true:pixelsize=12
+URxvt*boldFont:                       xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=12
 URxvt*jumpScroll:                     true
 URxvt*scrollBar:                      false
 URxvt*scrollTtyOutput:                false
@@ -29,10 +29,10 @@ URxvt*visualBell:                     false
 URxvt*perl-ext-common:                default,matcher
 URxvt*urlLauncher:                    chromium
 URxvt*matcher.button:                 1
-URxvt.underlineURLs: true
+URxvt.underlineURLs:                  true
 
 !fix font spacing
-URxvt.letterSpace:letterSpace -1
+URxvt.letterSpace:                    letterSpace -1
 
 !urxvt color settings (solarized dark color scheme)
 URxvt*fading:                         30
