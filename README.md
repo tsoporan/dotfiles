@@ -42,3 +42,21 @@ Start tmux in forced 256 color mode
 ```
 tmux -2
 ```
+
+
+Setting up the rest:
+====================
+
+ZSH
+
+Change to zsh shell.
+```
+chsh -s $(which zsh)
+```
+
+
+Link config, then logout/login.
+```
+ln -s dotfiles/zshrc ~/.zshrc
+```
+
