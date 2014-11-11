@@ -35,7 +35,7 @@ URxvt.underlineURLs:                  true
 URxvt.letterSpace:                    letterSpace -1
 
 !urxvt color settings
-URxvt*background:                       #2B2B2B
+URxvt*background:                     #2B2B2B
 URxvt*foreground:                     #DEDEDE
 
 URxvt*colorUL:                        #86a2b0

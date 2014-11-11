@@ -29,3 +29,8 @@ Startup vim and run the plugin installer:
 vim
 :PluginInstall
 ```
+
+Notes:
+======
+
+- Remember when symlinking to use absolute paths
