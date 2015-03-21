@@ -11,7 +11,7 @@ git clone https://github.com/tsoporan/dotfiles.git dotfiles
 
 Symlink vimrc:
 ```
-ln -s dotfiles/vimrc ~/.vimrc
+ln -s /path/to/dotfiles/vimrc /home/user/.vimrc
 ```
 
 Make vim bundle dir for Vundle:
