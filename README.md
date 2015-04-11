@@ -1,6 +1,14 @@
 If not otherwise specified setting up is a matter of symlinking the respective files.
 
 
+General Setup
+=============
+
+- Chsh zsh
+- Install ohmyzsh https://github.com/robbyrussell/oh-my-zsh
+- Symlink zshrc
+- Symlink gitconfig
+
 Setting up vIM:
 ===============
 
