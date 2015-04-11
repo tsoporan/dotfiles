@@ -13,7 +13,7 @@ Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive' ""
 Plugin 'nanotech/jellybeans.vim'
-"Plugin 'jiangmiao/auto-pairs'
+Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdtree'
 "Plugin 'sjl/gundo'
@@ -24,6 +24,7 @@ Plugin 'ervandew/supertab'
 Plugin 'bling/vim-airline'
 Plugin 'groenewege/vim-less'
 "Plugin 'lsdr/monokai'
+Plugin 'pangloss/vim-javascript'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
