@@ -26,6 +26,7 @@ Plugin 'groenewege/vim-less'
 "Plugin 'lsdr/monokai'
 Plugin 'pangloss/vim-javascript'
 Plugin 'wting/rust.vim'
+Plugin 'elixir-lang/vim-elixir'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
