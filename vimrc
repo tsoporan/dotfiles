@@ -27,6 +27,7 @@ Plugin 'groenewege/vim-less'
 Plugin 'pangloss/vim-javascript'
 Plugin 'wting/rust.vim'
 Plugin 'elixir-lang/vim-elixir'
+Plugin 'kien/ctrlp.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -114,3 +115,7 @@ au FileType less setlocal shiftwidth=2 tabstop=2
 
 " Remember info about open buffers on close
 set viminfo^=%
+
+" CtrlP
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
