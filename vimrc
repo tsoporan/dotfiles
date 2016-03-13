@@ -11,23 +11,21 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive' ""
+Plugin 'tpope/vim-fugitive'
 Plugin 'nanotech/jellybeans.vim'
-Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
-"Plugin 'sjl/gundo'
 Plugin 'rking/ag.vim'
 Plugin 'luochen1990/rainbow'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'ervandew/supertab'
-Plugin 'bling/vim-airline'
 Plugin 'groenewege/vim-less'
-"Plugin 'lsdr/monokai'
 Plugin 'pangloss/vim-javascript'
 Plugin 'wting/rust.vim'
 Plugin 'elixir-lang/vim-elixir'
 Plugin 'kien/ctrlp.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'vim-airline/vim-airline'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -38,9 +36,12 @@ let mapleader=',' "change from default \
 "basics
 syntax on
 
-set number
+set showmode "show what mode we're in
+set hidden " hide buffers instead of closing them
+set number " show numbers
 set cursorline
 set autoindent
+set copyindent "copies last indent
 set smartindent
 set cindent
 
@@ -48,11 +49,12 @@ set smarttab "be smart when using tabs
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4 "4 spaces
+set shiftround
 set expandtab "spaces instead of tabs
 set textwidth=0
 set foldmethod=marker
 set backspace=indent,eol,start "allow backspacing in insert mode
-set history=50 "keep command history
+set history=100 "keep command history
 set showcmd "show partial commands
 set list "show tab chars, visual whitespace
 set listchars=trail:<
@@ -64,15 +66,23 @@ set showmatch "show matching bracket
 set matchtime=5 "bracket blinks
 
 set hlsearch "highlight search
+set incsearch "show search matches as you type
+
 set wildmenu
 set ruler "show current position
-set incsearch
 set nowrap
 
 set noerrorbells
 set novisualbell
+set nomodeline
 
 set encoding=utf8
+
+"easily go into paste mode
+set pastetoggle=<F2>
+
+" enable using mouse in term
+set mouse=a
 
 "turn backups off
 set nobackup
@@ -80,8 +90,7 @@ set nowritebackup
 set noswapfile
 
 "colors
-"set background=dark
-colorscheme jellybeans 
+colorscheme jellybeans
 set t_Co=256
 
 "persistent undo
