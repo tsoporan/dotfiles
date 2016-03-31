@@ -25,6 +25,7 @@ Plugin 'elixir-lang/vim-elixir'
 Plugin 'kien/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
+Plugin 'mustache/vim-mustache-handlebars'
 
 
 " All of your Plugins must be added before the following line
