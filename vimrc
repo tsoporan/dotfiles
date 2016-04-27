@@ -1,4 +1,4 @@
-" Vundle start up ...
+" vimrc config for tsoporan 2016
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -26,7 +26,8 @@ Plugin 'kien/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'mustache/vim-mustache-handlebars'
-
+Plugin 'nathanaelkane/vim-indent-guides.git'
+Plugin 'lifepillar/vim-wwdc16-theme'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -91,7 +92,7 @@ set nowritebackup
 set noswapfile
 
 "colors
-colorscheme jellybeans
+colorscheme wwdc16
 set t_Co=256
 
 "persistent undo
@@ -119,9 +120,21 @@ imap jj <ESC>
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif 
 
 " Set tabs depending on file type
-au FileType javascript setlocal shiftwidth=2 tabstop=2
-au FileType css setlocal shiftwidth=2 tabstop=2
-au FileType less setlocal shiftwidth=2 tabstop=2
+" JS, HTML, CSS
+au BufNewFile,BufRead *.js, *.html, *.css, *.less, *.scss:
+    \ set tabstop=2
+    \ set softtabstop=2
+    \ set shiftwidth=2
+
+" PEP 8 Python
+au BufNewFile,BufRead *.py:
+    \ set tabstop=4
+    \ set softtabstop=4
+    \ set shiftwidth=4
+    \ set textwidth=79
+    \ set expandtab
+    \ set autoindent
+    \ set fileformat=unix
 
 " Remember info about open buffers on close
 set viminfo^=%
