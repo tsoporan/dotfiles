@@ -117,14 +117,14 @@ let g:rainbow_active=1
 imap jj <ESC>
 
 " Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif 
+au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif
 
 " Set tabs depending on file type
 " JS, HTML, CSS
-au BufNewFile,BufRead *.js, *.html, *.css, *.less, *.scss:
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
+autocmd Filetype html setlocal ts=2 sts=2 sw=2
+autocmd Filetype css setlocal ts=2 sts=2 sw=2
+autocmd Filetype scss setlocal ts=2 sts=2 sw=2
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 
 " PEP 8 Python
 au BufNewFile,BufRead *.py:
