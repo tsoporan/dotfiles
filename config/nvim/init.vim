@@ -1,53 +1,31 @@
-" vimrc config for tsoporan 2016
+" nVIM Configuration
 
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-"  PLUGINS!
-Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'scrooloose/syntastic'
-Plugin 'rking/ag.vim'
-Plugin 'luochen1990/rainbow'
-Plugin 'terryma/vim-multiple-cursors'
-Plugin 'ervandew/supertab'
-Plugin 'groenewege/vim-less'
-Plugin 'pangloss/vim-javascript'
-Plugin 'wting/rust.vim'
-Plugin 'elixir-lang/vim-elixir'
-Plugin 'kien/ctrlp.vim'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'vim-airline/vim-airline'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'nathanaelkane/vim-indent-guides.git'
-Plugin 'lifepillar/vim-wwdc16-theme'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
+call plug#begin()
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'fatih/vim-go'
+Plug 'vim-airline/vim-airline'
+Plug 'joshdick/onedark.vim'
+Plug 'slashmili/alchemist.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'nfischer/vim-rainbows'
+Plug 'myusuf3/numbers.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+call plug#end()
 
 let mapleader=',' "change from default \
-
-"basics
-syntax on
 
 set showmode "show what mode we're in
 set hidden " hide buffers instead of closing them
 set number " show numbers
 set cursorline
-set autoindent
 set copyindent "copies last indent
 set smartindent
 set cindent
 
-set smarttab "be smart when using tabs
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4 "4 spaces
@@ -56,19 +34,14 @@ set expandtab "spaces instead of tabs
 set textwidth=0
 set foldmethod=marker
 set backspace=indent,eol,start "allow backspacing in insert mode
-set history=100 "keep command history
 set showcmd "show partial commands
 set list "show tab chars, visual whitespace
-set listchars=trail:<
 set ignorecase
 set scs "smart search
 set laststatus=2 "status line at bottom of window
 
 set showmatch "show matching bracket
 set matchtime=5 "bracket blinks
-
-set hlsearch "highlight search
-set incsearch "show search matches as you type
 
 set wildmenu
 set ruler "show current position
@@ -78,13 +51,8 @@ set noerrorbells
 set novisualbell
 set nomodeline
 
-set encoding=utf8
-
 "easily go into paste mode
 set pastetoggle=<F2>
-
-" enable using mouse in term
-set mouse=a
 
 "turn backups off
 set nobackup
@@ -92,8 +60,10 @@ set nowritebackup
 set noswapfile
 
 "colors
-colorscheme wwdc16
 set t_Co=256
+colorscheme onedark
+let g:airline_theme='onedark'
+let g:onedark_termcolors=256
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -116,9 +86,6 @@ let g:rainbow_active=1
 "quick esc
 imap jj <ESC>
 
-" Return to last edit position when opening files (You want this!)
-au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif
-
 " Set tabs depending on file type
 " JS, HTML, CSS
 autocmd Filetype html setlocal ts=2 sts=2 sw=2
@@ -127,7 +94,7 @@ autocmd Filetype scss setlocal ts=2 sts=2 sw=2
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 
 " PEP 8 Python
-au BufNewFile,BufRead *.py:
+autocmd BufNewFile,BufRead *.py:
     \ set tabstop=4
     \ set softtabstop=4
     \ set shiftwidth=4
@@ -136,9 +103,29 @@ au BufNewFile,BufRead *.py:
     \ set autoindent
     \ set fileformat=unix
 
-" Remember info about open buffers on close
-set viminfo^=%
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif
 
 " CtrlP
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
+
+" Syntastic
+let g:syntastic_check_on_open = 1
+
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+
+" Use deoplete
+let g:deoplete#enable_at_startup = 1
+
+" Easy align
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+
