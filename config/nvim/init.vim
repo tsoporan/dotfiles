@@ -1,20 +1,24 @@
 " nVIM Configuration
-
 call plug#begin()
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
-Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
-Plug 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim' " Theme
 Plug 'slashmili/alchemist.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'nfischer/vim-rainbows'
+Plug 'luochen1990/rainbow'
 Plug 'myusuf3/numbers.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
-Plug 'posva/vim-vue'
+Plug 'posva/vim-vue' " VueJS
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx' " React JSX
+Plug 'leshill/vim-json'
+Plug 'fatih/vim-go' "Golang
+Plug 'w0rp/ale' " Async linting engine
+Plug 'ervandew/supertab' " Tab auto complete
+Plug 'raimondi/delimitmate' " Parens
 call plug#end()
 
 let mapleader=',' "change from default \
@@ -112,17 +116,6 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 
-" Syntastic
-let g:syntastic_check_on_open = 1
-
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-
-" Use deoplete
-let g:deoplete#enable_at_startup = 1
-
 " Easy align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
@@ -130,4 +123,14 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+" Vim-javascript
+let g:javascript_plugin_flow = 1
+
+" JSX
+let g:jsx_ext_required = 0
+
+" ALE
+let g:ale_lint_on_save = 1
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 0 " Disable linting on opening file
 
