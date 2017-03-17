@@ -14,6 +14,7 @@ Plug 'nfischer/vim-rainbows'
 Plug 'myusuf3/numbers.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'posva/vim-vue'
 call plug#end()
 
 let mapleader=',' "change from default \
@@ -92,6 +93,7 @@ autocmd Filetype html setlocal ts=2 sts=2 sw=2
 autocmd Filetype css setlocal ts=2 sts=2 sw=2
 autocmd Filetype scss setlocal ts=2 sts=2 sw=2
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
+autocmd Filetype vue setlocal ts=2 sts=2 sw=2
 
 " PEP 8 Python
 autocmd BufNewFile,BufRead *.py:
