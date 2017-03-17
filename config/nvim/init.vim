@@ -4,7 +4,6 @@ Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
-Plug 'joshdick/onedark.vim' " Theme
 Plug 'slashmili/alchemist.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'luochen1990/rainbow'
@@ -19,6 +18,7 @@ Plug 'fatih/vim-go' "Golang
 Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
+Plug 'chriskempson/base16-vim'  " Base 16 color scheme
 call plug#end()
 
 let mapleader=',' "change from default \
@@ -66,9 +66,8 @@ set noswapfile
 
 "colors
 set t_Co=256
-colorscheme onedark
-let g:airline_theme='onedark'
-let g:onedark_termcolors=256
+colorscheme base16-default-dark
+let base16colorspace=256  " Access colors present in 256 colorspace
 
 "persistent undo
 set undodir=~/.vim/undo
