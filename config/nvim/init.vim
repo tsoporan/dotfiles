@@ -66,9 +66,8 @@ set nowritebackup
 set noswapfile
 
 "colors
-set t_Co=256
-colorscheme base16-default-dark
 let base16colorspace=256  " Access colors present in 256 colorspace
+colorscheme base16-default-dark
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -134,4 +133,3 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_enter = 0 " Disable linting on opening file
 let g:ale_linters = {'javascript': ['eslint']}
-
