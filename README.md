@@ -36,6 +36,14 @@ vim
 :PluginInstall
 ```
 
+FZF
+===
+
+1. ```git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf```
+
+2. ```~/.fzf/install```
+
+
 Notes:
 ======
 
