@@ -19,6 +19,7 @@ Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
 Plug 'chriskempson/base16-vim'  " Base 16 color scheme
+Plug 'elmcast/elm-vim' " Elm lang
 call plug#end()
 
 let mapleader=',' "change from default \
