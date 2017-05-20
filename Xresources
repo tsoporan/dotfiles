@@ -1,11 +1,11 @@
 ! ----------------------------------------------------------------------------
 ! file:     ~/.Xresources
 ! author:   Titus Soporan - http://tsoporan.com
-! modified: Nov 10 2014
+! modified: May 19 2017
 ! ----------------------------------------------------------------------------
 
 !general settings
-Xft.dpi:                              96
+Xft.dpi:                              180 
 Xft.antialias:                        true
 Xft.hinting:                          true
 Xt.hintstyle:                         hintfull
@@ -16,8 +16,8 @@ urxvt*loginShell:                     true
 urxvt*saveLines:                      1000
 URxvt*:borderLess:                    true
 URxvt*cursorBlink:                    true
-URxvt*font:                           xft:DejaVu Sans Mono:antialias=true:pixelsize=12
-URxvt*boldFont:                       xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=12
+URxvt*font:                           xft:DejaVu Sans Mono:antialias=true:pixelsize=26
+URxvt*boldFont:                       xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=26
 URxvt*jumpScroll:                     true
 URxvt*scrollBar:                      false
 URxvt*scrollTtyOutput:                false
