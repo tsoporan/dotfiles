@@ -1,21 +1,9 @@
-#!/bin/sh
-#
-# ~/.xinitrc
-#
-# Executed by startx (run your window manager from here)
+xrdb -merge .Xresources &
 
-if [ -d /etc/X11/xinit/xinitrc.d ]; then
-  for f in /etc/X11/xinit/xinitrc.d/*; do
-    [ -x "$f" ] && . "$f"
-  done
-  unset f
-fi
+urxvtd -q -o -f
 
-# Load xresources
-xrdb -merge ~/.Xresources
+xscreensaver -no-splash &
 
-# Start xscreensaver
-xscreensaver -nosplash &
+redshift -l 43:-80 &
 
 exec awesome
-#exec i3
