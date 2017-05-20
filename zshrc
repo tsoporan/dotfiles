@@ -82,9 +82,6 @@ export EDITOR=vim
 
 export BROWSER=chromium
 
-# Use neovim
-alias vim='nvim'
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Need this for proper 256 colors in shell + vim
