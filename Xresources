@@ -5,7 +5,7 @@
 ! ----------------------------------------------------------------------------
 
 !general settings
-Xft.dpi:                              180 
+Xft.dpi:                              192 
 Xft.antialias:                        true
 Xft.hinting:                          true
 Xt.hintstyle:                         hintfull
@@ -13,11 +13,11 @@ Xft.rgba:                             rgb
 
 !urxvt general settings
 urxvt*loginShell:                     true
-urxvt*saveLines:                      1000
+urxvt*saveLines:                      3000
 URxvt*:borderLess:                    true
 URxvt*cursorBlink:                    true
-URxvt*font:                           xft:DejaVu Sans Mono:antialias=true:pixelsize=26
-URxvt*boldFont:                       xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=26
+URxvt*font:                           xft:Hack:antialias=true:pixelsize=28
+URxvt*boldFont:                       xft:Hack:style=bold:antialias=true:pixelsize=28
 URxvt*jumpScroll:                     true
 URxvt*scrollBar:                      false
 URxvt*scrollTtyOutput:                false
@@ -26,9 +26,10 @@ URxvt*urgentOnBell:                   true
 URxvt*visualBell:                     false
 
 
-URxvt.perl-ext-common:                default,matcher
+URxvt.perl-ext-common:                default,matcher,keyboard-select
 URxvt.url-launcher:                   /usr/bin/chromium
 URxvt.matcher.button:                 1
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
 
 URxvt.underlineURLs:                  true
 
