@@ -3,7 +3,6 @@
 " - last updated by tsoporan on May 22 2017
 "
 
-
 call plug#begin()
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-fugitive'
@@ -138,3 +137,11 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_enter = 0 " Disable linting on opening file
 let g:ale_linters = {'javascript': ['eslint']}
+
+
+if filereadable(expand("~/.vimrc_background"))
+  let base16colorspace=256
+  source ~/.vimrc_background
+endif
+
+set listchars=tab:>-
