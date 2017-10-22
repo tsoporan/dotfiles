@@ -1,48 +1,57 @@
 "
-" vim configuration
-" - last updated by tsoporan on May 22 2017
+" tsoporan's vim configuration
 "
 
 call plug#begin()
-Plug 'junegunn/vim-easy-align'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-surround'
-Plug 'vim-airline/vim-airline'
-Plug 'slashmili/alchemist.vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'luochen1990/rainbow'
+Plug 'junegunn/vim-easy-align' " Align around = and such
+Plug 'tpope/vim-fugitive' " Git
+Plug 'tpope/vim-surround' " '' => \"\"
+Plug 'slashmili/alchemist.vim' " Elixir
+Plug 'airblade/vim-gitgutter' " Shows git changes beside line numbers
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'myusuf3/numbers.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'posva/vim-vue' " VueJS
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx' " React JSX
-Plug 'leshill/vim-json'
 Plug 'fatih/vim-go' "Golang
 Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
-Plug 'chriskempson/base16-vim'  " Base 16 color scheme
 Plug 'elmcast/elm-vim' " Elm lang
+Plug 'pangloss/vim-javascript' " JS Syntax
+Plug 'mxw/vim-jsx' "JSX
+Plug 'leshill/vim-json' " JSON highlighting
+Plug 'justinmk/vim-sneak' "Motion 
+Plug 'Yggdroot/indentLine' "Indents
+Plug 'vimwiki/vimwiki' "Easy note taking
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
+Plug 'itchyny/lightline.vim' "Lightweight airline
+
 call plug#end()
 
 let mapleader=',' "change from default \
 
+set autochdir " Automatically change the directory
+set nu
+set autoindent
+set smartindent
+set lazyredraw
+
 set showmode "show what mode we're in
 set hidden " hide buffers instead of closing them
 set number " show numbers
-set cursorline
-set copyindent "copies last indent
-set smartindent
-set cindent
+set nocursorline
 
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4 "4 spaces
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2 "2 spaces
 set shiftround
-set expandtab "spaces instead of tabs
+set expandtab smarttab "spaces instead of tabs
+set encoding=utf-8
+
 set textwidth=0
-set foldmethod=marker
+set foldmethod=indent
 set backspace=indent,eol,start "allow backspacing in insert mode
 set showcmd "show partial commands
 set list "show tab chars, visual whitespace
@@ -54,6 +63,7 @@ set showmatch "show matching bracket
 set matchtime=5 "bracket blinks
 
 set wildmenu
+set wildmode=full
 set ruler "show current position
 set nowrap
 
@@ -70,20 +80,16 @@ set nowritebackup
 set noswapfile
 
 "colors
-let base16colorspace=256  " Access colors present in 256 colorspace
-colorscheme base16-default-dark
+"let base16colorspace=256  " Access colors present in 256 colorspace
+"colorscheme base16-tomorrow-night
+set background=dark
+colorscheme default
 
 "persistent undo
 set undodir=~/.vim/undo
-set undofile
-set undolevels=1000
-set undoreload=10000
 
 "gundo
 nnoremap <silent> <F5> :GundoToggle<CR>
-
-"nerdtree
-nnoremap <silent> <F2> :NERDTreeToggle<CR>
 
 "tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
@@ -115,33 +121,35 @@ autocmd BufNewFile,BufRead *.py:
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif
 
-" CtrlP
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-
 " Easy align
 " Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
 " Vim-javascript
 let g:javascript_plugin_flow = 1
 
-" JSX
-let g:jsx_ext_required = 0
+" JSX 
+let g:jsx_ext_required = 0 " Not required to have jsx extension
 
 " ALE
 let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 0
-let g:ale_lint_on_enter = 0 " Disable linting on opening file
+let g:ale_lint_on_text_changed = 1
+let g:ale_lint_on_enter = 1 " Disable linting on opening file
 let g:ale_linters = {'javascript': ['eslint']}
 
-
-if filereadable(expand("~/.vimrc_background"))
-  let base16colorspace=256
-  source ~/.vimrc_background
-endif
-
 set listchars=tab:>-
+
+"Indents
+hi Folded ctermbg=black
+hi Visual ctermbg=darkgrey
+
+"Vim easy motion
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+"Undo
+let g:undotree_WindowLayout = 2
+nnoremap U :UndotreeToggle<CR>
+
+"FZF
+nnoremap F :FZF<CR>
