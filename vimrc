@@ -27,6 +27,7 @@ Plug 'Yggdroot/indentLine' "Indents
 Plug 'vimwiki/vimwiki' "Easy note taking
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Lightweight airline
+Plug 'scrooloose/nerdcommenter' " Commenting
 
 call plug#end()
 
@@ -98,7 +99,7 @@ nnoremap <silent> <F9> :TagbarToggle<CR>
 let g:rainbow_active=1
 
 "quick esc
-imap jj <ESC>
+imap jk <ESC>
 
 " Set tabs depending on file type
 " JS, HTML, CSS
