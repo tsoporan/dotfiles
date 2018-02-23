@@ -1,58 +1,46 @@
-General Setup
-=============
+# dotfiles
 
-- Chsh zsh
-- Install ohmyzsh https://github.com/robbyrussell/oh-my-zsh
-- Symlink zshrc to ~/.zshrc
-- Symlink gitconfig to ~/.gitconfig
-- Symlink tmux.conf to ~/.tmux.conf
+Notes to self on how to set em up.
 
-Setting up vIM:
-===============
+## Zsh
 
-Clone this repo:
+1. Setup zsh as shell:
+```cshh zsh```
+
+2. Setup oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+
+
+## Git
+```
+ln -s $(PWD)/gitconfig ~/.gitconfig
+```
+
+## Vim
+
+1. Clone this repo:
 ```
 git clone https://github.com/tsoporan/dotfiles.git dotfiles
 ```
 
-Symlink vimrc:
+2. Symlink vimrc:
 ```
-ln -s /path/to/dotfiles/vimrc /home/user/.vimrc
-```
-
-Make vim bundle dir for Vundle:
-```
-mkdir -p ~/.vim/bundle/
+ln -s $(PWD)/vimrc ~/.vimrc
 ```
 
-Put Vundle in there:
+3. Set up `vim-plug`:
 ```
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-Startup vim and run the plugin installer:
+4. Startup vim and install plugins:
 ```
 vim
 :PluginInstall
 ```
 
-Colors
-======
-
-Follow https://github.com/chriskempson/base16-shell if using urxvt-unicode-256color
-
-1. ```git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell```
-
-
-FZF
-===
+## FZF
 
 1. ```git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf```
 
 2. ```~/.fzf/install```
-
-
-Notes:
-======
-
-- Remember when symlinking to use absolute paths
