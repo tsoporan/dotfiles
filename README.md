@@ -5,7 +5,7 @@ Notes to self on how to set em up.
 ## Zsh
 
 1. Setup zsh as shell:
-```cshh zsh```
+```chsh zsh```
 
 2. Setup oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
 
