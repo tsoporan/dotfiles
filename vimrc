@@ -1,7 +1,6 @@
 "
 " tsoporan's vim configuration
 "
-
 call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
@@ -22,36 +21,44 @@ Plug 'elmcast/elm-vim' " Elm lang
 Plug 'pangloss/vim-javascript' " JS Syntax
 Plug 'mxw/vim-jsx' "JSX
 Plug 'leshill/vim-json' " JSON highlighting
-Plug 'justinmk/vim-sneak' "Motion 
 Plug 'Yggdroot/indentLine' "Indents
 Plug 'vimwiki/vimwiki' "Easy note taking
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Lightweight airline
 Plug 'scrooloose/nerdcommenter' " Commenting
+Plug 'haya14busa/incsearch.vim' "Improved incremental search
+Plug 'crusoexia/vim-monokai'
 
 call plug#end()
 
 let mapleader=',' "change from default \
 
 set autochdir " Automatically change the directory
+set autowrite " Write before running commands
 set nu
 set autoindent
 set smartindent
 set lazyredraw
+set hlsearch
 
 set showmode "show what mode we're in
 set hidden " hide buffers instead of closing them
 set number " show numbers
+set numberwidth=4
 set nocursorline
 
+" Tabs/spaces
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2 "2 spaces
 set shiftround
 set expandtab smarttab "spaces instead of tabs
+
 set encoding=utf-8
 
-set textwidth=0
+set textwidth=100
+set colorcolumn=+1
+
 set foldmethod=indent
 set backspace=indent,eol,start "allow backspacing in insert mode
 set showcmd "show partial commands
@@ -81,10 +88,9 @@ set nowritebackup
 set noswapfile
 
 "colors
-"let base16colorspace=256  " Access colors present in 256 colorspace
-"colorscheme base16-tomorrow-night
 set background=dark
-colorscheme default
+colorscheme monokai
+set t_Co=256
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -138,7 +144,7 @@ let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_enter = 1 " Disable linting on opening file
 let g:ale_linters = {'javascript': ['eslint']}
 
-set listchars=tab:>-
+set list listchars=tab:»·,trail:·,nbsp:· " Whitespace
 
 "Indents
 hi Folded ctermbg=black
@@ -153,4 +159,15 @@ let g:undotree_WindowLayout = 2
 nnoremap U :UndotreeToggle<CR>
 
 "FZF
-nnoremap F :FZF<CR>
+nnoremap P :FZF<CR>
+
+"Incsearch
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+" Move between linting  errors
+"
+" Move between linting errors
+nnoremap ]r :ALENextWrap<CR>
+nnoremap [r :ALEPreviousWrap<CR>
