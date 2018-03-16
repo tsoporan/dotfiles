@@ -179,3 +179,11 @@ map g/ <Plug>(incsearch-stay)
 " Move between linting  errors
 nnoremap ]r :ALENextWrap<CR>
 nnoremap [r :ALEPreviousWrap<CR>
+
+" Tmp files
+set backupdir=/tmp//,.
+set directory=/tmp//,.
+if v:version >= 703
+  set undodir=/tmp//,.
+  set undofile
+endif
