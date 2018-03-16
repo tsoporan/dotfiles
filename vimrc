@@ -187,3 +187,7 @@ if v:version >= 703
   set undodir=/tmp//,.
   set undofile
 endif
+
+"Commenting
+let g:NERDSpaceDelims = 1 "Spaces after comments
+
