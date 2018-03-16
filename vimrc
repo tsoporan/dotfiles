@@ -138,6 +138,11 @@ let g:ale_lint_on_text_changed = 1
 let g:ale_lint_on_enter = 1 " Disable linting on opening file
 let g:ale_linters = {'javascript': ['eslint']}
 
+" Check Python files with flake8 and pylint.
+let b:ale_linters = ['flake8', 'pylint']
+" Fix Python files with autopep8 and yapf.
+let b:ale_fixers = ['autopep8', 'yapf']
+
 set listchars=tab:>-
 
 "Indents
@@ -154,3 +159,10 @@ nnoremap U :UndotreeToggle<CR>
 
 "FZF
 nnoremap F :FZF<CR>
+
+"netwr
+let g:netrw_liststyle = 3 "Tree view
+let g:netrw_banner = 0 "No banner
+let g:netrw_browse_split = 4 "Open file in prev window
+let g:netrw_altv = 1 
+let g:netrw_winsize = 25
