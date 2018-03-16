@@ -1,6 +1,7 @@
 "
 " tsoporan's vim configuration
 "
+"
 call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
@@ -8,8 +9,6 @@ Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'slashmili/alchemist.vim' " Elixir
 Plug 'airblade/vim-gitgutter' " Shows git changes beside line numbers
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'junegunn/goyo.vim'
-Plug 'myusuf3/numbers.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'posva/vim-vue' " VueJS
@@ -22,12 +21,12 @@ Plug 'pangloss/vim-javascript' " JS Syntax
 Plug 'mxw/vim-jsx' "JSX
 Plug 'leshill/vim-json' " JSON highlighting
 Plug 'Yggdroot/indentLine' "Indents
-Plug 'vimwiki/vimwiki' "Easy note taking
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Lightweight airline
 Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
-Plug 'crusoexia/vim-monokai'
+Plug 'junegunn/seoul256.vim' "Color
+Plug 'junegunn/gv.vim' "Git commit browser
 
 call plug#end()
 
@@ -88,8 +87,9 @@ set nowritebackup
 set noswapfile
 
 "colors
+let g:seoul256_background = 236
+colo seoul256
 set background=dark
-colorscheme monokai
 set t_Co=256
 
 "persistent undo
@@ -170,7 +170,6 @@ let g:netrw_banner = 0 "No banner
 let g:netrw_browse_split = 4 "Open file in prev window
 let g:netrw_altv = 1 
 let g:netrw_winsize = 25
-
 
 "Incsearch
 map /  <Plug>(incsearch-forward)
