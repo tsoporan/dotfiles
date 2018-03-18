@@ -4,10 +4,9 @@ Notes to self on how to set em up.
 
 ## Zsh
 
-1. Setup zsh as shell:
-```chsh zsh```
+1. Use zsh: `chsh zsh`
 
-2. Setup oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+2. Set up `antigen` (https://github.com/zsh-users/antigen)
 
 
 ## Git

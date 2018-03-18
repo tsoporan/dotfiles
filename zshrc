@@ -17,7 +17,7 @@ antigen bundle zsh-users/zsh-autosuggestions # Fish style autosuggestions
 antigen bundle zsh-users/zsh-completions # Completions
 antigen bundle zsh-users/zsh-history-substring-search # Nicer search
 
-antigen theme lambda 
+antigen theme lambda
 
 # All done
 antigen apply
