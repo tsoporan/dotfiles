@@ -1,9 +1,9 @@
 #
-# tsoporan's zshrc confi
+# tsoporan's zshrc config
 # 
 
 # Pull in Antigen for managing plugins
-source ~/antigen.zsh
+source ~/scripts/antigen.zsh
 
 antigen use oh-my-zsh
 
@@ -33,7 +33,7 @@ alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 alias gcom="git commit -S --signoff"
 
 export EDITOR=vim
-export BROWSER=firefox-developer
+export BROWSER=firefox-developer-edition
 
 # Good fortune
 if [ `which fortune` ]; then
@@ -42,6 +42,7 @@ if [ `which fortune` ]; then
 fi
 
 bindkey -v #vi mode
+export KEYTIMEOUT=1 # Less lag
 
 # FZF! 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -49,3 +50,17 @@ bindkey -v #vi mode
 # Fix NPM install
 PATH="$HOME/.node_modules/bin:$PATH"
 export npm_config_prefix=~/.node_modules
+
+# NVM
+source /usr/share/nvm/init-nvm.sh
+
+# Color man: https://wiki.archlinux.org/index.php/Color_output_in_console#man
+man() {
+    LESS_TERMCAP_md=$'\e[01;31m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;44;33m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[01;32m' \
+    command man "$@"
+}
