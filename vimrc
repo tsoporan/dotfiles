@@ -87,7 +87,7 @@ set nowritebackup
 set noswapfile
 
 "colors
-let g:seoul256_background = 236
+let g:seoul256_background = 235
 colo seoul256
 set background=dark
 set t_Co=256
