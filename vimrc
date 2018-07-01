@@ -126,20 +126,9 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 nmap ga <Plug>(EasyAlign)
 
-" Vim-javascript
-let g:javascript_plugin_flow = 1
-
-" JSX
-let g:jsx_ext_required = 0 " Not required to have jsx extension
-
 " ALE
-let g:ale_lint_on_save = 1
-let g:ale_lint_on_text_changed = 1
-let g:ale_lint_on_enter = 1 " Disable linting on opening file
-let g:ale_linters = {'javascript': ['eslint']}
-let b:ale_linters = ['flake8', 'pylint']
-" Fix Python files with autopep8 and yapf.
-let b:ale_fixers = ['autopep8', 'yapf']
+let b:ale_fixers = {'javascript': ['prettier', 'eslint'], 'python': ['autopep8', 'yapf']}
+let g:ale_fix_on_save = 1
 
 set list listchars=tab:»·,trail:·,nbsp:· " Whitespace
 
@@ -184,4 +173,3 @@ endif
 
 "Commenting
 let g:NERDSpaceDelims = 1 "Spaces after comments
-
