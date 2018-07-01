@@ -6,20 +6,13 @@ call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-surround' " '' => \"\"
-Plug 'slashmili/alchemist.vim' " Elixir
 Plug 'airblade/vim-gitgutter' " Shows git changes beside line numbers
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
-Plug 'posva/vim-vue' " VueJS
-Plug 'fatih/vim-go' "Golang
 Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
-Plug 'elmcast/elm-vim' " Elm lang
-Plug 'pangloss/vim-javascript' " JS Syntax
-Plug 'mxw/vim-jsx' "JSX
-Plug 'leshill/vim-json' " JSON highlighting
 Plug 'Yggdroot/indentLine' "Indents
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Lightweight airline
