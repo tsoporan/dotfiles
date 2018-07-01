@@ -27,6 +27,7 @@ Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
 Plug 'junegunn/seoul256.vim' "Color
 Plug 'junegunn/gv.vim' "Git commit browser
+Plug 'sheerun/vim-polyglot' "Multiple lang support
 
 call plug#end()
 
