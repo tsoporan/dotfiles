@@ -1,3 +1,5 @@
+# tsoporans xinitrc
+
 xrdb -merge .Xresources &
 
 #compton -CGb &

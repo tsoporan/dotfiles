@@ -1,16 +1,14 @@
 [user]
   name = Titus Soporan
   email = titus@tsoporan.com
-  signingkey = 59D03D532467C916
+  signingkey = 0x228C82BB
 [core]
   editor = vim
   whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 [commit]
-  gpgSign = true
+  gpgsign = true
 [merge]
-  gpgSign = true
-[gpg]
-  program = gpg2
+  gpgsign = true
 [color]
   branch = auto
   diff = auto

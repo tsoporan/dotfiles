@@ -21,6 +21,7 @@ Plug 'haya14busa/incsearch.vim' "Improved incremental search
 Plug 'junegunn/seoul256.vim' "Color
 Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
+Plug 'hashivim/vim-terraform' "Terraform
 
 call plug#end()
 
@@ -173,3 +174,7 @@ endif
 
 "Commenting
 let g:NERDSpaceDelims = 1 "Spaces after comments
+
+"Terraform
+let g:terraform_align=1
+let g:terraform_fold_sections=1
