@@ -1,6 +1,6 @@
 #
 # tsoporan's zshrc config
-# 
+#
 
 # Pull in Antigen for managing plugins
 source ~/scripts/antigen.zsh
@@ -48,11 +48,9 @@ export KEYTIMEOUT=1 # Less lag
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Fix NPM install
-PATH="$HOME/.node_modules/bin:$PATH"
-export npm_config_prefix=~/.node_modules
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-# NVM
-source /usr/share/nvm/init-nvm.sh
 
 # Color man: https://wiki.archlinux.org/index.php/Color_output_in_console#man
 man() {
