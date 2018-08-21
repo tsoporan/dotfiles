@@ -6,4 +6,4 @@ xscreensaver -no-splash &
 
 redshift -O 3200K -P &
 
-exec awesome
+exec i3
