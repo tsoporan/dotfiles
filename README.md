@@ -1,45 +1,29 @@
 # dotfiles
 
-Notes to self on how to set em up.
+My collection of dotfiles for my day-to-day apps
 
-## Zsh
+### Requirements
 
-1. Use zsh: `chsh zsh`
+- [Linux(Arch)](https://www.archlinux.org/)
+- [i3wm](https://i3wm.org/)
+  - [polybar](https://github.com/jaagr/polybar)
+  - [i3lock](https://github.com/i3/i3lock)
+- [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
+- [rofi](https://github.com/DaveDavenport/rofi)
+- [kitty](https://github.com/kovidgoyal/kitty)
+- [vim](https://www.vim.org/)
+  - [vim-plug](https://github.com/junegunn/vim-plug)
+- [zsh](https://wiki.archlinux.org/index.php/zsh)
+  - [antigen](https://github.com/zsh-users/antigen)
+- [git](https://wiki.archlinux.org/index.php/git)
+- [fzf](https://github.com/junegunn/fzf)
+- [nm-applet](https://wiki.archlinux.org/index.php/NetworkManager)
+- [Hack font](https://sourcefoundry.org/hack/)
 
-2. Set up `antigen` (https://github.com/zsh-users/antigen)
+### Set up
 
+The requirements link to the respective apps which will need to be installed/setup.
 
-## Git
-```
-ln -s $(PWD)/gitconfig ~/.gitconfig
-```
+After that all that remains is to symlink (`ln -s`) the appropriate configs.
 
-## Vim
-
-1. Clone this repo:
-```
-git clone https://github.com/tsoporan/dotfiles.git dotfiles
-```
-
-2. Symlink vimrc:
-```
-ln -s $(PWD)/vimrc ~/.vimrc
-```
-
-3. Set up `vim-plug`:
-```
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-```
-
-4. Startup vim and install plugins:
-```
-vim
-:PluginInstall
-```
-
-## FZF
-
-1. ```git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf```
-
-2. ```~/.fzf/install```
+Enjoy!
