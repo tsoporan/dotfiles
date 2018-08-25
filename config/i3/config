@@ -152,9 +152,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Enable polybar
+# Autostart apps
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id nm-applet
+exec --no-startup-id nitrogen --restore
 
 # Borders
 new_window pixel 2
