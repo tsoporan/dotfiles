@@ -168,8 +168,3 @@ bindsym $mod+r mode "resize"
 
 # Enable polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-
-bar {
-  i3bar_command $HOME/.config/polybar/launch.sh
-}
-
