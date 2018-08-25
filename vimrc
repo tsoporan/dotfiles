@@ -18,7 +18,7 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Lightweight airline
 Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
-Plug 'junegunn/seoul256.vim' "Color
+Plug 'w0ng/vim-hybrid' "Color
 Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
 Plug 'hashivim/vim-terraform' "Terraform
@@ -82,10 +82,10 @@ set nowritebackup
 set noswapfile
 
 "colors
-let g:seoul256_background = 235
-colo seoul256
 set background=dark
-set t_Co=256
+let g:hybrid_custom_term_colors = 1
+let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
+colorscheme hybrid
 
 "persistent undo
 set undodir=~/.vim/undo
