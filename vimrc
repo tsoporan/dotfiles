@@ -128,8 +128,17 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "
 nmap ga <Plug>(EasyAlign)
 
 " ALE
-let b:ale_fixers = {'javascript': ['prettier', 'eslint'], 'python': ['autopep8', 'yapf']}
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['prettier', 'eslint'],
+\   'vue': ['prettier', 'eslint'],
+\   'python': ['yapf']
+\}
 let g:ale_fix_on_save = 1
+
+" Move between linting  errors
+nnoremap ]r :ALENextWrap<CR>
+nnoremap [r :ALEPreviousWrap<CR>
 
 set list listchars=tab:»·,trail:·,nbsp:· " Whitespace
 
@@ -152,7 +161,7 @@ nnoremap P :FZF<CR>
 let g:netrw_liststyle = 3 "Tree view
 let g:netrw_banner = 0 "No banner
 let g:netrw_browse_split = 4 "Open file in prev window
-let g:netrw_altv = 1 
+let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
 "Incsearch
@@ -160,9 +169,6 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-" Move between linting  errors
-nnoremap ]r :ALENextWrap<CR>
-nnoremap [r :ALEPreviousWrap<CR>
 
 " Tmp files
 set backupdir=/tmp//,.
