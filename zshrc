@@ -7,22 +7,21 @@ source ~/scripts/antigen.zsh
 
 antigen use oh-my-zsh
 
+antigen bundle mafredri/zsh-async
 antigen bundle git
 antigen bundle common-aliases
 antigen bundle docker
 antigen bundle docker-compose
-
-antigen bundle zsh-users/zsh-syntax-highlighting # Syntax highlighting
+antigen bundle zdharma/fast-syntax-highlighting # Syntax highlighting
 antigen bundle zsh-users/zsh-autosuggestions # Fish style autosuggestions
 antigen bundle zsh-users/zsh-completions # Completions
 antigen bundle zsh-users/zsh-history-substring-search # Nicer search
+antigen bundle ael-code/zsh-colored-man-pages # Colored man pages
 
 antigen theme lambda
-
-# All done
 antigen apply
 
-# Customize to your needs...
+# Various aliases
 alias lock="xscreensaver-command -lock"
 alias startx="ssh-agent startx"
 alias v="vim"
@@ -35,30 +34,12 @@ alias gcom="git commit -S --signoff"
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
 
-# Good fortune
-if [ `which fortune` ]; then
-    fortune
-    echo ""
-fi
-
-bindkey -v #vi mode
+bindkey -v # vi mode
 export KEYTIMEOUT=1 # Less lag
 
-# FZF! 
+# FZF!
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Fix NPM install
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-
-# Color man: https://wiki.archlinux.org/index.php/Color_output_in_console#man
-man() {
-    LESS_TERMCAP_md=$'\e[01;31m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;44;33m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[01;32m' \
-    command man "$@"
-}
