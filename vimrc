@@ -130,9 +130,10 @@ nmap ga <Plug>(EasyAlign)
 " ALE
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['prettier', 'eslint'],
-\   'vue': ['prettier', 'eslint'],
-\   'python': ['yapf']
+\   'javascript': ['eslint', 'prettier'],
+\   'vue': ['eslint', 'prettier'],
+\   'python': ['isort', 'black'],
+\   'html': ['htmlhint']
 \}
 let g:ale_fix_on_save = 1
 
