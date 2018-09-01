@@ -30,6 +30,7 @@ alias gfetch="git fetch"
 alias gstat="git status"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature"
 alias gcom="git commit -S --signoff"
+alias cat="bat" # Use "\cat" otherwise
 
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
@@ -43,3 +44,6 @@ export KEYTIMEOUT=1 # Less lag
 # Fix NPM install
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+# Local bin
+PATH=$PATH:$HOME/.local/bin
