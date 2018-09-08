@@ -24,6 +24,11 @@ My collection of dotfiles for my day-to-day apps
 
 The requirements link to the respective apps which will need to be installed/setup.
 
-After that all that remains is to symlink (`ln -s`) the appropriate configs.
+Generally all that remains is to symlink (`ln -s`) the appropriate configs.
 
 Enjoy!
+
+## i3
+
+Notice there is a `*.laptop` for some configs, this is due to the diff between HiDPI laptop and my
+other pcs which are not so.
