@@ -22,15 +22,15 @@ antigen theme lambda
 antigen apply
 
 # Various aliases
-alias lock="xscreensaver-command -lock"
-alias startx="ssh-agent startx"
 alias v="vim"
 alias vi="vim"
-alias gfetch="git fetch"
+alias ga="git add"
+alias gstash="git stash"
+alias gf="git fetch"
+alias gp="git push"
 alias gstat="git status"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature"
 alias gcom="git commit -S --signoff"
-alias cat="bat" # Use "\cat" otherwise
 
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
