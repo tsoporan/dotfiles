@@ -4,6 +4,6 @@ xrdb -merge ~/.Xresources &
 
 xscreensaver -no-splash &
 
-redshift -O 3200K -P &
+redshift -O 4200K -P &
 
 exec i3
