@@ -1,0 +1,277 @@
+; tsoporans polybar Config
+
+[colors]
+background  = #222
+foreground  = #eee
+linecolor   = #fba922
+bordercolor = #333
+accent      = #e60053
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top    = 0
+margin-bottom = 0
+
+[bar/default]
+enable-ipc         = true
+;monitor           = ${env:MONITOR:eDP1}
+width              = 100%
+height             = 60
+fixed-center      = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-color     = ${colors.linecolor}
+underline-size = 1
+overline-size  = 4
+
+border-bottom-size = 2
+border-bottom-color = ${colors.bordercolor}
+
+padding-left = 0
+padding-right = 2
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = Fira Code:fontformat=truetype:size=18;5
+font-1 = Fira Code:fontformat=truetype:size=19;5
+font-2 = Font Awesome 5 Free:size=14;5
+font-3 = Font Awesome 5 Free Brands:size=14;5
+font-4 = Font Awesome 5 Free Solid:size=14;5
+
+modules-left = bspwm i3
+modules-center = xwindow
+modules-right = backlight pulseaudio battery memory cpu date power-menu
+
+tray-maxsize = 36
+tray-position = right
+tray-padding = 4
+
+wm-restack = bspwm
+
+scroll-up = bspwm-deskprev
+scroll-down = bspwm-desknext
+
+# bar/module specific vars
+bspwm-focused-overline = ${colors.linecolor}
+bspwm-focused-underline = #cc333333
+
+[module/fs-root]
+type = internal/fs
+mount-0 = /root
+label-mounted = %{F#e60053}%percentage_used%%%{F-} used of %mountpoint%
+
+[module/bspwm]
+type = internal/bspwm
+
+enable-scroll = false
+
+format = <label-state> <label-mode>
+
+ws-icon-default = x
+
+inline-mode = true
+
+;label-focused = %icon%
+label-focused = o
+label-focused-background = #383838
+label-focused-foreground = #fff
+label-focused-overline = ${root.bspwm-focused-overline}
+label-focused-underline = ${root.bspwm-focused-underline}
+label-focused-padding = 2
+
+label-focused-occupied = %{O-1}⏺%{O-1}
+label-focused-occupied-background = ${self.label-focused-background}
+label-focused-occupied-foreground = ${self.label-focused-foreground}
+label-focused-occupied-overline = ${self.label-focused-overline}
+label-focused-occupied-underline = ${self.label-focused-underline}
+label-focused-occupied-padding = ${self.label-focused-padding}
+
+;label-occupied = %icon%
+label-occupied = %{O-1}⏺%{O-1}
+label-occupied-padding = 2
+
+;label-urgent = %icon%
+label-urgent = !
+label-urgent-background = #bd2c40
+label-urgent-padding = 2
+
+;label-empty = %icon%
+label-empty = x
+label-empty-foreground = #444
+label-empty-padding = 2
+
+label-monocle = 
+label-monocle-padding = 2
+label-monocle-background = #171717
+label-monocle-foreground = ${colors.accent}
+
+label-floating = 
+label-floating-padding = 2
+label-floating-background = #171717
+label-floating-foreground = ${colors.accent}
+
+label-locked = locked
+label-locked-padding = 1
+label-sticky = sticky
+label-sticky-padding = 1
+label-private = private
+label-private-padding = 1
+
+label-dimmed-background = ${root.background}
+label-dimmed-overline = ${root.background}
+label-dimmed-underline = ${root.background}
+label-dimmed-active-foreground = #f00
+
+[module/i3]
+type = internal/i3
+index-sort = true
+pin-workspaces = true
+wrapping-scroll = true
+;reverse-scroll = false
+;enable-scroll = false
+
+format = <label-state> <label-mode>
+
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = ${colors.accent}
+
+label-focused = %index%
+label-focused-background = ${module/bspwm.label-focused-background}
+label-focused-foreground = ${module/bspwm.label-focused-foreground}
+label-focused-overline= ${module/bspwm.label-focused-overline}
+label-focused-underline= ${module/bspwm.label-focused-underline}
+label-focused-padding = ${module/bspwm.label-focused-padding}
+
+label-unfocused = %index%
+label-unfocused-padding = ${module/bspwm.label-occupied-padding}
+
+label-urgent = %index%!
+label-urgent-background = ${module/bspwm.label-urgent-background}
+label-urgent-padding = ${module/bspwm.label-urgent-padding}
+
+label-visible = %index%
+label-visible-padding = ${module/bspwm.label-empty-padding}
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+label = %percentage%%
+format-prefix = "CPU "
+format-prefix-foreground = #666
+
+[module/memory]
+type = internal/memory
+interval = 2
+label = %percentage_used%%
+format-prefix = "MEM "
+format-prefix-foreground = #666
+
+[module/date]
+type = internal/date
+label = %{F#666}%{F-}%date%%{F#e60053}%{F-} %time%
+date = %Y-%m-%d
+time = %H:%M
+interval = 5
+format-prefix = "DATE "
+format-prefix-foreground = #666
+
+[module/backlight]
+type = internal/backlight
+card = intel_backlight
+
+format = <ramp> <label>
+
+label = %percentage%%
+
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑
+ramp-foreground = #666
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+interval = 5
+
+format-volume = <ramp-volume> <label-volume>
+format-muted = <label-muted>
+
+label-volume = %percentage%%
+
+label-muted = MUTE
+label-muted-foreground = #666
+
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-foreground = #666
+
+[module/battery]
+type = internal/battery
+full-at = 98
+time-format = %H:%M
+
+format-discharging-prefix = "-BAT "
+format-discharging-prefix-foreground = #666
+format-charging-prefix = "+BAT "
+format-charging-prefix-foreground = #666
+
+format-charging = <label-charging>
+label-charging = %percentage%%
+
+format-discharging = <label-discharging>
+label-discharging = %percentage%%
+
+format-full = <label-full>
+format-full-prefix = "FBAT"
+format-full-prefix-foreground = #666
+
+[module/power-menu]
+type = custom/menu
+
+label-open = menu
+label-close = menu-close
+label-separator = /
+label-separator-margin = 1
+
+menu-0-0 = Terminate WM
+menu-0-0-foreground = ${colors.accent}
+menu-0-0-exec = i3-msg exit
+menu-0-1 = Reboot
+menu-0-1-foreground = ${colors.accent}
+menu-0-1-exec = menu-open-1
+menu-0-2 = Power off
+menu-0-2-foreground = ${colors.accent}
+menu-0-2-exec = menu-open-2
+menu-0-3 = Lock
+menu-0-3-foreground = ${colors.accent}
+menu-0-3-exec = betterlockscreen --lock
+
+menu-1-0 = Cancel
+menu-1-0-foreground = ${colors.accent}
+menu-1-0-exec = menu-open-0
+menu-1-1 = Reboot
+menu-1-1-foreground = ${colors.accent}
+menu-1-1-exec = sudo reboot
+
+menu-2-0 = Power off
+menu-2-0-foreground = ${colors.accent}
+menu-2-0-exec = sudo poweroff
+menu-2-1 = Cancel
+menu-2-1-foreground = ${colors.accent}
+menu-2-1-exec = menu-open-0
+
+[module/xwindow]
+type = internal/xwindow
+format = <label>
+label-maxlen = 75
+
+; vim:ft=dosini
