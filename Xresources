@@ -1,4 +1,4 @@
-! Xresources
+! Xresources Default
 
 Xft.dpi: 96
 Xft.antialias: true
@@ -8,41 +8,61 @@ Xft.autohint: false
 Xft.hintstyle: hintslight
 Xft.lcdfilter: lcddefault
 
+*background:            #272827
+*foreground:            #657b83
 *fading:                15
 *fadeColor:             black
 *cursorColor:           #16A085
 *pointerColorBackground:#2B2C2B
 *pointerColorForeground:#16A085
 
-*foreground: #EAD49B
-*background: #1E272B
-*cursor: #EAD49B
-*color0: #1E272B
-*color1: #685742
-*color2: #9D6A47
-*color3: #B36D43
-*color4: #78824B
-*color5: #D99F57
-*color6: #C9A554
-*color7: #EAD49B
-*color9: #685742
-*color10: #9D6A47
-*color11: #B36D43
-*color12: #78824B
-*color13: #D99F57
-*color14: #C9A554
-*color15: #EAD49B
-*color8: #666666
+! Colors
+! special
+*.foreground:   #c6c6c6
+*.background:   #1f1f1f
+*.cursorColor:  #c6c6c6
+
+! black
+*.color0:       #828282
+*.color8:       #828282
+
+! red
+*.color1:       #cc6666
+*.color9:       #cc6666
+
+! green
+*.color2:       #81a2be
+*.color10:      #81a2be
+
+! yellow
+*.color3:       #f0c674
+*.color11:      #f0c674
+
+! blue
+*.color4:       #81a2be
+*.color12:      #81a2be
+
+! magenta
+*.color5:       #b294bb
+*.color13:      #b294bb
+
+! cyan
+*.color6:       #8abeb7
+*.color14:      #8abeb7
+
+! white
+*.color7:       #c5c8c6
+*.color15: #c5c8c6
 
 
 ! Enable the extended coloring options
 rofi.color-enabled: true
 !                  bg       border   separator
-rofi.color-window: #1E272B, #9D6A47, #9D6A47
+rofi.color-window: #1f1f1f, #c6c6c6, #c6c6c6
 !                  bg       fg       bg-alt   hl-bg    hl-fg
-rofi.color-normal: #1E272B, #EAD49B, #1E272B, #1E272B, #78824B
-rofi.color-active: #1E272B, #EAD49B, #1E272B, #1E272B, #78824B
-rofi.color-urgent: #1E272B, #EAD49B, #1E272B, #1E272B, #78824B
+rofi.color-normal: #1f1f1f, #828282, #1f1f1f, #1f1f1f, #c6c6c6
+rofi.color-active: #1f1f1f, #828282, #1f1f1f, #1f1f1f, #c6c6c6
+rofi.color-urgent: #1f1f1f, #828282, #1f1f1f, #1f1f1f, #c6c6c6
 
 rofi.separator-style: solid
 rofi.sidebar-mode: false
