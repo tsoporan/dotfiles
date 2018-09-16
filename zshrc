@@ -47,3 +47,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Local bin
 PATH=$PATH:$HOME/.local/bin
+
+# Keychain
+eval $(keychain --eval --quiet id_rsa)
