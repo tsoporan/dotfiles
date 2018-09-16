@@ -6,8 +6,8 @@ My collection of dotfiles for my day-to-day apps
 
 - [Linux(Arch)](https://www.archlinux.org/)
 - [i3wm](https://i3wm.org/)
-  - [polybar](https://github.com/jaagr/polybar)
-  - [i3lock](https://github.com/i3/i3lock)
+- [polybar](https://github.com/jaagr/polybar)
+- [betterlockscreen](https://github.com/flumm/Themes/blob/master/Space/.i3/config)
 - [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
 - [rofi](https://github.com/DaveDavenport/rofi)
 - [kitty](https://github.com/kovidgoyal/kitty)
@@ -19,6 +19,8 @@ My collection of dotfiles for my day-to-day apps
 - [fzf](https://github.com/junegunn/fzf)
 - [nm-applet](https://wiki.archlinux.org/index.php/NetworkManager)
 - [Hack font](https://sourcefoundry.org/hack/)
+- [Font Awesome](https://fontawesome.com/?from=io)
+- [Deja Vu Sans](https://dejavu-fonts.github.io/)
 
 ### Set up
 
