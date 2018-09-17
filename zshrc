@@ -24,6 +24,7 @@ antigen apply
 # Various aliases
 alias v="vim"
 alias vi="vim"
+alias gdiff="git diff"
 alias ga="git add"
 alias gstash="git stash"
 alias gf="git fetch"
@@ -50,3 +51,6 @@ PATH=$PATH:$HOME/.local/bin
 
 # Keychain
 eval $(keychain --eval --quiet id_rsa)
+
+# Go
+export GOPATH=$HOME/projects/gocode
