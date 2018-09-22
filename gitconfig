@@ -1,6 +1,7 @@
 [user]
   name = Titus Soporan
   email = titus@tsoporan.com
+  signingkey = 228C82BB
 [core]
   editor = vim
   autocrlf = input
