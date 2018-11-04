@@ -22,6 +22,7 @@ Plug 'w0ng/vim-hybrid' "Color
 Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
 Plug 'hashivim/vim-terraform' "Terraform
+Plug 'leafgarland/typescript-vim' "Ts
 
 call plug#end()
 
