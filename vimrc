@@ -1,7 +1,7 @@
 "
 " tsoporan's vim configuration
 "
-"
+
 call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
@@ -15,7 +15,8 @@ Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
 Plug 'Yggdroot/indentLine' "Indents
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
-Plug 'itchyny/lightline.vim' "Lightweight airline
+Plug 'vim-airline/vim-airline' "Status bar
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
 Plug 'w0ng/vim-hybrid' "Color
@@ -28,7 +29,7 @@ call plug#end()
 
 let mapleader=',' "change from default \
 
-set autochdir " Automatically change the directory
+"set autochdir " Automatically change the directory
 set autowrite " Write before running commands
 set nu
 set autoindent
@@ -51,7 +52,7 @@ set expandtab smarttab "spaces instead of tabs
 
 set encoding=utf-8
 
-set textwidth=100
+set textwidth=120
 set colorcolumn=+1
 
 set foldmethod=indent
@@ -73,6 +74,9 @@ set nowrap
 set noerrorbells
 set novisualbell
 set nomodeline
+
+" Search down into subfolders + tab complete for files
+set path+=**
 
 "easily go into paste mode
 set pastetoggle=<F2>
@@ -133,7 +137,7 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
-\   'python': ['isort', 'black']
+\   'python': ['black']
 \}
 let g:ale_fix_on_save = 1
 
@@ -185,3 +189,9 @@ let g:NERDSpaceDelims = 1 "Spaces after comments
 "Terraform
 let g:terraform_align=1
 let g:terraform_fold_sections=1
+
+" Markdown
+let g:vim_markdown_conceal = 0
+
+" Airline
+let g:airline_theme = 'badcat'
