@@ -160,7 +160,8 @@ let g:undotree_WindowLayout = 2
 nnoremap U :UndotreeToggle<CR>
 
 "FZF
-nnoremap P :FZF<CR>
+nnoremap <leader>, :FZF<CR>
+nnoremap <leader>. :Rg<CR>
 
 "netwr
 let g:netrw_liststyle = 3 "Tree view
