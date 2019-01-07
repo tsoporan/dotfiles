@@ -56,3 +56,6 @@ export GOPATH=$HOME/projects/gocode
 
 # FASD
 eval "$(fasd --init auto)"
+
+# GPG display, can lead to odd signing error
+export GPG_TTY=$(tty)
