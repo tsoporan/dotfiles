@@ -176,3 +176,6 @@ gaps outer 3
 # Key bindings
 bindsym XF86MonBrightnessUp exec light -A 5
 bindsym XF86MonBrightnessDown exec light -U 5
+
+# Issues with high DPI and "upload file" window in browsers
+floating_maximum_size 800 x 640
