@@ -4,7 +4,7 @@ xrdb -merge ~/.Xresources &
 
 xscreensaver -no-splash &
 
-redshift -O 4200K -P &
+redshift -O 3800K -P &
 
 autocutsel -fork &
 autocutsel -selection PRIMARY -fork &
