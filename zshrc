@@ -22,10 +22,11 @@ antigen theme lambda
 antigen apply
 
 # Various aliases
-alias v="f -e vim"
+alias v="vim"
 alias gdiff="git diff"
-alias ga="git add"
+alias gadd="git add"
 alias gstash="git stash"
+alias gstat="git status"
 alias gf="git fetch"
 alias gp="git push"
 alias gstat="git status"
@@ -53,6 +54,3 @@ eval $(keychain --eval --quiet id_rsa)
 
 # Go
 export GOPATH=$HOME/projects/gocode
-
-# FASD
-eval "$(fasd --init auto)"
