@@ -24,6 +24,7 @@ Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
 Plug 'hashivim/vim-terraform' "Terraform
 Plug 'leafgarland/typescript-vim' "Ts
+Plug 'posva/vim-vue' " Vue syntax
 
 call plug#end()
 
@@ -114,6 +115,7 @@ autocmd Filetype css setlocal ts=2 sts=2 sw=2
 autocmd Filetype scss setlocal ts=2 sts=2 sw=2
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 autocmd Filetype vue setlocal ts=2 sts=2 sw=2
+autocmd FileType vue syntax sync fromstart " Otherwise syntax highlighting tends to break
 
 " PEP 8 Python
 autocmd BufNewFile,BufRead *.py:
