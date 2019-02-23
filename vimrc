@@ -117,12 +117,12 @@ autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 autocmd Filetype vue setlocal ts=2 sts=2 sw=2
 autocmd FileType vue syntax sync fromstart " Otherwise syntax highlighting tends to break
 
-" PEP 8 Python
+" PEP8 Python
 autocmd BufNewFile,BufRead *.py:
     \ set tabstop=4
     \ set softtabstop=4
     \ set shiftwidth=4
-    \ set textwidth=79
+    \ set textwidth=90
     \ set expandtab
     \ set autoindent
     \ set fileformat=unix
