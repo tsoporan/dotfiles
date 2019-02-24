@@ -1,10 +1,11 @@
 # dotfiles
 
-My collection of dotfiles for my day-to-day apps
+Collection of dotfiles for my day-to-day programs.
 
-### Requirements
+### My setup
 
 - [Linux(Arch)](https://www.archlinux.org/)
+- [GNU Stow](https://www.gnu.org/software/stow/)
 - [i3wm](https://i3wm.org/)
 - [polybar](https://github.com/jaagr/polybar)
 - [betterlockscreen](https://github.com/flumm/Themes/blob/master/Space/.i3/config)
@@ -22,15 +23,13 @@ My collection of dotfiles for my day-to-day apps
 - [Font Awesome](https://fontawesome.com/?from=io)
 - [Deja Vu Sans](https://dejavu-fonts.github.io/)
 
-### Set up
+### Dotfile usage
 
-The requirements link to the respective apps which will need to be installed/setup.
-
-Generally all that remains is to symlink (`ln -s`) the appropriate configs.
+Using `stow` simply `stow <dirname>` from within the cloned dir.
 
 Enjoy!
 
-## i3
+## HiDPI
 
-Notice there is a `*.laptop` for some configs, this is due to the diff between HiDPI laptop and my
-other pcs which are not so.
+Note `*.laptop` variations for some configs, this is due to the diff between my computers, though you should only
+need one of these.
