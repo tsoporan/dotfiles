@@ -31,3 +31,7 @@ Enjoy!
 ### Theme
 
 The theme is customized for my needs but heavily based on: [awesome-pro](https://github.com/4ban/awesome-pro) - check it out!
+
+### HiDPI
+
+The `laptop` branch contains adjustments to the configs for HiDPI
