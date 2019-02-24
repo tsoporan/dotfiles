@@ -424,7 +424,9 @@ awful.screen.connect_for_each_screen(function(s)
             spr,
 
             --
+            spr5px,
             s.mylayoutbox,
+            spr5px,
         },
     }
 end)

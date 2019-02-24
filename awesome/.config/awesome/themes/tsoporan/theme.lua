@@ -51,21 +51,13 @@ theme.notification_shape                        = gears.shape.infobubble
 theme.notification_opacity                      = 1
 theme.notification_margin                       = 30
 
--- Layout
-
-theme.layout_floating   = theme.icons .. "/panel/layouts/floating.png"
-theme.layout_tile       = theme.icons .. "/panel/layouts/tile.png"
-theme.layout_tileleft   = theme.icons .. "/panel/layouts/tileleft.png"
-theme.layout_tilebottom = theme.icons .. "/panel/layouts/tilebottom.png"
-theme.layout_tiletop    = theme.icons .. "/panel/layouts/tiletop.png"
-
 -- Taglist
 
 theme.taglist_bg_empty    = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/empty.png"
 theme.taglist_bg_occupied = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/occupied.png"
 theme.taglist_bg_urgent   = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/urgent.png"
 theme.taglist_bg_focus    = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/focus.png"
-theme.taglist_font        = "Terminus 11"
+theme.taglist_font        = "Fira Code 11"
 
 -- Tasklist
 
