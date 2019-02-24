@@ -9,4 +9,4 @@ redshift -O 3800K -P &
 autocutsel -fork &
 autocutsel -selection PRIMARY -fork &
 
-exec i3
+exec awesome
