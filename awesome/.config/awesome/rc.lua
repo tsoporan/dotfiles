@@ -1,47 +1,65 @@
--- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
+-- tsoporans AwesomeWM config
+
+-- LuaRocks - if installed
 pcall(require, "luarocks.loader")
 
--- Standard awesome library
-local gears = require("gears")
-local awful = require("awful")
-require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox")
--- Theme handling library
-local beautiful = require("beautiful")
--- Notification library
-local naughty = require("naughty")
-local menubar = require("menubar")
+local gears         = require("gears")
+local awful         = require("awful")
+                      require("awful.autofocus")
+local wibox         = require("wibox")
+local beautiful     = require("beautiful")
+local naughty       = require("naughty")
+local menubar       = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+local lain          = require("lain")
+local markup        = lain.util.markup
+
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- {{{ Error handling
--- Check if awesome encountered an error during startup and fell back to
--- another config (This code will only ever execute for the fallback config)
+-- Error handling
 if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
+  naughty.notify({
+    preset = naughty.config.presets.critical,
+    title = "Oops, there were errors during startup!",
+    text = awesome.startup_errors
+  })
 end
 
 -- Handle runtime errors after startup
 do
-    local in_error = false
-    awesome.connect_signal("debug::error", function (err)
-        -- Make sure we don't go into an endless error loop
-        if in_error then return end
-        in_error = true
+  local in_error = false
+  awesome.connect_signal("debug::error", function (err)
+    -- Make sure we don't go into an endless error loop
+    if in_error then return end
+    in_error = true
 
-        naughty.notify({ preset = naughty.config.presets.critical,
-                         title = "Oops, an error happened!",
-                         text = tostring(err) })
-        in_error = false
-    end)
+    naughty.notify({
+      preset = naughty.config.presets.critical,
+      title = "Oops, an error happened!",
+      text = tostring(err) })
+    in_error = false
+  end)
 end
--- }}}
+
+
+-- Naughty settings
+naughty.config.defaults.font          = "Fira Code 10"
+naughty.config.defaults.timeout       = 5
+naughty.config.defaults.screen        = 1
+naughty.config.defaults.position      = "top_right"
+naughty.config.defaults.margin        = 8
+naughty.config.defaults.gap           = 1
+naughty.config.defaults.ontop         = true
+naughty.config.defaults.icon          = nil
+naughty.config.defaults.icon_size     = 32
+naughty.config.defaults.fg            = beautiful.fg_tooltip
+naughty.config.defaults.bg            = beautiful.bg_tooltip
+naughty.config.defaults.border_color  = beautiful.border_tooltip
+naughty.config.defaults.border_width  = 2
+naughty.config.defaults.hover_timeout = nil
+
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
@@ -57,30 +75,25 @@ local modkey      = "Mod4"
 local altkey      = "Mod1"
 local scrlock     = "xscreensaver-command -lock"
 
+-- Theme
+local themename  = "tsoporan"
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/" .. themename .. "/theme.lua")
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.floating,
-    awful.layout.suit.max,
-    --awful.layout.suit.tile.left,
-    --awful.layout.suit.tile.bottom,
-    --awful.layout.suit.tile.top,
-    --awful.layout.suit.fair,
-    --awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
-    --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max.fullscreen,
-    --awful.layout.suit.magnifier,
-    --awful.layout.suit.corner.nw,
+  awful.layout.suit.tile,
+  awful.layout.suit.floating,
+  awful.layout.suit.max,
+  lain.layout.termfair,
+  lain.layout.centerwork,
 }
--- }}}
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
+  { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+  { "restart", awesome.restart },
+  { "quit", function() awesome.quit() end },
 }
 
 mymainmenu = awful.menu({ items = {
@@ -96,14 +109,136 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon, menu = myma
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
+awful.util.terminal    = terminal
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
 
--- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+-- Widgets
+
+---- Clock
+space3 = markup.font("Fira Code 3", " ")
+clockgf = beautiful.clockgf
+
+local chosen_clock_type = "%a %d %b %H:%M"
+local textclock         = wibox.widget.textclock(markup(clockgf, space3 .. chosen_clock_type .. markup.font("Fira Code 3", " ")))
+local clock_widget      = wibox.container.background(textclock)
+
+clock_widget.bgimage=beautiful.widget_display
+
+lain.widget.cal({
+    cal = "cal --color=always",
+    attach_to = { textclock },
+    notification_preset = {
+        font = beautiful.calendar_font,
+        fg   = beautiful.fg_normal,
+        bg   = beautiful.bg_normal
+    }
+})
+
+---- CPU
+local cpu_icon = wibox.widget.imagebox(beautiful.widget_cpu)
+local cpu = lain.widget.cpu({
+    settings = function()
+        widget:set_markup(space3 .. cpu_now.usage .. "%" .. markup.font("Fira Code 4", " "))
+    end
+})
+local cpu_widget = wibox.container.background(cpu.widget)
+cpu_widget.bgimage=beautiful.widget_display
+
+---- MEM
+local mem_icon = wibox.widget.imagebox(beautiful.widget_mem)
+local mem = lain.widget.mem({
+    settings = function()
+        widget:set_markup(space3 .. mem_now.used .. "MB" .. markup.font("Fira Code 4", " "))
+    end
+})
+local mem_widget = wibox.container.background(mem.widget)
+mem_widget.bgimage=beautiful.widget_display
+
+---- Net
+local netdl_icon = wibox.widget.imagebox(beautiful.widget_netdl)
+local netup_icon = wibox.widget.imagebox(beautiful.widget_netul)
+
+local iface = "enp24s0"
+
+local net_widgetdl = lain.widget.net({
+    iface = iface,
+    settings = function()
+        widget:set_markup(markup.font("Fira Code 1", " ") .. net_now.received)
+    end
+})
+local net_widgetul = lain.widget.net({
+    iface = iface,
+    settings = function()
+        widget:set_markup(markup.font("Fira Code 1", "  ") .. net_now.sent)
+    end
+})
+local netdl_widget = wibox.container.background(net_widgetdl.widget)
+netdl_widget.bgimage=beautiful.widget_display
+local netup_widget = wibox.container.background(net_widgetul.widget)
+netup_widget.bgimage=beautiful.widget_display
+
+-- FS
+local fs_icon = wibox.widget.imagebox(beautiful.widget_fs)
+
+local fs = lain.widget.fs({
+    notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = beautiful.fs_font },
+    settings = function()
+        widget:set_markup(markup.font(beautiful.font, "/: " .. fs_now["/"].percentage .. "%"))
+    end
+})
+local fs_widget = wibox.container.background(fs.widget)
+fs_widget.bgimage=beautiful.widget_display
+
+-- Battery
+local bat = lain.widget.bat({
+    battery = "BAT0",
+    timeout = 30,
+    notify = "on",
+    n_perc = {5,15}, -- crit, low
+
+    settings = function()
+        bat_notification_low_preset = {
+            title = "Battery low",
+            text = "Plug the cable!",
+            timeout = 15,
+            fg = beautiful.fg_normal,
+            bg = beautiful.bg_normal
+        }
+        bat_notification_critical_preset = {
+            title = "Battery exhausted",
+            text = "Shutdown imminent",
+            timeout = 15,
+            fg = beautiful.bat_fg_critical,
+            bg = beautiful.bat_bg_critical
+        }
+
+        if bat_now.status ~= "N/A" then
+            if bat_now.status == "Charging" then
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " +" .. bat_now.perc .. "%")))
+            elseif bat_now.status == "Full" then
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " ~" .. bat_now.perc .. "%")))
+            elseif tonumber(bat_now.perc) <= 35 then
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+            elseif tonumber(bat_now.perc) <= 80 then
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+            elseif tonumber(bat_now.perc) <= 99 then
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+            else
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+            end
+        else
+            widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " AC ")))
+        end
+    end
+})
+local bat_widget = wibox.container.background(bat.widget)
+bat_widget.bgimage=beautiful.widget_display
+
+-- End Widgets
+
+-- Wibar
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -160,17 +295,27 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+-- Empty due to icon
 tagnames = {
-  "一",
-  "二",
-  "三",
-  "四",
-  "五",
-  "六",
-  "七",
-  "八",
-  "九",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
+  "  ",
 }
+
+spr = wibox.widget.imagebox(beautiful.spr)
+spr4px = wibox.widget.imagebox(beautiful.spr4px)
+spr5px = wibox.widget.imagebox(beautiful.spr5px)
+
+widget_display = wibox.widget.imagebox(beautiful.widget_display)
+widget_display_r = wibox.widget.imagebox(beautiful.widget_display_r)
+widget_display_l = wibox.widget.imagebox(beautiful.widget_display_l)
+widget_display_c = wibox.widget.imagebox(beautiful.widget_display_c)
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -204,23 +349,81 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s })
+    s.mywibox = awful.wibar({
+      position = "top",
+      screen   = s,
+      height   = 22,
+      bg       = beautiful.panel,
+      fg       = beautiful.fg_normal
+    })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
+            spr5px,
             s.mytaglist,
-            s.mypromptbox,
+            spr5px,
         },
-        s.mytasklist, -- Middle widget
+        s.mytasklist, -- Middle widget,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            s.mypromptbox,
             wibox.widget.systray(),
-            mytextclock,
+
+            -- CPU widget
+            spr,
+            cpu_icon,
+            widget_display_l,
+            cpu_widget,
+            widget_display_r,
+            spr5px,
+
+            -- Mem widget
+            spr,
+            mem_icon,
+            widget_display_l,
+            mem_widget,
+            widget_display_r,
+            spr5px,
+
+            -- Fs widget
+            spr,
+            fs_icon,
+            widget_display_l,
+            fs_widget,
+            widget_display_r,
+            spr5px,
+
+            -- Net widget
+            spr,
+            netdl_icon,
+            widget_display_l,
+            netdl_widget,
+            widget_display_c,
+            netup_widget,
+            widget_display_r,
+            netup_icon,
+
+            -- Battery widget
+            spr,
+            spr5px,
+            widget_display_l,
+            bat_widget,
+            widget_display_r,
+
+            -- Clock
+            spr5px,
+            spr,
+            spr5px,
+            widget_display_l,
+            clock_widget,
+            widget_display_r,
+            spr5px,
+            spr,
+
+            --
             s.mylayoutbox,
         },
     }
@@ -237,6 +440,10 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+
+    -- Select screenshot
+    awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'", false) end),
+
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -284,8 +491,10 @@ globalkeys = gears.table.join(
     -- Standard program
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
+
     awful.key({ modkey, "Control" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
+
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
               {description = "quit awesome", group = "awesome"}),
 
@@ -321,7 +530,7 @@ globalkeys = gears.table.join(
     -- Prompt
     awful.key({ modkey }, "r",
       function ()
-        awful.spawn.with_shell("rofi -show combi")
+        awful.spawn.with_shell("rofi -show combi -theme tsoporan")
       end,
               {description = "run rofi", group = "launcher"}),
 
@@ -340,6 +549,7 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "toggle fullscreen", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
@@ -494,7 +704,7 @@ awful.rules.rules = {
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
@@ -566,3 +776,7 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
+
+--Beautiful settings
+
+beautiful.useless_gap = 3
