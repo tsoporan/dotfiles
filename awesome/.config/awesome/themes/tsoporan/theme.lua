@@ -11,12 +11,12 @@ theme.dir               = os.getenv("HOME") .. "/.config/awesome/themes/tsoporan
 theme.icons             = theme.dir .. "/icons"
 theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/4k-clouds.jpg"
 
-theme.panel             = "png:" .. theme.icons .. "/panel/panel.png"
-theme.font              = "Fira Code 10"
-theme.calendar_font     = "Fira Code 10"
-theme.fs_font           = "Fira Code 10"
+theme.panel             = "#333333"
+theme.font              = "Hack 12"
+theme.calendar_font     = "Hack 12"
+theme.fs_font           = "Hack 12"
 
-theme.fg_normal         = "#888888"
+theme.fg_normal         = "#f9f9f9"
 theme.fg_focus          = "#e4e4e4"
 theme.fg_urgent         = "#CC9393"
 theme.bat_fg_critical   = "#232323"
@@ -27,45 +27,45 @@ theme.bg_urgent         = "#3F3F3F"
 theme.bg_systray        = "#343434"
 theme.bat_bg_critical   = "#ff0000"
 
-theme.clockgf           = "#d5d5c3"
+theme.clockgf           = "#f9f9f9"
 
 -- Borders
 
-theme.border_width                              = 4
-theme.border_normal                             = "#3F3F3F"
-theme.border_focus                              = "#6F6F6F"
-theme.border_marked                             = "#CC9393"
+theme.border_width  = 7
+theme.border_normal = "#3F3F3F"
+theme.border_focus  = "#276fbf"
+theme.border_marked = "#CC9393"
 
 -- Menu
 
-theme.menu_height = 16
+theme.menu_height = 38
 theme.menu_width  = 160
 
 -- Notifications
-theme.notification_font                         = "Fira Code 12"
-theme.notification_bg                           = "#232323"
-theme.notification_fg                           = "e4e4e4"
-theme.notification_border_width                 = 0
-theme.notification_border_color                 = "#232323"
-theme.notification_shape                        = gears.shape.infobubble
-theme.notification_opacity                      = 1
-theme.notification_margin                       = 30
+theme.notification_font         = "Hack 12"
+theme.notification_bg           = "#232323"
+theme.notification_fg           = "e4e4e4"
+theme.notification_border_width = 0
+theme.notification_border_color = "#232323"
+theme.notification_shape        = gears.shape.infobubble
+theme.notification_opacity      = 1
+theme.notification_margin       = 60
 
 -- Taglist
 
-theme.taglist_bg_empty    = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/empty.png"
-theme.taglist_bg_occupied = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/occupied.png"
-theme.taglist_bg_urgent   = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/urgent.png"
-theme.taglist_bg_focus    = "png:" .. theme.icons .. "/panel/taglist/" .. chosen_taglist_type .. "/focus.png"
-theme.taglist_font        = "Fira Code 11"
+theme.taglist_bg_empty    = "#333333"
+theme.taglist_bg_occupied = "#ad5d4e"
+theme.taglist_bg_urgent   = "#f03a47"
+theme.taglist_bg_focus    = "#eb6534"
+theme.taglist_font        = "Hack 12"
 
 -- Tasklist
 
-theme.tasklist_font                 = "Fira Code 9"
+theme.tasklist_font                 = "Hack 12"
 theme.tasklist_disable_icon         = true
-theme.tasklist_bg_normal            = "png:" .. theme.icons .. "/panel/tasklist/normal.png"
-theme.tasklist_bg_focus             = "png:" .. theme.icons .. "/panel/tasklist/focus.png"
-theme.tasklist_bg_urgent            = "png:" .. theme.icons .. "/panel/tasklist/urgent.png"
+theme.tasklist_bg_normal            = "#333333"
+theme.tasklist_bg_focus             = "#444444"
+theme.tasklist_bg_urgent            = "#f03a47"
 theme.tasklist_fg_focus             = "#DDDDDD"
 theme.tasklist_fg_urgent            = "#EEEEEE"
 theme.tasklist_fg_normal            = "#AAAAAA"
@@ -116,8 +116,6 @@ theme.widget_netul = theme.icons .. "/panel/widgets/widget_netul.png"
 -- Misc
 
 theme.menu_submenu_icon = theme.icons .. "/submenu.png"
-
-theme.chrome         = theme.dir .. "/icons/apps/chrome.png"
 
 -- Titlebar
 theme.titlebar_close_button_focus               = theme.dir .. "/icons/titlebar/close_focus.png"

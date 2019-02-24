@@ -44,23 +44,6 @@ do
 end
 
 
--- Naughty settings
-naughty.config.defaults.font          = "Fira Code 10"
-naughty.config.defaults.timeout       = 5
-naughty.config.defaults.screen        = 1
-naughty.config.defaults.position      = "top_right"
-naughty.config.defaults.margin        = 8
-naughty.config.defaults.gap           = 1
-naughty.config.defaults.ontop         = true
-naughty.config.defaults.icon          = nil
-naughty.config.defaults.icon_size     = 32
-naughty.config.defaults.fg            = beautiful.fg_tooltip
-naughty.config.defaults.bg            = beautiful.bg_tooltip
-naughty.config.defaults.border_color  = beautiful.border_tooltip
-naughty.config.defaults.border_width  = 2
-naughty.config.defaults.hover_timeout = nil
-
-
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
@@ -117,14 +100,12 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Widgets
 
 ---- Clock
-space3 = markup.font("Fira Code 3", " ")
+space3 = markup.font("Terminus 3", " ")
 clockgf = beautiful.clockgf
 
 local chosen_clock_type = "%a %d %b %H:%M"
-local textclock         = wibox.widget.textclock(markup(clockgf, space3 .. chosen_clock_type .. markup.font("Fira Code 3", " ")))
+local textclock         = wibox.widget.textclock(markup(clockgf, space3 .. chosen_clock_type .. markup.font("Terminus 3", " ")))
 local clock_widget      = wibox.container.background(textclock)
-
-clock_widget.bgimage=beautiful.widget_display
 
 lain.widget.cal({
     cal = "cal --color=always",
@@ -140,44 +121,40 @@ lain.widget.cal({
 local cpu_icon = wibox.widget.imagebox(beautiful.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(space3 .. cpu_now.usage .. "%" .. markup.font("Fira Code 4", " "))
+        widget:set_markup(space3 .. cpu_now.usage .. "%" .. markup.font("Terminus 4", " "))
     end
 })
 local cpu_widget = wibox.container.background(cpu.widget)
-cpu_widget.bgimage=beautiful.widget_display
 
 ---- MEM
 local mem_icon = wibox.widget.imagebox(beautiful.widget_mem)
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(space3 .. mem_now.used .. "MB" .. markup.font("Fira Code 4", " "))
+        widget:set_markup(space3 .. mem_now.used .. "MB" .. markup.font("Terminus 4", " "))
     end
 })
 local mem_widget = wibox.container.background(mem.widget)
-mem_widget.bgimage=beautiful.widget_display
 
 ---- Net
 local netdl_icon = wibox.widget.imagebox(beautiful.widget_netdl)
 local netup_icon = wibox.widget.imagebox(beautiful.widget_netul)
 
-local iface = "enp24s0"
+local iface = "wlp2s0"
 
 local net_widgetdl = lain.widget.net({
     iface = iface,
     settings = function()
-        widget:set_markup(markup.font("Fira Code 1", " ") .. net_now.received)
+        widget:set_markup(markup.font("Terminus 1", " ") .. net_now.received)
     end
 })
 local net_widgetul = lain.widget.net({
     iface = iface,
     settings = function()
-        widget:set_markup(markup.font("Fira Code 1", "  ") .. net_now.sent)
+        widget:set_markup(markup.font("Terminus 1", "  ") .. net_now.sent)
     end
 })
 local netdl_widget = wibox.container.background(net_widgetdl.widget)
-netdl_widget.bgimage=beautiful.widget_display
 local netup_widget = wibox.container.background(net_widgetul.widget)
-netup_widget.bgimage=beautiful.widget_display
 
 -- FS
 local fs_icon = wibox.widget.imagebox(beautiful.widget_fs)
@@ -189,7 +166,6 @@ local fs = lain.widget.fs({
     end
 })
 local fs_widget = wibox.container.background(fs.widget)
-fs_widget.bgimage=beautiful.widget_display
 
 -- Battery
 local bat = lain.widget.bat({
@@ -234,7 +210,6 @@ local bat = lain.widget.bat({
     end
 })
 local bat_widget = wibox.container.background(bat.widget)
-bat_widget.bgimage=beautiful.widget_display
 
 -- End Widgets
 
@@ -297,15 +272,15 @@ screen.connect_signal("property::geometry", set_wallpaper)
 
 -- Empty due to icon
 tagnames = {
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
+  "一",
+  "二",
+  "三",
+  "四",
+  "五",
+  "六",
+  "七",
+  "八",
+  "九",
 }
 
 spr = wibox.widget.imagebox(beautiful.spr)
@@ -352,7 +327,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({
       position = "top",
       screen   = s,
-      height   = 22,
+      height   = 38,
       bg       = beautiful.panel,
       fg       = beautiful.fg_normal
     })
@@ -362,9 +337,9 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            spr5px,
             s.mytaglist,
-            spr5px,
+            spr5x,
+            spr
         },
         s.mytasklist, -- Middle widget,
         { -- Right widgets
@@ -375,51 +350,41 @@ awful.screen.connect_for_each_screen(function(s)
             -- CPU widget
             spr,
             cpu_icon,
-            widget_display_l,
             cpu_widget,
-            widget_display_r,
             spr5px,
 
             -- Mem widget
             spr,
             mem_icon,
-            widget_display_l,
             mem_widget,
-            widget_display_r,
             spr5px,
 
             -- Fs widget
             spr,
             fs_icon,
-            widget_display_l,
             fs_widget,
-            widget_display_r,
             spr5px,
 
             -- Net widget
             spr,
             netdl_icon,
-            widget_display_l,
             netdl_widget,
-            widget_display_c,
+            spr5px,
+            spr,
+            spr5px,
             netup_widget,
-            widget_display_r,
             netup_icon,
 
             -- Battery widget
             spr,
-            spr5px,
-            widget_display_l,
             bat_widget,
-            widget_display_r,
+            spr5px,
 
             -- Clock
             spr5px,
             spr,
             spr5px,
-            widget_display_l,
             clock_widget,
-            widget_display_r,
             spr5px,
             spr,
 
@@ -781,4 +746,4 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 --Beautiful settings
 
-beautiful.useless_gap = 3
+beautiful.useless_gap = 5
