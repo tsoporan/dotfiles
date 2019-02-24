@@ -4,32 +4,28 @@ Collection of dotfiles for my day-to-day programs.
 
 ### My setup
 
-- [Linux(Arch)](https://www.archlinux.org/)
+- [ArchLinux](https://www.archlinux.org/)
+- [AwesomeWM](https://awesomewm.org/)
 - [GNU Stow](https://www.gnu.org/software/stow/)
-- [i3wm](https://i3wm.org/)
-- [polybar](https://github.com/jaagr/polybar)
-- [betterlockscreen](https://github.com/flumm/Themes/blob/master/Space/.i3/config)
-- [nitrogen](https://wiki.archlinux.org/index.php/nitrogen)
-- [rofi](https://github.com/DaveDavenport/rofi)
-- [kitty](https://github.com/kovidgoyal/kitty)
+- [rofi/rofi-pass](https://github.com/DaveDavenport/rofi)
+- [kitty term](https://github.com/kovidgoyal/kitty)
 - [vim](https://www.vim.org/)
-  - [vim-plug](https://github.com/junegunn/vim-plug)
 - [zsh](https://wiki.archlinux.org/index.php/zsh)
-  - [antigen](https://github.com/zsh-users/antigen)
-- [git](https://wiki.archlinux.org/index.php/git)
 - [fzf](https://github.com/junegunn/fzf)
-- [nm-applet](https://wiki.archlinux.org/index.php/NetworkManager)
-- [Hack font](https://sourcefoundry.org/hack/)
-- [Font Awesome](https://fontawesome.com/?from=io)
-- [Deja Vu Sans](https://dejavu-fonts.github.io/)
+- [Fira Code font](https://github.com/tonsky/FiraCode)
 
 ### Dotfile usage
 
 Using `stow` simply `stow <dirname>` from within the cloned dir.
 
+```bash
+# For example to add the vim config
+stow vim
+# Notice now that ~/.vimrc is linked
+```
+
 Enjoy!
 
-## HiDPI
+### Theme
 
-Note `*.laptop` variations for some configs, this is due to the diff between my computers, though you should only
-need one of these.
+The theme is customized for my needs but heavily based on: [awesome-pro](https://github.com/4ban/awesome-pro) - check it out!
