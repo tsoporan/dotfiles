@@ -2,6 +2,8 @@
 
 Collection of dotfiles for my day-to-day programs.
 
+![2019-02-24-000011_1920x1200_scrot](https://user-images.githubusercontent.com/130991/53295351-5ecca400-37c7-11e9-844e-5322989dba96.png)
+
 ### My setup
 
 - [ArchLinux](https://www.archlinux.org/)
