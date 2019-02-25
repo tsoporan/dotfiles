@@ -18,6 +18,11 @@ local markup        = lain.util.markup
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
+--
+naughty.config.defaults.margin = 20
+naughty.config.padding = -20
+naughty.config.spacing = 20
+
 -- Error handling
 if awesome.startup_errors then
   naughty.notify({
@@ -110,11 +115,6 @@ local clock_widget      = wibox.container.background(textclock)
 lain.widget.cal({
     cal = "cal --color=always",
     attach_to = { textclock },
-    notification_preset = {
-        font = beautiful.calendar_font,
-        fg   = beautiful.fg_normal,
-        bg   = beautiful.bg_normal
-    }
 })
 
 ---- CPU
@@ -160,7 +160,6 @@ local netup_widget = wibox.container.background(net_widgetul.widget)
 local fs_icon = wibox.widget.imagebox(beautiful.widget_fs)
 
 local fs = lain.widget.fs({
-    notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = beautiful.fs_font },
     settings = function()
         widget:set_markup(markup.font(beautiful.font, "/: " .. fs_now["/"].percentage .. "%"))
     end
@@ -175,19 +174,21 @@ local bat = lain.widget.bat({
     n_perc = {5,15}, -- crit, low
 
     settings = function()
+        bat_notification_charged_preset = {
+          title   = "Battery full",
+          text    = "You can unplug the cable",
+          timeout = 15,
+        }
+
         bat_notification_low_preset = {
             title = "Battery low",
             text = "Plug the cable!",
             timeout = 15,
-            fg = beautiful.fg_normal,
-            bg = beautiful.bg_normal
         }
         bat_notification_critical_preset = {
             title = "Battery exhausted",
             text = "Shutdown imminent",
             timeout = 15,
-            fg = beautiful.bat_fg_critical,
-            bg = beautiful.bat_bg_critical
         }
 
         if bat_now.status ~= "N/A" then

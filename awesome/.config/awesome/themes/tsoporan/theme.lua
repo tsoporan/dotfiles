@@ -1,9 +1,9 @@
 -- tsoporan theme
 -- Customized from: https://github.com/4ban/awesome-pro/blob/master/themes/pro-dark/theme.lua
 
-local gears = require("gears")
-
-local chosen_taglist_type = "sticks" -- bubbles
+local gears      = require("gears")
+local xresources = require("beautiful.xresources")
+local dpi        = xresources.apply_dpi
 
 local theme             = {}
 theme.dir               = os.getenv("HOME") .. "/.config/awesome/themes/tsoporan"
@@ -20,7 +20,6 @@ theme.fg_normal         = "#f9f9f9"
 theme.fg_focus          = "#e4e4e4"
 theme.fg_urgent         = "#CC9393"
 theme.bat_fg_critical   = "#232323"
-
 theme.bg_normal         = "#3F3F3F"
 theme.bg_focus          = "#5a5a5a"
 theme.bg_urgent         = "#3F3F3F"
@@ -39,17 +38,19 @@ theme.border_marked = "#CC9393"
 -- Menu
 
 theme.menu_height = 38
-theme.menu_width  = 160
+theme.menu_width  = dpi(100)
 
 -- Notifications
 theme.notification_font         = "Hack 12"
 theme.notification_bg           = "#232323"
-theme.notification_fg           = "e4e4e4"
-theme.notification_border_width = 0
-theme.notification_border_color = "#232323"
-theme.notification_shape        = gears.shape.infobubble
+theme.notification_fg           = "#e4e4e4"
+theme.notification_border_width = 5
+theme.notification_border_color = "#ffffff"
 theme.notification_opacity      = 1
-theme.notification_margin       = 60
+theme.notification_margin       = 100
+theme.notification_padding      = 20
+theme.notification_max_width    = 800
+theme.notification_max_height   = 800
 
 -- Taglist
 
