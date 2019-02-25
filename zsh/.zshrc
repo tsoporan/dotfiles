@@ -2,25 +2,9 @@
 # tsoporan's zshrc config
 #
 
-# Pull in Antigen for managing plugins
-source ~/scripts/antigen.zsh
-
-antigen use oh-my-zsh
-
-antigen bundle mafredri/zsh-async
-antigen bundle git
-antigen bundle common-aliases
-antigen bundle docker
-antigen bundle docker-compose
-antigen bundle zdharma/fast-syntax-highlighting # Syntax highlighting
-antigen bundle zsh-users/zsh-autosuggestions # Fish style autosuggestions
-antigen bundle zsh-users/zsh-completions # Completions
-antigen bundle zsh-users/zsh-history-substring-search # Nicer search
-antigen bundle ael-code/zsh-colored-man-pages # Colored man pages
-antigen bundle terraform
-
-antigen theme lambda
-antigen apply
+# Use antibody
+export ZSH="$(antibody home)/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
+source ~/.zsh_plugins.sh
 
 # Various aliases
 alias v="vim"
