@@ -1,4 +1,4 @@
--- tsoporans AwesomeWM config
+-- tsoporans AwesomeWM config circa 2019
 
 -- LuaRocks - if installed
 pcall(require, "luarocks.loader")
@@ -17,6 +17,11 @@ local markup        = lain.util.markup
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+
+-- Override for now, using beautiful does not work!
+naughty.config.defaults.margin = 20
+naughty.config.padding = 20
+naughty.config.spacing = 20
 
 -- Error handling
 if awesome.startup_errors then
@@ -42,23 +47,6 @@ do
     in_error = false
   end)
 end
-
-
--- Naughty settings
-naughty.config.defaults.font          = "Fira Code 10"
-naughty.config.defaults.timeout       = 5
-naughty.config.defaults.screen        = 1
-naughty.config.defaults.position      = "top_right"
-naughty.config.defaults.margin        = 8
-naughty.config.defaults.gap           = 1
-naughty.config.defaults.ontop         = true
-naughty.config.defaults.icon          = nil
-naughty.config.defaults.icon_size     = 32
-naughty.config.defaults.fg            = beautiful.fg_tooltip
-naughty.config.defaults.bg            = beautiful.bg_tooltip
-naughty.config.defaults.border_color  = beautiful.border_tooltip
-naughty.config.defaults.border_width  = 2
-naughty.config.defaults.hover_timeout = nil
 
 
 -- {{{ Variable definitions
@@ -116,82 +104,61 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- Widgets
 
----- Clock
-space3 = markup.font("Fira Code 3", " ")
+---- Clock / Cal
 clockgf = beautiful.clockgf
 
 local chosen_clock_type = "%a %d %b %H:%M"
-local textclock         = wibox.widget.textclock(markup(clockgf, space3 .. chosen_clock_type .. markup.font("Fira Code 3", " ")))
+local textclock         = wibox.widget.textclock(" " .. chosen_clock_type .. " ")
 local clock_widget      = wibox.container.background(textclock)
 
-clock_widget.bgimage=beautiful.widget_display
-
 lain.widget.cal({
-    cal = "cal --color=always",
     attach_to = { textclock },
+    three = true,
     notification_preset = {
-        font = beautiful.calendar_font,
-        fg   = beautiful.fg_normal,
-        bg   = beautiful.bg_normal
+      font = beautiful.notification_font,
+      fg = beautiful.notification_fg,
+      bg = beautiful.notification_bg
     }
 })
 
 ---- CPU
-local cpu_icon = wibox.widget.imagebox(beautiful.widget_cpu)
+local cpu_icon = wibox.widget.textbox("[CPU]")
+
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(space3 .. cpu_now.usage .. "%" .. markup.font("Fira Code 4", " "))
+        widget:set_markup(" " .. cpu_now.usage .. "%" .. markup.font("Terminus 4", " "))
     end
 })
+
 local cpu_widget = wibox.container.background(cpu.widget)
-cpu_widget.bgimage=beautiful.widget_display
 
 ---- MEM
-local mem_icon = wibox.widget.imagebox(beautiful.widget_mem)
+local mem_icon = wibox.widget.textbox("[MEM]")
+
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(space3 .. mem_now.used .. "MB" .. markup.font("Fira Code 4", " "))
+        widget:set_markup(" " .. mem_now.used .. "MB" .. markup.font("Terminus 4", " "))
     end
 })
 local mem_widget = wibox.container.background(mem.widget)
-mem_widget.bgimage=beautiful.widget_display
-
----- Net
-local netdl_icon = wibox.widget.imagebox(beautiful.widget_netdl)
-local netup_icon = wibox.widget.imagebox(beautiful.widget_netul)
-
-local iface = "enp24s0"
-
-local net_widgetdl = lain.widget.net({
-    iface = iface,
-    settings = function()
-        widget:set_markup(markup.font("Fira Code 1", " ") .. net_now.received)
-    end
-})
-local net_widgetul = lain.widget.net({
-    iface = iface,
-    settings = function()
-        widget:set_markup(markup.font("Fira Code 1", "  ") .. net_now.sent)
-    end
-})
-local netdl_widget = wibox.container.background(net_widgetdl.widget)
-netdl_widget.bgimage=beautiful.widget_display
-local netup_widget = wibox.container.background(net_widgetul.widget)
-netup_widget.bgimage=beautiful.widget_display
 
 -- FS
-local fs_icon = wibox.widget.imagebox(beautiful.widget_fs)
+local fs_icon = wibox.widget.textbox("[FS]")
 
 local fs = lain.widget.fs({
-    notification_preset = { fg = beautiful.fg_normal, bg = beautiful.bg_normal, font = beautiful.fs_font },
     settings = function()
-        widget:set_markup(markup.font(beautiful.font, "/: " .. fs_now["/"].percentage .. "%"))
-    end
+        widget:set_markup(markup.font(beautiful.font, " " .. fs_now["/"].percentage .. "%"))
+    end,
+    notification_preset = {
+      font =  beautiful.notification_font,
+      fg = beautiful.notification_fg,
+      bg = beautiful.notification_bg
+    }
 })
 local fs_widget = wibox.container.background(fs.widget)
-fs_widget.bgimage=beautiful.widget_display
 
 -- Battery
+local bat_icon = wibox.widget.textbox("[BAT]")
 local bat = lain.widget.bat({
     battery = "BAT0",
     timeout = 30,
@@ -199,19 +166,21 @@ local bat = lain.widget.bat({
     n_perc = {5,15}, -- crit, low
 
     settings = function()
+        bat_notification_charged_preset = {
+          title   = "Battery full",
+          text    = "You can unplug the cable",
+          timeout = 15,
+        }
+
         bat_notification_low_preset = {
             title = "Battery low",
             text = "Plug the cable!",
             timeout = 15,
-            fg = beautiful.fg_normal,
-            bg = beautiful.bg_normal
         }
         bat_notification_critical_preset = {
             title = "Battery exhausted",
             text = "Shutdown imminent",
             timeout = 15,
-            fg = beautiful.bat_fg_critical,
-            bg = beautiful.bat_bg_critical
         }
 
         if bat_now.status ~= "N/A" then
@@ -234,7 +203,21 @@ local bat = lain.widget.bat({
     end
 })
 local bat_widget = wibox.container.background(bat.widget)
-bat_widget.bgimage=beautiful.widget_display
+
+--- Vol
+local vol_icon = wibox.widget.textbox("[VOL]")
+
+local volume = lain.widget.pulse {
+    settings = function()
+        vlevel = volume_now.left .. "%"
+        if volume_now.muted == "yes" then
+            vlevel = vlevel .. " M"
+        end
+        widget:set_markup(lain.util.markup("#ffffff", vlevel))
+    end
+}
+
+local vol_widget = wibox.container.background(volume.widget)
 
 -- End Widgets
 
@@ -297,25 +280,20 @@ screen.connect_signal("property::geometry", set_wallpaper)
 
 -- Empty due to icon
 tagnames = {
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
-  "  ",
+  "一",
+  "二",
+  "三",
+  "四",
+  "五",
+  "六",
+  "七",
+  "八",
+  "九",
 }
 
 spr = wibox.widget.imagebox(beautiful.spr)
 spr4px = wibox.widget.imagebox(beautiful.spr4px)
 spr5px = wibox.widget.imagebox(beautiful.spr5px)
-
-widget_display = wibox.widget.imagebox(beautiful.widget_display)
-widget_display_r = wibox.widget.imagebox(beautiful.widget_display_r)
-widget_display_l = wibox.widget.imagebox(beautiful.widget_display_l)
-widget_display_c = wibox.widget.imagebox(beautiful.widget_display_c)
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -352,7 +330,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({
       position = "top",
       screen   = s,
-      height   = 22,
+      height   = beautiful.panel_height,
       bg       = beautiful.panel,
       fg       = beautiful.fg_normal
     })
@@ -362,9 +340,9 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            spr5px,
             s.mytaglist,
-            spr5px,
+            spr5x,
+            spr
         },
         s.mytasklist, -- Middle widget,
         { -- Right widgets
@@ -374,52 +352,49 @@ awful.screen.connect_for_each_screen(function(s)
 
             -- CPU widget
             spr,
+            spr5px,
             cpu_icon,
-            widget_display_l,
+            spr5px,
             cpu_widget,
-            widget_display_r,
             spr5px,
 
             -- Mem widget
             spr,
+            spr5px,
             mem_icon,
-            widget_display_l,
             mem_widget,
-            widget_display_r,
             spr5px,
 
             -- Fs widget
             spr,
-            fs_icon,
-            widget_display_l,
-            fs_widget,
-            widget_display_r,
             spr5px,
-
-            -- Net widget
-            spr,
-            netdl_icon,
-            widget_display_l,
-            netdl_widget,
-            widget_display_c,
-            netup_widget,
-            widget_display_r,
-            netup_icon,
+            fs_icon,
+            spr5px,
+            fs_widget,
+            spr5px,
 
             -- Battery widget
+            spr5px,
             spr,
             spr5px,
-            widget_display_l,
+            bat_icon,
             bat_widget,
-            widget_display_r,
+            spr5px,
+
+            -- Vol widget
+            spr5px,
+            spr,
+            spr5px,
+            vol_icon,
+            spr5px,
+            vol_widget,
+            spr5px,
 
             -- Clock
             spr5px,
             spr,
             spr5px,
-            widget_display_l,
             clock_widget,
-            widget_display_r,
             spr5px,
             spr,
 
@@ -442,6 +417,9 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
+    -- Brightness
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 10") end),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 10") end),
 
     -- Select screenshot
     awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'", false) end),
@@ -586,7 +564,24 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
+
+  -- Audio (PulseAudio)
+  awful.key({ altkey }, "Up",
+      function ()
+          os.execute(string.format("pactl set-sink-volume %d +10%%", volume.device))
+          volume.update()
+      end),
+  awful.key({ altkey }, "Down",
+      function ()
+          os.execute(string.format("pactl set-sink-volume %d -10%%", volume.device))
+          volume.update()
+      end),
+  awful.key({ altkey }, "m",
+      function ()
+          os.execute(string.format("pactl set-sink-mute %d toggle", volume.device))
+          volume.update()
+      end)
 )
 
 -- Bind all key numbers to tags.
@@ -781,4 +776,4 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 
 --Beautiful settings
 
-beautiful.useless_gap = 3
+beautiful.useless_gap = 5
