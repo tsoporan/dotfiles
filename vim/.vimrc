@@ -15,8 +15,7 @@ Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
 Plug 'Yggdroot/indentLine' "Indents
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
-Plug 'vim-airline/vim-airline' "Status bar
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim' "Status bar
 Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
 Plug 'w0ng/vim-hybrid' "Color
@@ -29,6 +28,8 @@ Plug 'posva/vim-vue' " Vue syntax
 call plug#end()
 
 let mapleader=',' "change from default \
+
+set noshowmode
 
 "set autochdir " Automatically change the directory
 set autowrite " Write before running commands
@@ -196,5 +197,7 @@ let g:terraform_fold_sections=1
 " Markdown
 let g:vim_markdown_conceal = 0
 
-" Airline
-let g:airline_theme = 'badcat'
+" Lightline
+let g:lightline = {
+  \ 'colorscheme': 'wombat',
+  \ }
