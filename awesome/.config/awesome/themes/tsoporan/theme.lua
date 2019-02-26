@@ -12,8 +12,8 @@ theme.icons             = theme.dir .. "/icons"
 theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/4k-clouds.jpg"
 
 theme.panel             = "#333333"
-theme.panel_height      = 48
-theme.font              = "Fira Mono 10"
+theme.panel_height      = dpi(28)
+theme.font              = "Fira Mono 9"
 
 theme.fg_normal         = "#f9f9f9"
 theme.fg_focus          = "#e4e4e4"
@@ -40,7 +40,7 @@ theme.menu_height = dpi(38)
 theme.menu_width  = dpi(100)
 
 -- Notifications
-theme.notification_font         = "Fira Mono 10"
+theme.notification_font         = "Fira Mono 9"
 theme.notification_bg           = "#121212"
 theme.notification_fg           = "#e4e4e4"
 theme.notification_border_width = dpi(4)
@@ -57,11 +57,11 @@ theme.taglist_bg_empty    = "#333333"
 theme.taglist_bg_occupied = "#ad5d4e"
 theme.taglist_bg_urgent   = "#f03a47"
 theme.taglist_bg_focus    = "#eb6534"
-theme.taglist_font        = "Fira Mono 10"
+theme.taglist_font        = "Fira Mono 9"
 
 -- Tasklist
 
-theme.tasklist_font                 = "Fira Mono 10"
+theme.tasklist_font                 = "Fira Mono 9"
 theme.tasklist_disable_icon         = true
 theme.tasklist_bg_normal            = "#333333"
 theme.tasklist_bg_focus             = "#444444"
