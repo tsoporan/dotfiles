@@ -9,12 +9,15 @@ Collection of dotfiles for my day-to-day programs.
 - [ArchLinux](https://www.archlinux.org/)
 - [AwesomeWM](https://awesomewm.org/)
 - [GNU Stow](https://www.gnu.org/software/stow/)
-- [rofi/rofi-pass](https://github.com/DaveDavenport/rofi)
+- [rofi & rofi-pass](https://github.com/DaveDavenport/rofi)
 - [kitty term](https://github.com/kovidgoyal/kitty)
 - [vim](https://www.vim.org/)
 - [zsh](https://wiki.archlinux.org/index.php/zsh)
+  - [antibody](https://github.com/getantibody/antibody)
 - [fzf](https://github.com/junegunn/fzf)
 - [Fira Code font](https://github.com/tonsky/FiraCode)
+- [ripgrep](https://github.com/BurntSushi/ripgrep)
+- [fd](https://github.com/sharkdp/fd)
 
 ### Dotfile usage
 
