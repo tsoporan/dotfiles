@@ -54,5 +54,5 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export PURE_PROMPT_SYMBOL="λ"
 
-# Allow autojump to work
-export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND ;} history -a"
+# Z
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
