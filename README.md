@@ -2,7 +2,7 @@
 
 Collection of dotfiles for my day-to-day programs.
 
-![2019-02-24-000011_1920x1200_scrot](https://user-images.githubusercontent.com/130991/53295351-5ecca400-37c7-11e9-844e-5322989dba96.png)
+![2019-02-25-231425_3840x2160_scrot](https://user-images.githubusercontent.com/130991/53387138-6e78f380-3953-11e9-86eb-abc36fed6986.png)
 
 ### My setup
 
