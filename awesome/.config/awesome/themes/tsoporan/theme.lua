@@ -12,6 +12,7 @@ theme.icons             = theme.dir .. "/icons"
 theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/4k-clouds.jpg"
 
 theme.panel             = "#333333"
+theme.panel_height      = 48
 theme.font              = "Fira Mono 10"
 
 theme.fg_normal         = "#f9f9f9"
@@ -56,11 +57,11 @@ theme.taglist_bg_empty    = "#333333"
 theme.taglist_bg_occupied = "#ad5d4e"
 theme.taglist_bg_urgent   = "#f03a47"
 theme.taglist_bg_focus    = "#eb6534"
-theme.taglist_font        = "Hack 12"
+theme.taglist_font        = "Fira Mono 10"
 
 -- Tasklist
 
-theme.tasklist_font                 = "Hack 12"
+theme.tasklist_font                 = "Fira Mono 10"
 theme.tasklist_disable_icon         = true
 theme.tasklist_bg_normal            = "#333333"
 theme.tasklist_bg_focus             = "#444444"
