@@ -295,11 +295,6 @@ spr = wibox.widget.imagebox(beautiful.spr)
 spr4px = wibox.widget.imagebox(beautiful.spr4px)
 spr5px = wibox.widget.imagebox(beautiful.spr5px)
 
-widget_display = wibox.widget.imagebox(beautiful.widget_display)
-widget_display_r = wibox.widget.imagebox(beautiful.widget_display_r)
-widget_display_l = wibox.widget.imagebox(beautiful.widget_display_l)
-widget_display_c = wibox.widget.imagebox(beautiful.widget_display_c)
-
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -335,7 +330,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox = awful.wibar({
       position = "top",
       screen   = s,
-      height   = 38,
+      height   = beautiful.panel_height,
       bg       = beautiful.panel,
       fg       = beautiful.fg_normal
     })
@@ -569,7 +564,24 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
+
+  -- Audio (PulseAudio)
+  awful.key({ altkey }, "Up",
+      function ()
+          os.execute(string.format("pactl set-sink-volume %d +10%%", volume.device))
+          volume.update()
+      end),
+  awful.key({ altkey }, "Down",
+      function ()
+          os.execute(string.format("pactl set-sink-volume %d -10%%", volume.device))
+          volume.update()
+      end),
+  awful.key({ altkey }, "m",
+      function ()
+          os.execute(string.format("pactl set-sink-mute %d toggle", volume.device))
+          volume.update()
+      end)
 )
 
 -- Bind all key numbers to tags.
