@@ -1,4 +1,4 @@
--- tsoporans AwesomeWM config
+-- tsoporans AwesomeWM config circa 2019
 
 -- LuaRocks - if installed
 pcall(require, "luarocks.loader")
@@ -18,9 +18,9 @@ local markup        = lain.util.markup
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
---
+-- Override for now, using beautiful does not work!
 naughty.config.defaults.margin = 20
-naughty.config.padding = -20
+naughty.config.padding = 20
 naughty.config.spacing = 20
 
 -- Error handling
@@ -104,69 +104,61 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- Widgets
 
----- Clock
-space3 = markup.font("Terminus 3", " ")
+---- Clock / Cal
 clockgf = beautiful.clockgf
 
 local chosen_clock_type = "%a %d %b %H:%M"
-local textclock         = wibox.widget.textclock(markup(clockgf, space3 .. chosen_clock_type .. markup.font("Terminus 3", " ")))
+local textclock         = wibox.widget.textclock(" " .. chosen_clock_type .. " ")
 local clock_widget      = wibox.container.background(textclock)
 
 lain.widget.cal({
-    cal = "cal --color=always",
     attach_to = { textclock },
+    three = true,
+    notification_preset = {
+      font = beautiful.notification_font,
+      fg = beautiful.notification_fg,
+      bg = beautiful.notification_bg
+    }
 })
 
 ---- CPU
-local cpu_icon = wibox.widget.imagebox(beautiful.widget_cpu)
+local cpu_icon = wibox.widget.textbox("[CPU]")
+
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(space3 .. cpu_now.usage .. "%" .. markup.font("Terminus 4", " "))
+        widget:set_markup(" " .. cpu_now.usage .. "%" .. markup.font("Terminus 4", " "))
     end
 })
+
 local cpu_widget = wibox.container.background(cpu.widget)
 
 ---- MEM
-local mem_icon = wibox.widget.imagebox(beautiful.widget_mem)
+local mem_icon = wibox.widget.textbox("[MEM]")
+
 local mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(space3 .. mem_now.used .. "MB" .. markup.font("Terminus 4", " "))
+        widget:set_markup(" " .. mem_now.used .. "MB" .. markup.font("Terminus 4", " "))
     end
 })
 local mem_widget = wibox.container.background(mem.widget)
 
----- Net
-local netdl_icon = wibox.widget.imagebox(beautiful.widget_netdl)
-local netup_icon = wibox.widget.imagebox(beautiful.widget_netul)
-
-local iface = "wlp2s0"
-
-local net_widgetdl = lain.widget.net({
-    iface = iface,
-    settings = function()
-        widget:set_markup(markup.font("Terminus 1", " ") .. net_now.received)
-    end
-})
-local net_widgetul = lain.widget.net({
-    iface = iface,
-    settings = function()
-        widget:set_markup(markup.font("Terminus 1", "  ") .. net_now.sent)
-    end
-})
-local netdl_widget = wibox.container.background(net_widgetdl.widget)
-local netup_widget = wibox.container.background(net_widgetul.widget)
-
 -- FS
-local fs_icon = wibox.widget.imagebox(beautiful.widget_fs)
+local fs_icon = wibox.widget.textbox("[FS]")
 
 local fs = lain.widget.fs({
     settings = function()
-        widget:set_markup(markup.font(beautiful.font, "/: " .. fs_now["/"].percentage .. "%"))
-    end
+        widget:set_markup(markup.font(beautiful.font, " " .. fs_now["/"].percentage .. "%"))
+    end,
+    notification_preset = {
+      font =  beautiful.notification_font,
+      fg = beautiful.notification_fg,
+      bg = beautiful.notification_bg
+    }
 })
 local fs_widget = wibox.container.background(fs.widget)
 
 -- Battery
+local bat_icon = wibox.widget.textbox("[BAT]")
 local bat = lain.widget.bat({
     battery = "BAT0",
     timeout = 30,
@@ -211,6 +203,21 @@ local bat = lain.widget.bat({
     end
 })
 local bat_widget = wibox.container.background(bat.widget)
+
+--- Vol
+local vol_icon = wibox.widget.textbox("[VOL]")
+
+local volume = lain.widget.pulse {
+    settings = function()
+        vlevel = volume_now.left .. "%"
+        if volume_now.muted == "yes" then
+            vlevel = vlevel .. " M"
+        end
+        widget:set_markup(lain.util.markup("#ffffff", vlevel))
+    end
+}
+
+local vol_widget = wibox.container.background(volume.widget)
 
 -- End Widgets
 
@@ -350,35 +357,42 @@ awful.screen.connect_for_each_screen(function(s)
 
             -- CPU widget
             spr,
+            spr5px,
             cpu_icon,
+            spr5px,
             cpu_widget,
             spr5px,
 
             -- Mem widget
             spr,
+            spr5px,
             mem_icon,
             mem_widget,
             spr5px,
 
             -- Fs widget
             spr,
+            spr5px,
             fs_icon,
+            spr5px,
             fs_widget,
             spr5px,
 
-            -- Net widget
-            spr,
-            netdl_icon,
-            netdl_widget,
-            spr5px,
-            spr,
-            spr5px,
-            netup_widget,
-            netup_icon,
-
             -- Battery widget
+            spr5px,
             spr,
+            spr5px,
+            bat_icon,
             bat_widget,
+            spr5px,
+
+            -- Vol widget
+            spr5px,
+            spr,
+            spr5px,
+            vol_icon,
+            spr5px,
+            vol_widget,
             spr5px,
 
             -- Clock
