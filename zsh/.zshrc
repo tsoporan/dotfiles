@@ -2,12 +2,20 @@
 # tsoporan's zshrc config
 #
 
+# Profiling
+#zmodload zsh/zprof
+
 # Use antibody
 export ZSH="$(antibody home)/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 source ~/.zsh_plugins.sh
 
+# Some fun
+fortune | cowsay -f vader | lolcat
+
 # Various aliases
 alias v="vim"
+alias lx="exa"
+alias ll="exa -al"
 alias gdiff="git diff"
 alias gadd="git add"
 alias gstash="git stash"
@@ -29,8 +37,8 @@ export KEYTIMEOUT=1 # Less lag
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Fix NPM install
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Local bin
 PATH=$PATH:$HOME/.local/bin
@@ -56,3 +64,6 @@ export PURE_PROMPT_SYMBOL="λ"
 
 # Z
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
+# End profiling
+#zprof
