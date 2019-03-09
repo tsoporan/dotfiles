@@ -37,4 +37,5 @@ The theme is customized for my needs but heavily based on: [awesome-pro](https:/
 
 ### HiDPI
 
-The `laptop` branch contains adjustments to the configs for HiDPI
+The main branch contains a HiDPI set up, due to my primary driver, check out the `desktop` branch if you aren't using
+HiDPI.
