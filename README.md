@@ -10,7 +10,7 @@ Collection of dotfiles for my day-to-day programs.
 - [AwesomeWM](https://awesomewm.org/)
 - [GNU Stow](https://www.gnu.org/software/stow/)
 - [rofi & rofi-pass](https://github.com/DaveDavenport/rofi)
-- [kitty term](https://github.com/kovidgoyal/kitty)
+- [alacritty terminal](https://github.com/jwilm/alacritty)
 - [vim](https://www.vim.org/)
 - [zsh](https://wiki.archlinux.org/index.php/zsh)
   - [antibody](https://github.com/getantibody/antibody)

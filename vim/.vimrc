@@ -24,6 +24,7 @@ Plug 'sheerun/vim-polyglot' "Multiple lang support
 Plug 'hashivim/vim-terraform' "Terraform
 Plug 'leafgarland/typescript-vim' "Ts
 Plug 'posva/vim-vue' " Vue syntax
+Plug 'b4b4r07/vim-sqlfmt' " Format sql
 
 call plug#end()
 
@@ -201,3 +202,7 @@ let g:vim_markdown_conceal = 0
 let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ }
+
+" SQL fmt
+let g:sqlfmt_command = "sqlformat"
+let g:sqlfmt_options = "-r -k upper"

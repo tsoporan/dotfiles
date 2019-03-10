@@ -26,6 +26,7 @@ alias gstat="git status"
 alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature"
 alias gcom="git commit -S --signoff"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias rm="rm -i"
 
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
@@ -64,6 +65,10 @@ export PURE_PROMPT_SYMBOL="λ"
 
 # Z
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
+
+# Correct prev command
+eval $(thefuck --alias fuu)
 
 # End profiling
 #zprof
