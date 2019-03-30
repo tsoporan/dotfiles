@@ -70,5 +70,9 @@ export PURE_PROMPT_SYMBOL="λ"
 # Correct prev command
 eval $(thefuck --alias fuu)
 
+# NPM install
+PATH="$HOME/.node_modules/bin:$PATH"
+export npm_config_prefix=~/.node_modules
+
 # End profiling
 #zprof
