@@ -25,6 +25,7 @@ Plug 'hashivim/vim-terraform' "Terraform
 Plug 'leafgarland/typescript-vim' "Ts
 Plug 'posva/vim-vue' " Vue syntax
 Plug 'b4b4r07/vim-sqlfmt' " Format sql
+Plug 'jparise/vim-graphql'
 
 call plug#end()
 
@@ -137,12 +138,22 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "
 nmap ga <Plug>(EasyAlign)
 
 " ALE
+let g:ale_linters = {
+\  'javascript': ['eslint'],
+\  'typescript': ['tsserver', 'tslint'],
+\  'vue': ['eslint'],
+\  'python': ['flake8']
+\}
+
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
-\   'python': ['black']
+\   'typescript': ['prettier'],
+\   'python': ['black'],
+\   'html': ['prettier']
 \}
+let g:ale_linters_explicit = 1
 let g:ale_fix_on_save = 1
 
 " Move between linting  errors
@@ -196,7 +207,7 @@ let g:terraform_align=1
 let g:terraform_fold_sections=1
 
 " Markdown
-let g:vim_markdown_conceal = 0
+let g:vim_markdown_conceal = 1
 
 " Lightline
 let g:lightline = {
@@ -206,3 +217,6 @@ let g:lightline = {
 " SQL fmt
 let g:sqlfmt_command = "sqlformat"
 let g:sqlfmt_options = "-r -k upper"
+
+" System Clipboard
+set clipboard=unnamedplus
