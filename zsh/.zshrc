@@ -42,7 +42,7 @@ export KEYTIMEOUT=1 # Less lag
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # Local bin
-PATH=$PATH:$HOME/.local/bin
+PATH=$PATH:$HOME/.local/bin:$HOME/.npm-global/bin
 
 # Keychain
 eval $(keychain --eval --quiet id_rsa)
@@ -70,9 +70,8 @@ export PURE_PROMPT_SYMBOL="λ"
 # Correct prev command
 eval $(thefuck --alias fuu)
 
-# NPM install
-PATH="$HOME/.node_modules/bin:$PATH"
-export npm_config_prefix=~/.node_modules
+# NPM
+NPM_CONFIG_PREFIX=~/.npm-global
 
 # End profiling
 #zprof
