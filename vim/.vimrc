@@ -207,7 +207,7 @@ let g:terraform_align=1
 let g:terraform_fold_sections=1
 
 " Markdown
-let g:vim_markdown_conceal = 1
+let g:vim_markdown_conceal = 0
 
 " Lightline
 let g:lightline = {

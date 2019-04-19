@@ -1,13 +1,29 @@
 #
-# tsoporan's zshrc config
+# tsoporan's zshrc config (based on ohmyzsh)
 #
 
-# Profiling
-#zmodload zsh/zprof
+# Path to your oh-my-zsh installation.
+export ZSH="/home/tsoporan/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 
-# Use antibody
-export ZSH="$(antibody home)/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
-source ~/.zsh_plugins.sh
+ZSH_THEME="spaceship"
+
+# Uncomment the following line to change how often to auto-update (in days).
+export UPDATE_ZSH_DAYS=5
+
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+plugins=(git dotenv colored-man-pages colorize docker )
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
 
 # Some fun
 fortune | cowsay -f vader | lolcat
@@ -37,10 +53,6 @@ export KEYTIMEOUT=1 # Less lag
 # FZF!
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Fix NPM install
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
 # Local bin
 PATH=$PATH:$HOME/.local/bin:$HOME/.npm-global/bin
 
@@ -61,17 +73,34 @@ export FZF_DEFAULT_OPTS="--ansi"
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-export PURE_PROMPT_SYMBOL="λ"
-
 # Z
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
-
-
-# Correct prev command
-eval $(thefuck --alias fuu)
 
 # NPM
 NPM_CONFIG_PREFIX=~/.npm-global
 
-# End profiling
-#zprof
+# Syntax highlighting
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Fish style auto suggests
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Spaceship theme config
+SPACESHIP_PROMPT_ORDER=(
+  time
+  user
+  dir
+  host
+  git
+  docker
+  venv
+  pyenv
+  kubecontext
+  terraform
+  exec_time
+  line_sep
+  jobs
+  exit_code
+  char
+)
+SPACESHIP_DOCKER_SYMBOL=🐳·
