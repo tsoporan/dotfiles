@@ -13,11 +13,12 @@ Collection of dotfiles for my day-to-day programs.
 - [alacritty terminal](https://github.com/jwilm/alacritty)
 - [vim](https://www.vim.org/)
 - [zsh](https://wiki.archlinux.org/index.php/zsh)
-  - [antibody](https://github.com/getantibody/antibody)
+  - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
 - [fzf](https://github.com/junegunn/fzf)
 - [Fira Code font](https://github.com/tonsky/FiraCode)
 - [ripgrep](https://github.com/BurntSushi/ripgrep)
 - [fd](https://github.com/sharkdp/fd)
+- [z](https://github.com/rupa/z)
 
 ### Dotfile usage
 
@@ -31,7 +32,7 @@ stow vim
 
 Enjoy!
 
-### Theme
+### WM Theme
 
 The theme is customized for my needs but heavily based on: [awesome-pro](https://github.com/4ban/awesome-pro) - check it out!
 
@@ -39,3 +40,13 @@ The theme is customized for my needs but heavily based on: [awesome-pro](https:/
 
 The main branch contains a HiDPI set up, due to my primary driver, check out the `desktop` branch if you aren't using
 HiDPI.
+
+### Fonts
+
+For emojis using [ttf-emojione](https://aur.archlinux.org/packages/ttf-emojione)
+
+### ZSH
+
+For prompt using [spaceship prompt](https://denysdovhan.com/spaceship-prompt/)
+
+Also using [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) and [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
