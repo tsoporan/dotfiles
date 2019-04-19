@@ -5,7 +5,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/home/tsoporan/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 
-ZSH_THEME="robbyrussell"
+ZSH_THEME="spaceship"
 
 # Uncomment the following line to change how often to auto-update (in days).
 export UPDATE_ZSH_DAYS=5
@@ -84,3 +84,23 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 # Fish style auto suggests
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Spaceship theme config
+SPACESHIP_PROMPT_ORDER=(
+  time
+  user
+  dir
+  host
+  git
+  docker
+  venv
+  pyenv
+  kubecontext
+  terraform
+  exec_time
+  line_sep
+  jobs
+  exit_code
+  char
+)
+SPACESHIP_DOCKER_SYMBOL=🐳·
