@@ -85,6 +85,9 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 # Fish style auto suggests
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+# Re-map autosuggest-accept (default arrow key)
+bindkey '^ ' autosuggest-accept
+
 # Spaceship theme config
 SPACESHIP_PROMPT_ORDER=(
   time
