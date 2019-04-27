@@ -26,6 +26,7 @@ Plug 'leafgarland/typescript-vim' "Ts
 Plug 'posva/vim-vue' " Vue syntax
 Plug 'b4b4r07/vim-sqlfmt' " Format sql
 Plug 'jparise/vim-graphql'
+Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 
 call plug#end()
 
@@ -177,6 +178,7 @@ nnoremap U :UndotreeToggle<CR>
 "FZF
 nnoremap <leader>, :FZF<CR>
 nnoremap <leader>. :Rg<CR>
+nnoremap <leader>l :BLines<CR>
 
 "netwr
 let g:netrw_liststyle = 3 "Tree view
@@ -220,3 +222,6 @@ let g:sqlfmt_options = "-r -k upper"
 
 " System Clipboard
 set clipboard=unnamedplus
+
+" Tags lookup, traverse up
+set tags=./tags;/
