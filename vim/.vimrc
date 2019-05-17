@@ -27,6 +27,7 @@ Plug 'posva/vim-vue' " Vue syntax
 Plug 'b4b4r07/vim-sqlfmt' " Format sql
 Plug 'jparise/vim-graphql'
 Plug 'ludovicchabant/vim-gutentags' " (c)tag management
+Plug 'flazz/vim-colorschemes' " Bunch of colors
 
 call plug#end()
 
@@ -93,9 +94,7 @@ set noswapfile
 
 "colors
 set background=dark
-let g:hybrid_custom_term_colors = 1
-let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-colorscheme hybrid
+colorscheme 256-jungle
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -143,7 +142,7 @@ let g:ale_linters = {
 \  'javascript': ['eslint'],
 \  'typescript': ['tsserver', 'tslint'],
 \  'vue': ['eslint'],
-\  'python': ['flake8']
+\  'python': ['flake8', 'mypy']
 \}
 
 let g:ale_fixers = {

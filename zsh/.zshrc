@@ -30,8 +30,7 @@ fortune | cowsay -f vader | lolcat
 
 # Various aliases
 alias v="vim"
-alias lx="exa"
-alias ll="exa -al"
+alias l="exa -al"
 alias gdiff="git diff"
 alias gadd="git add"
 alias gstash="git stash"
