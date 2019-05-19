@@ -7,7 +7,7 @@ Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'airblade/vim-gitgutter' " Shows git changes beside line numbers
-Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'luochen1990/rainbow' " Rainbow parens
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale' " Async linting engine
@@ -28,6 +28,7 @@ Plug 'b4b4r07/vim-sqlfmt' " Format sql
 Plug 'jparise/vim-graphql'
 Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 Plug 'flazz/vim-colorschemes' " Bunch of colors
+Plug 'RRethy/vim-illuminate' " Hilite matching words
 
 call plug#end()
 
@@ -94,7 +95,7 @@ set noswapfile
 
 "colors
 set background=dark
-colorscheme 256-jungle
+colorscheme 1989
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -104,9 +105,6 @@ nnoremap <silent> <F5> :GundoToggle<CR>
 
 "tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
-
-"rainbow parans
-let g:rainbow_active=1
 
 "quick esc
 imap jk <ESC>
@@ -224,3 +222,8 @@ set clipboard=unnamedplus
 
 " Tags lookup, traverse up
 set tags=./tags;/
+
+let g:rainbow_active = 1
+
+" Highlight instead of underline
+hi link illuminatedWord Visual
