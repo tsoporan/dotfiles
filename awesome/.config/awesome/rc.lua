@@ -54,7 +54,7 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-local terminal    = "alacritty"
+local terminal    = "kitty"
 local editor      = os.getenv("EDITOR") or "vim"
 local editor_cmd  = terminal .. " -e " .. editor
 local filemanager = "nemo"
