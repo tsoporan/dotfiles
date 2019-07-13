@@ -16,7 +16,7 @@ ENABLE_CORRECTION="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git dotenv colored-man-pages colorize docker )
+plugins=(git dotenv colored-man-pages colorize docker aws)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -99,6 +99,7 @@ SPACESHIP_PROMPT_ORDER=(
   pyenv
   kubecontext
   terraform
+  aws
   exec_time
   line_sep
   jobs

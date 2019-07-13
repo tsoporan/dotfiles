@@ -14,17 +14,14 @@ Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
 Plug 'Yggdroot/indentLine' "Indents
-Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' } "Better undo
 Plug 'itchyny/lightline.vim' "Status bar
-Plug 'scrooloose/nerdcommenter' " Commenting
 Plug 'haya14busa/incsearch.vim' "Improved incremental search
-Plug 'w0ng/vim-hybrid' "Color
 Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
 Plug 'hashivim/vim-terraform' "Terraform
-Plug 'leafgarland/typescript-vim' "Ts
-Plug 'posva/vim-vue' " Vue syntax
-Plug 'b4b4r07/vim-sqlfmt' " Format sql
+"Plug 'leafgarland/typescript-vim' "Ts
+"Plug 'posva/vim-vue' " Vue syntax
+"Plug 'b4b4r07/vim-sqlfmt' " Format sql
 Plug 'jparise/vim-graphql'
 Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 Plug 'flazz/vim-colorschemes' " Bunch of colors
@@ -95,13 +92,10 @@ set noswapfile
 
 "colors
 set background=dark
-colorscheme 1989
+colorscheme 256-jungle
 
 "persistent undo
 set undodir=~/.vim/undo
-
-"gundo
-nnoremap <silent> <F5> :GundoToggle<CR>
 
 "tagbar
 nnoremap <silent> <F9> :TagbarToggle<CR>
@@ -138,7 +132,7 @@ nmap ga <Plug>(EasyAlign)
 " ALE
 let g:ale_linters = {
 \  'javascript': ['eslint'],
-\  'typescript': ['tsserver', 'tslint'],
+"\  'typescript': ['tsserver', 'tslint'],
 \  'vue': ['eslint'],
 \  'python': ['flake8', 'mypy']
 \}
@@ -147,8 +141,8 @@ let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
-\   'typescript': ['prettier'],
-\   'python': ['black'],
+"\   'typescript': ['prettier'],
+\   'python': ['black', 'isort', 'add_blank_lines_for_python_control_statements'],
 \   'html': ['prettier']
 \}
 let g:ale_linters_explicit = 1
@@ -214,8 +208,8 @@ let g:lightline = {
   \ }
 
 " SQL fmt
-let g:sqlfmt_command = "sqlformat"
-let g:sqlfmt_options = "-r -k upper"
+"let g:sqlfmt_command = "sqlformat"
+"let g:sqlfmt_options = "-r -k upper"
 
 " System Clipboard
 set clipboard=unnamedplus
@@ -227,3 +221,7 @@ let g:rainbow_active = 1
 
 " Highlight instead of underline
 hi link illuminatedWord Visual
+
+" Here is my writting notes mode, on and off
+map <leader>w :set tw=120<CR>:set linebreak<CR>:set spell spelllang=en_us<CR>
+map <leader>W :set tw=0<CR>:set nolinebreak<CR>:set nospell<CR>
