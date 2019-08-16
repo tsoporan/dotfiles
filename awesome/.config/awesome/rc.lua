@@ -514,6 +514,14 @@ globalkeys = gears.table.join(
       end,
               {description = "run rofi", group = "launcher"}),
 
+
+    awful.key({ modkey }, "t",
+      function ()
+        awful.spawn.with_shell("rofi-pass")
+      end,
+              {description = "run rofi pass", group = "launcher"}),
+
+
     awful.key({ modkey }, "x", function () awful.spawn(scrlock) end,
               { description = "lock the screen", group = "launcher" }),
 

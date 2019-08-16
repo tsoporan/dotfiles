@@ -6,26 +6,19 @@ call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-surround' " '' => \"\"
-Plug 'airblade/vim-gitgutter' " Shows git changes beside line numbers
 Plug 'luochen1990/rainbow' " Rainbow parens
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'w0rp/ale' " Async linting engine
 Plug 'ervandew/supertab' " Tab auto complete
 Plug 'raimondi/delimitmate' " Parens
-Plug 'Yggdroot/indentLine' "Indents
+Plug 'Yggdroot/indentLine' "Indent indicator
 Plug 'itchyny/lightline.vim' "Status bar
-Plug 'haya14busa/incsearch.vim' "Improved incremental search
-Plug 'junegunn/gv.vim' "Git commit browser
 Plug 'sheerun/vim-polyglot' "Multiple lang support
-Plug 'hashivim/vim-terraform' "Terraform
-"Plug 'leafgarland/typescript-vim' "Ts
-"Plug 'posva/vim-vue' " Vue syntax
-"Plug 'b4b4r07/vim-sqlfmt' " Format sql
-Plug 'jparise/vim-graphql'
 Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 Plug 'flazz/vim-colorschemes' " Bunch of colors
 Plug 'RRethy/vim-illuminate' " Hilite matching words
+Plug 'mhinz/vim-signify' "VCS changes indication
 
 call plug#end()
 
@@ -178,12 +171,6 @@ let g:netrw_browse_split = 4 "Open file in prev window
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
-"Incsearch
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-
-
 " Tmp files
 set backupdir=/tmp//,.
 set directory=/tmp//,.
@@ -191,13 +178,6 @@ if v:version >= 703
   set undodir=/tmp//,.
   set undofile
 endif
-
-"Commenting
-let g:NERDSpaceDelims = 1 "Spaces after comments
-
-"Terraform
-let g:terraform_align=1
-let g:terraform_fold_sections=1
 
 " Markdown
 let g:vim_markdown_conceal = 0
@@ -207,15 +187,11 @@ let g:lightline = {
   \ 'colorscheme': 'wombat',
   \ }
 
-" SQL fmt
-"let g:sqlfmt_command = "sqlformat"
-"let g:sqlfmt_options = "-r -k upper"
-
 " System Clipboard
 set clipboard=unnamedplus
 
 " Tags lookup, traverse up
-set tags=./tags;/
+"set tags=./tags;/
 
 let g:rainbow_active = 1
 
@@ -225,3 +201,13 @@ hi link illuminatedWord Visual
 " Here is my writting notes mode, on and off
 map <leader>w :set tw=120<CR>:set linebreak<CR>:set spell spelllang=en_us<CR>
 map <leader>W :set tw=0<CR>:set nolinebreak<CR>:set nospell<CR>
+
+" Signify
+let g:signify_vcs_list = ['git']
+hi SignColumn ctermbg=none
+highlight DiffAdd     cterm=bold ctermbg=none ctermfg=119
+highlight DiffDelete  cterm=bold ctermbg=none ctermfg=167
+highlight DiffChange  cterm=bold ctermbg=none ctermfg=227
+highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
