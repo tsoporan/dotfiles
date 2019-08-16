@@ -191,7 +191,7 @@ let g:lightline = {
 set clipboard=unnamedplus
 
 " Tags lookup, traverse up
-set tags=./tags;/
+"set tags=./tags;/
 
 let g:rainbow_active = 1
 
