@@ -6,6 +6,7 @@ call plug#begin()
 Plug 'junegunn/vim-easy-align' " Align around = and such
 Plug 'tpope/vim-fugitive' " Git
 Plug 'tpope/vim-surround' " '' => \"\"
+Plug 'tpope/vim-sensible' " sensible defaults for Vim
 Plug 'luochen1990/rainbow' " Rainbow parens
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
@@ -19,6 +20,7 @@ Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 Plug 'flazz/vim-colorschemes' " Bunch of colors
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'mhinz/vim-signify' "VCS changes indication
+Plug 'majutsushi/tagbar' "Tagbar
 
 call plug#end()
 
@@ -53,7 +55,6 @@ set textwidth=120
 set colorcolumn=+1
 
 set foldmethod=indent
-set backspace=indent,eol,start "allow backspacing in insert mode
 set showcmd "show partial commands
 set list "show tab chars, visual whitespace
 set ignorecase
@@ -91,7 +92,7 @@ colorscheme 256-jungle
 set undodir=~/.vim/undo
 
 "tagbar
-nnoremap <silent> <F9> :TagbarToggle<CR>
+nnoremap <leader>b :TagbarToggle<CR>
 
 "quick esc
 imap jk <ESC>
@@ -135,8 +136,8 @@ let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
 "\   'typescript': ['prettier'],
-\   'python': ['black', 'isort', 'add_blank_lines_for_python_control_statements'],
-\   'html': ['prettier']
+\   'python': ['black', 'isort', 'add_blank_lines_for_python_control_statements']
+"\   'html': ['prettier']
 \}
 let g:ale_linters_explicit = 1
 let g:ale_fix_on_save = 1
@@ -144,8 +145,6 @@ let g:ale_fix_on_save = 1
 " Move between linting  errors
 nnoremap ]r :ALENextWrap<CR>
 nnoremap [r :ALEPreviousWrap<CR>
-
-set list listchars=tab:»·,trail:·,nbsp:· " Whitespace
 
 "Indents
 hi Folded ctermbg=black
@@ -160,9 +159,19 @@ let g:undotree_WindowLayout = 2
 nnoremap U :UndotreeToggle<CR>
 
 "FZF
+" Search files
 nnoremap <leader>, :FZF<CR>
+" Search history (usually more useful)
+nnoremap <leader>/ :History<CR>
+" Search text
 nnoremap <leader>. :Rg<CR>
+" Search current open buffer
 nnoremap <leader>l :BLines<CR>
+" Search tags (requires generation of tags, see gutentags)
+nnoremap <leader>; :Tags<CR>
+
+" FZF auto bind history ctrl-p/ctrl-n
+let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 "netwr
 let g:netrw_liststyle = 3 "Tree view
