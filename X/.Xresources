@@ -62,3 +62,6 @@ rofi.hide-scrollbar: true
 ! white
 *.color7:       #f8f8f2
 *.color15:      #f9f8f5
+
+! Emacs
+Emacs.font: Hack 10

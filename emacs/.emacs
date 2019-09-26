@@ -21,3 +21,5 @@
 (evil-mode 1)
 
 (load-theme 'tango-dark)
+
+(set-default-font "Hack 10")
