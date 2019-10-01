@@ -36,3 +36,15 @@
   gpgSign = true
 [gpg]
   program = gpg2
+[alias]
+  s = status
+  d = diff
+  co = checkout
+  br = branch
+  ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature
+  a = add
+  ap = add -p
+  ash = stash
+  f = fetch
+  com = commit -S --signoff
+  p = push
