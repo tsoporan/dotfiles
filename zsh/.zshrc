@@ -25,21 +25,12 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
-# Some fun
-fortune | cowsay -f vader | lolcat
 
 # Various aliases
 alias v="vim"
+alias e="emacsclient -nw"
 alias l="exa -al"
-alias gdiff="git diff"
-alias gadd="git add"
-alias gstash="git stash"
-alias gstat="git status"
-alias gf="git fetch"
-alias gp="git push"
-alias gstat="git status"
-alias glog="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature"
-alias gcom="git commit -S --signoff"
+alias g="git"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias rm="rm -i"
 
@@ -107,3 +98,5 @@ SPACESHIP_PROMPT_ORDER=(
   char
 )
 SPACESHIP_DOCKER_SYMBOL=🐳·
+
+termquotes get | cowsay -f vader
