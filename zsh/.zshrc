@@ -2,6 +2,9 @@
 # tsoporan's zshrc config (based on ohmyzsh)
 #
 
+# Profile
+#zmodload zsh/zprof
+
 # Path to your oh-my-zsh installation.
 export ZSH="/home/tsoporan/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
 
@@ -16,7 +19,7 @@ ENABLE_CORRECTION="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-plugins=(git dotenv colored-man-pages colorize docker aws)
+plugins=(git dotenv colorize aws)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -24,7 +27,6 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
-
 
 # Various aliases
 alias v="vim"
@@ -88,8 +90,8 @@ SPACESHIP_PROMPT_ORDER=(
   docker
   venv
   pyenv
-  kubecontext
-  terraform
+  #kubecontext
+  #terraform
   aws
   exec_time
   line_sep
@@ -100,3 +102,6 @@ SPACESHIP_PROMPT_ORDER=(
 SPACESHIP_DOCKER_SYMBOL=🐳·
 
 termquotes get | cowsay -f vader
+
+#zprof
+#exit
