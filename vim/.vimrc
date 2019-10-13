@@ -22,6 +22,8 @@ Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'mhinz/vim-signify' "VCS changes indication
 Plug 'majutsushi/tagbar' "Tagbar
 
+let &t_ut=''
+
 call plug#end()
 
 let mapleader=',' "change from default \
@@ -86,7 +88,8 @@ set noswapfile
 
 "colors
 set background=dark
-colorscheme 256-jungle
+"colorscheme 256-jungle
+colorscheme blazer
 
 "persistent undo
 set undodir=~/.vim/undo
@@ -136,11 +139,12 @@ let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
 "\   'typescript': ['prettier'],
-\   'python': ['black', 'isort', 'add_blank_lines_for_python_control_statements']
+\   'python': ['black', 'add_blank_lines_for_python_control_statements', 'isort']
 "\   'html': ['prettier']
 \}
-let g:ale_linters_explicit = 1
-let g:ale_fix_on_save = 1
+let g:ale_linters_explicit=1
+let g:ale_fix_on_save=1
+let g:ale_python_black_auto_pipenv = 1
 
 " Move between linting  errors
 nnoremap ]r :ALENextWrap<CR>

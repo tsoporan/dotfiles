@@ -54,10 +54,9 @@ end
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-local terminal    = "alacritty"
+local terminal    = "kitty -1"
 local editor      = os.getenv("EDITOR") or "vim"
 local editor_cmd  = terminal .. " -e " .. editor
-local filemanager = "nemo"
 local browser     = "firefox-developer-edition"
 local modkey      = "Mod4"
 local altkey      = "Mod1"
@@ -84,15 +83,6 @@ myawesomemenu = {
   { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = {
-    { "awesome",  myawesomemenu, beautiful.awesome_icon},
-    { "terminal", terminal},
-    { "firefox",  browser},
-    { "files",    filemanager},
-  }
-})
-
-
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon, menu = mymainmenu })
 
 -- Menubar configuration
@@ -108,7 +98,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 clockgf = beautiful.clockgf
 
 local chosen_clock_type = "%a %d %b %H:%M"
-local textclock         = wibox.widget.textclock(" " .. chosen_clock_type .. " ")
+local textclock         = wibox.widget.textclock(chosen_clock_type)
 local clock_widget      = wibox.container.background(textclock)
 
 lain.widget.cal({
@@ -158,7 +148,7 @@ local fs = lain.widget.fs({
 local fs_widget = wibox.container.background(fs.widget)
 
 -- Battery
-local bat_icon = wibox.widget.textbox("[BAT]")
+local bat_icon = wibox.widget.textbox("BAT")
 local bat = lain.widget.bat({
     battery = "BAT0",
     timeout = 30,
@@ -185,17 +175,17 @@ local bat = lain.widget.bat({
 
         if bat_now.status ~= "N/A" then
             if bat_now.status == "Charging" then
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " +" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "+" .. bat_now.perc .. "%")))
             elseif bat_now.status == "Full" then
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " ~" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "~" .. bat_now.perc .. "%")))
             elseif tonumber(bat_now.perc) <= 35 then
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "-" .. bat_now.perc .. "%")))
             elseif tonumber(bat_now.perc) <= 80 then
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "-" .. bat_now.perc .. "%")))
             elseif tonumber(bat_now.perc) <= 99 then
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "-" .. bat_now.perc .. "%")))
             else
-                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " -" .. bat_now.perc .. "%")))
+                widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, "-" .. bat_now.perc .. "%")))
             end
         else
             widget:set_markup(markup.font(beautiful.font, markup.fg.color(beautiful.fg_normal, " AC ")))
@@ -205,7 +195,7 @@ local bat = lain.widget.bat({
 local bat_widget = wibox.container.background(bat.widget)
 
 --- Vol
-local vol_icon = wibox.widget.textbox("[VOL]")
+local vol_icon = wibox.widget.textbox("SND")
 
 local volume = lain.widget.pulse {
     settings = function()
@@ -291,9 +281,8 @@ tagnames = {
   "九",
 }
 
-spr = wibox.widget.imagebox(beautiful.spr)
-spr4px = wibox.widget.imagebox(beautiful.spr4px)
-spr5px = wibox.widget.imagebox(beautiful.spr5px)
+spacer = wibox.widget.textbox(" | ")
+space = wibox.widget.textbox(" ")
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
@@ -340,68 +329,33 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            s.mytaglist,
-            spr5x,
-            spr
+            s.mytaglist
         },
-        s.mytasklist, -- Middle widget,
+        s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             s.mypromptbox,
             wibox.widget.systray(),
 
-            -- CPU widget
-            spr,
-            spr5px,
-            cpu_icon,
-            spr5px,
-            cpu_widget,
-            spr5px,
-
-            -- Mem widget
-            spr,
-            spr5px,
-            mem_icon,
-            mem_widget,
-            spr5px,
-
-            -- Fs widget
-            spr,
-            spr5px,
-            fs_icon,
-            spr5px,
-            fs_widget,
-            spr5px,
-
             -- Battery widget
-            spr5px,
-            spr,
-            spr5px,
+            spacer,
             bat_icon,
+            space,
             bat_widget,
-            spr5px,
+            spacer,
 
             -- Vol widget
-            spr5px,
-            spr,
-            spr5px,
             vol_icon,
-            spr5px,
+            space,
             vol_widget,
-            spr5px,
+            spacer,
 
             -- Clock
-            spr5px,
-            spr,
-            spr5px,
             clock_widget,
-            spr5px,
-            spr,
 
-            --
-            spr5px,
+            spacer,
             s.mylayoutbox,
-            spr5px,
+            space,
         },
     }
 end)
@@ -409,7 +363,6 @@ end)
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -445,9 +398,6 @@ globalkeys = gears.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
