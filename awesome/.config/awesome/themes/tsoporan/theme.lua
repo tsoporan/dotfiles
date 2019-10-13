@@ -9,7 +9,7 @@ local theme             = {}
 theme.dir               = os.getenv("HOME") .. "/.config/awesome/themes/tsoporan"
 
 theme.icons             = theme.dir .. "/icons"
-theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/4k-clouds.jpg"
+theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/4k-fern-leaf.jpg"
 
 theme.panel             = "#0d1925"
 theme.panel_height      = 48
