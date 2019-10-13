@@ -77,7 +77,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # NPM
 NPM_CONFIG_PREFIX=~/.npm-global
 
-termquotes get | cowsay -f vader
+termquotes get | cowsay -d
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
