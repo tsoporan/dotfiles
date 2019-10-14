@@ -445,39 +445,52 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    awful.key({ modkey, "Control" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
-                    )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
+    awful.key(
+      { modkey, "Control" }, "n",
+      function ()
+          local c = awful.client.restore()
+          -- Focus restored client
+          if c then
+            c:emit_signal(
+                "request::activate", "key.unminimize", {raise = true}
+            )
+          end
+      end,
+      {description = "restore minimized", group = "client"}
+    ),
 
-    -- Prompt
-    awful.key({ modkey }, "r",
+    awful.key(
+      { modkey }, "r",
       function ()
         awful.spawn.with_shell("rofi -show combi -theme tsoporan")
       end,
-              {description = "run rofi", group = "launcher"}),
+      {description = "run rofi", group = "custom"}
+    ),
 
+    awful.key(
+      { modkey}, "c",
+      function ()
+        awful.spawn("clipster -sp")
+      end,
+      {description = "copy paste", group = "custom"}
+    ),
 
-    awful.key({ modkey }, "t",
+    awful.key(
+      { modkey }, "t",
       function ()
         awful.spawn.with_shell("rofi-pass")
       end,
-              {description = "run rofi pass", group = "launcher"}),
+      {description = "run rofi pass", group = "custom"}
+    ),
 
+    awful.key(
+      { modkey }, "x",
+      function ()
+        awful.spawn(scrlock)
+      end,
+      { description = "lock the screen", group = "custom" }
+    )
 
-    awful.key({ modkey }, "x", function () awful.spawn(scrlock) end,
-              { description = "lock the screen", group = "launcher" }),
-
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
 )
 
 clientkeys = gears.table.join(
@@ -625,37 +638,6 @@ awful.rules.rules = {
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen
      }
     },
-
-    -- Floating clients.
-    { rule_any = {
-        instance = {
-          "DTA",  -- Firefox addon DownThemAll.
-          "copyq",  -- Includes session name in class.
-          "pinentry",
-        },
-        class = {
-          "Arandr",
-          "Blueman-manager",
-          "Gpick",
-          "Kruler",
-          "MessageWin",  -- kalarm.
-          "Sxiv",
-          "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
-          "Wpa_gui",
-          "veromix",
-          "xtightvncviewer"},
-
-        -- Note that the name property shown in xprop might be set slightly after creation of the client
-        -- and the name shown there might not match defined rules here.
-        name = {
-          "Event Tester",  -- xev.
-        },
-        role = {
-          "AlarmWindow",  -- Thunderbird's calendar.
-          "ConfigManager",  -- Thunderbird's about:config.
-          "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-        }
-      }, properties = { floating = true }},
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
