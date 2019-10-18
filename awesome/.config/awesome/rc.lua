@@ -470,7 +470,7 @@ globalkeys = gears.table.join(
     awful.key(
       { modkey}, "c",
       function ()
-        awful.spawn("clipster -sp")
+        awful.spawn("clipster -p")
       end,
       {description = "copy paste", group = "custom"}
     ),
