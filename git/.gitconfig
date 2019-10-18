@@ -37,14 +37,15 @@
 [gpg]
   program = gpg2
 [alias]
-  s = status
-  d = diff
-  co = checkout
+  st = status
+  di = diff
+  ch = checkout
   br = branch
-  ll = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature
-  a = add
+  lo = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature
+  ad = add
   ap = add -p
   ash = stash
-  f = fetch
+  fe = fetch
   com = commit -S --signoff
-  p = push
+  ps = push
+  pu = pull
