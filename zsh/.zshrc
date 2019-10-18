@@ -1,35 +1,46 @@
-#
-# tsoporan's zshrc config (based on ohmyzsh)
-#
+###########################
+# tsoporans zshrc config  #
+#                Oct 2019 #
+###########################
 
-# Path to your oh-my-zsh installation.
-export ZSH="/home/tsoporan/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-robbyrussell-SLASH-oh-my-zsh"
+# Profile
+# zmodload zsh/zprof
 
-ZSH_THEME="spaceship"
 
-# Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=5
+# Manage plugins - https://github.com/zplug/zplug
+source ~/.zplug/init.zsh
 
-# Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# Plugins
+zplug "romkatv/powerlevel10k", as:theme, depth:1
+zplug "plugins/git-extras",   from:oh-my-zsh
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-completions", defer:2
+zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "skywind3000/z.lua" # Faster z.sh
+zplug "softmoth/zsh-vim-mode"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
 
-plugins=(git dotenv colored-man-pages colorize docker aws)
+# Install & Loads plugins
+if ! zplug check --verbose; then
+  printf "Install? [y/N]: "
+    if read -q; then
+      echo; zplug install
+    fi
+fi
+zplug load
 
-source $ZSH/oh-my-zsh.sh
+# vi mode
+bindkey -v
+# Re-map autosuggest-accept (default arrow key), ctrl+space
+bindkey '^ ' autosuggest-accept
 
-# User configuration
-
-# You may need to manually set your language environment
 export LANG=en_US.UTF-8
-
 
 # Various aliases
 alias v="vim"
 alias e="emacsclient -nw"
-alias l="exa -al"
+alias ls="exa"
 alias g="git"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias rm="rm -i"
@@ -37,7 +48,6 @@ alias rm="rm -i"
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
 
-bindkey -v # vi mode
 export KEYTIMEOUT=1 # Less lag
 
 # FZF!
@@ -54,6 +64,7 @@ export GOPATH=$HOME/projects/gocode
 
 # GPG display, can lead to odd signing error
 export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye >/dev/null
 
 # Setting fd as the default source for fzf, search hidden and symlinks exclude git
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
@@ -63,40 +74,15 @@ export FZF_DEFAULT_OPTS="--ansi"
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Z
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
-
 # NPM
 NPM_CONFIG_PREFIX=~/.npm-global
 
-# Syntax highlighting
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+termquotes get | cowsay -d
 
-# Fish style auto suggests
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-# Re-map autosuggest-accept (default arrow key)
-bindkey '^ ' autosuggest-accept
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 
-# Spaceship theme config
-SPACESHIP_PROMPT_ORDER=(
-  time
-  user
-  dir
-  host
-  git
-  docker
-  venv
-  pyenv
-  kubecontext
-  terraform
-  aws
-  exec_time
-  line_sep
-  jobs
-  exit_code
-  char
-)
-SPACESHIP_DOCKER_SYMBOL=🐳·
-
-termquotes get | cowsay -f vader
+# zprof
+# exit

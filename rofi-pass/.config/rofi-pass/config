@@ -4,7 +4,7 @@
 
 # rofi command. Make sure to have "$@" as last argument
 _rofi () {
-    rofi -i -no-auto-select "$@"
+    rofi -i -no-auto-select "$@" -theme tsoporan
 }
 
 # default command to generate passwords
@@ -50,7 +50,7 @@ xdotool_delay=12
 EDITOR='gvim -f'
 
 # Browser
-BROWSER='xdg-open'
+BROWSER='firefox-developer-edition'
 
 ## Misc settings
 
@@ -61,7 +61,7 @@ default_autotype='user :tab pass'
 
 # color of the help messages
 # leave empty for autodetection
-help_color="#4872FF"
+help_color=""
 
 # Clipboard settings
 # Possible options: primary, clipboard, both
