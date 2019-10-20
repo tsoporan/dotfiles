@@ -12,16 +12,119 @@ source "$HOME/.zplugin/bin/zplugin.zsh"
 autoload -Uz _zplugin
 
 (( ${+_comps} )) && _comps[zplugin]=_zplugin
+autoload -Uz cdr
+autoload -Uz chpwd_recent_dirs
+
+# https://github.com/zdharma/zplugin/issues/119
+ZSH="$HOME/.zplugin/plugins/robbyrussell---oh-my-zsh/"
+local _OMZ_SOURCES=(
+    # Libs
+    lib/compfix.zsh
+    lib/directories.zsh
+    lib/functions.zsh
+    lib/git.zsh
+    lib/termsupport.zsh
+
+    # Plugins
+    plugins/command-not-found/command-not-found.plugin.zsh
+    plugins/fzf/fzf.plugin.zsh
+    plugins/git/git.plugin.zsh
+    plugins/gitfast/gitfast.plugin.zsh
+    plugins/sudo/sudo.plugin.zsh
+    plugins/urltools/urltools.plugin.zsh
+)
+
+zplugin ice from"gh" pick"/dev/null" nocompletions blockf lucid \
+        multisrc"${_OMZ_SOURCES}" compile"(${(j.|.)_OMZ_SOURCES})" \
+        atinit"zpcdreplay" wait"1c"
+zplugin light "robbyrussell/oh-my-zsh"
+
 
 # Plugins
+zplugin light "mafredri/zsh-async"
 zplugin light "romkatv/powerlevel10k"
-zplugin light "zsh-users/zsh-autosuggestions"
-zplugin light "zsh-users/zsh-history-substring-search"
-zplugin light "zsh-users/zsh-completions"
-zplugin light "zdharma/fast-syntax-highlighting"
+
+zplugin ice wait"0a" lucid
 zplugin light "skywind3000/z.lua" # Faster z.sh
+
+zplugin ice wait"0a" compile'{src/*.zsh,src/strategies/*}' atload"_zsh_autosuggest_start" lucid
+zplugin light "zsh-users/zsh-autosuggestions"
+
+zplugin ice wait"0a" atload"_zsh_highlight" lucid
+zplugin light "zdharma/fast-syntax-highlighting"
+
+zplugin ice wait"0b" blockf lucid
+zplugin light "zsh-users/zsh-completions"
+
+zplugin ice wait"0b" lucid
+zplugin light "hlissner/zsh-autopair"
+
+_zsh-history-substring-search-setting() {
+  bindkey '^[[A' history-substring-search-up
+  bindkey '^[[B' history-substring-search-down
+  bindkey "$terminfo[kcuu1]" history-substring-search-up
+  bindkey "$terminfo[kcud1]" history-substring-search-down
+  HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+}
+
+zplugin ice wait"0c" atload"_zsh-history-substring-search-setting" lucid
+zplugin light "zsh-users/zsh-history-substring-search"
+
+_zsh-git-smart-commands-setting() {
+  # + signing
+  alias c='git-smart-commit -S --signoff'
+  alias a='git-smart-add'
+  alias p='git-smart-push seletskiy'
+  alias u='git-smart-pull'
+  # Won't use
+  # alias r='git-smart-remote'
+  alias s='git status'
+}
+
+zplugin ice wait"1a" atload"_zsh-git-smart-commands-setting" blockf lucid
+zplugin light "seletskiy/zsh-git-smart-commands"
+
+zplugin ice wait"1b" lucid
 zplugin light "softmoth/zsh-vim-mode"
 
+zplugin ice wait"2" as"program" pick"tldr" lucid
+zplugin light "raylee/tldr"
+
+zplugin ice wait"2" lucid
+zplugin light "wfxr/forgit"
+
+# https://gist.github.com/ctechols/ca1035271ad134841284
+# On slow systems, checking the cached .zcompdump file to see if it must be
+# regenerated adds a noticable delay to zsh startup.  This little hack restricts
+# it to once a day.  It should be pasted into your own completion file.
+#
+# The globbing is a little complicated here:
+# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - '.' matches "regular files"
+# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
+
+# Perform compinit only once a day.
+
+# Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
+# in the background as this is doesn't affect the current session.
+
+setopt EXTENDEDGLOB LOCAL_OPTIONS
+autoload -Uz compinit
+autoload -Uz bashcompinit && bashcompinit
+zmodload -i zsh/complist
+
+local zcd=${ZPLGM[ZCOMPDUMP_PATH]:-${ZDOTDIR:-$HOME}/.zcompdump}
+local zcdc="$zcd.zwc"
+if [[ -f "$zcd"(#qN.m+1) ]]; then
+    compinit -i -d "$zcd"
+    { rm -f "$zcdc" && zcompile "$zcd" } &!
+else
+    compinit -C -d "$zcd"
+    { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+fi
+
+zplugin cdreplay -q
 
 # vi mode
 bindkey -v
@@ -37,6 +140,19 @@ alias ls="exa"
 alias g="git"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias rm="rm -i"
+alias ..="cd .."
+alias ~="cd ~"
+alias /="cd /"
+alias cp="cp -i"
+alias df="df -h"
+alias free="free -m"
+alias more="less"
+alias bc="bc -l"
+alias sha1="openssl sha1"
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
+
 
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
@@ -79,8 +195,9 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 [ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
-HISTSIZE=50000
-SAVEHIST=10000
+HISTSIZE=1000000
+SAVEHIST=$HISTSIZE
+
 
 ## History command configuration
 setopt extended_history       # record timestamp of command in HISTFILE
