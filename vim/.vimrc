@@ -20,7 +20,10 @@ Plug 'ludovicchabant/vim-gutentags' " (c)tag management
 Plug 'flazz/vim-colorschemes' " Bunch of colors
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'mhinz/vim-signify' "VCS changes indication
-Plug 'majutsushi/tagbar' "Tagbar
+"Plug 'majutsushi/tagbar' "Tagbar
+Plug 'liuchengxu/vista.vim' " Tagbar replacement
+" Build the extra binary if cargo exists on your system.
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
 let &t_ut=''
 
@@ -162,18 +165,6 @@ nmap ga <Plug>(EasyAlign)
 let g:undotree_WindowLayout = 2
 nnoremap U :UndotreeToggle<CR>
 
-"FZF
-" Search files
-nnoremap <leader>, :FZF<CR>
-" Search history (usually more useful)
-nnoremap <leader>/ :History<CR>
-" Search text
-nnoremap <leader>. :Rg<CR>
-" Search current open buffer
-nnoremap <leader>l :BLines<CR>
-" Search tags (requires generation of tags, see gutentags)
-nnoremap <leader>; :Tags<CR>
-
 " FZF auto bind history ctrl-p/ctrl-n
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
@@ -237,3 +228,23 @@ function! RenameFile()
     endif
 endfunction
 map <leader>n :call RenameFile()<cr>
+
+" Vim clap config
+
+let g:clap_theme = 'material_design_dark'
+
+" Working with files, i.e handy vim-clap bindings
+" Search files
+nnoremap <leader>, :Clap files<CR>
+
+" Search text
+nnoremap <leader>. :Clap grep<CR>
+
+" Bring up tags, uses vista.vim
+nnoremap <leader>t :Clap tags<CR>
+
+" File browser using `maple`
+nnoremap <leader>f :Clap filer<CR>
+
+" Search jumps, i.e places been
+nnoremap <leader>o :Clap jumps<CR>
