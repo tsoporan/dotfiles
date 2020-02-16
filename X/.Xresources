@@ -14,7 +14,7 @@ xcursor.theme:  Vanilla-DMZ
 !--------------------------------
 
 ! Rofi
-rofi.font: Fira Code 36
+rofi.font: Fira Code 14
 !--------------------------------
 
 ! Colors - Monokai - Base16
