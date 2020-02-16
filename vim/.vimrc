@@ -53,7 +53,7 @@ set expandtab smarttab "spaces instead of tabs
 
 set encoding=utf-8
 
-set textwidth=120
+set textwidth=88
 set colorcolumn=+1
 
 set foldmethod=indent
@@ -139,12 +139,12 @@ let g:ale_fixers = {
 \   'javascript': ['prettier', 'eslint'],
 \   'vue': ['prettier', 'eslint'],
 "\   'typescript': ['prettier'],
-\   'python': ['black', 'add_blank_lines_for_python_control_statements', 'isort']
+"\   'python': ['add_blank_lines_for_python_control_statements', 'isort', 'black']
+\   'python': ['add_blank_lines_for_python_control_statements', 'isort', 'black']
 "\   'html': ['prettier']
 \}
 let g:ale_linters_explicit=1
 let g:ale_fix_on_save=1
-let g:ale_python_black_auto_pipenv = 1
 
 " Move between linting  errors
 nnoremap ]r :ALENextWrap<CR>
@@ -224,3 +224,16 @@ highlight DiffChange  cterm=bold ctermbg=none ctermfg=227
 highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
 highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
 highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+
+"Rename file + remove old file simultatenously
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <leader>n :call RenameFile()<cr>
