@@ -24,6 +24,7 @@ Plug 'mhinz/vim-signify' "VCS changes indication
 Plug 'liuchengxu/vista.vim' " Tagbar replacement
 " Build the extra binary if cargo exists on your system.
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+Plug 'pechorin/any-jump.vim'
 
 let &t_ut=''
 
