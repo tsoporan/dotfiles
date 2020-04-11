@@ -3,7 +3,7 @@ scrolling:
   multiplier : 3
 
 font:
-  size: 13
+  size: 14
 
   normal:
     family: FiraMono
