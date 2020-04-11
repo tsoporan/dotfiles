@@ -212,8 +212,8 @@ setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
 
-# Gruvbox pallette
-source "$HOME/gruvbox-git/gruvbox_256palette.sh"
+# Gruvbox (term colors) pallette
+source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
 
 # zprof
 # exit
