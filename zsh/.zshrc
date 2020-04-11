@@ -134,7 +134,8 @@ bindkey '^ ' autosuggest-accept
 export LANG=en_US.UTF-8
 
 # Various aliases
-alias v="vim"
+alias v="nvim"
+alias vim="nvim"
 alias e="emacsclient -nw"
 alias ls="exa"
 alias g="git"
@@ -152,7 +153,8 @@ alias sha1="openssl sha1"
 alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
-
+alias dco='docker-compose'
+alias dock='docker'
 
 export EDITOR=vim
 export BROWSER=firefox-developer-edition
@@ -209,5 +211,9 @@ setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
+
+# Gruvbox (term colors) pallette
+source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
+
 # zprof
 # exit
