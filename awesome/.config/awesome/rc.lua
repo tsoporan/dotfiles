@@ -462,7 +462,7 @@ globalkeys = gears.table.join(
     awful.key(
       { modkey }, "r",
       function ()
-        awful.spawn.with_shell("rofi -show combi -theme tsoporan")
+        awful.spawn.with_shell("rofi -show combi -theme gruvbox-dark-hard")
       end,
       {description = "run rofi", group = "custom"}
     ),

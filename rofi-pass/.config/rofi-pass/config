@@ -4,7 +4,7 @@
 
 # rofi command. Make sure to have "$@" as last argument
 _rofi () {
-    rofi -i -no-auto-select "$@" -theme tsoporan
+    rofi -i -no-auto-select "$@" -theme gruvbox-dark-hard
 }
 
 # default command to generate passwords
