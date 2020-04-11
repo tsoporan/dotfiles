@@ -1,130 +1,27 @@
-###########################
-# tsoporans zshrc config  #
-#                Oct 2019 #
-###########################
-
-# Profile
-# zmodload zsh/zprof
-
-# Zplugin
-source "$HOME/.zplugin/bin/zplugin.zsh"
-
-autoload -Uz _zplugin
-
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-autoload -Uz cdr
-autoload -Uz chpwd_recent_dirs
-
-# https://github.com/zdharma/zplugin/issues/119
-ZSH="$HOME/.zplugin/plugins/robbyrussell---oh-my-zsh/"
-local _OMZ_SOURCES=(
-    # Libs
-    lib/compfix.zsh
-    lib/directories.zsh
-    lib/functions.zsh
-    lib/git.zsh
-    lib/termsupport.zsh
-
-    # Plugins
-    plugins/command-not-found/command-not-found.plugin.zsh
-    plugins/fzf/fzf.plugin.zsh
-    plugins/git/git.plugin.zsh
-    plugins/gitfast/gitfast.plugin.zsh
-    plugins/sudo/sudo.plugin.zsh
-    plugins/urltools/urltools.plugin.zsh
-)
-
-zplugin ice from"gh" pick"/dev/null" nocompletions blockf lucid \
-        multisrc"${_OMZ_SOURCES}" compile"(${(j.|.)_OMZ_SOURCES})" \
-        atinit"zpcdreplay" wait"1c"
-zplugin light "robbyrussell/oh-my-zsh"
-
-
-# Plugins
-zplugin light "mafredri/zsh-async"
-zplugin light "romkatv/powerlevel10k"
-
-zplugin ice wait"0a" lucid
-zplugin light "skywind3000/z.lua" # Faster z.sh
-
-zplugin ice wait"0a" compile'{src/*.zsh,src/strategies/*}' atload"_zsh_autosuggest_start" lucid
-zplugin light "zsh-users/zsh-autosuggestions"
-
-zplugin ice wait"0a" atload"_zsh_highlight" lucid
-zplugin light "zdharma/fast-syntax-highlighting"
-
-zplugin ice wait"0b" blockf lucid
-zplugin light "zsh-users/zsh-completions"
-
-zplugin ice wait"0b" lucid
-zplugin light "hlissner/zsh-autopair"
-
-_zsh-history-substring-search-setting() {
-  bindkey '^[[A' history-substring-search-up
-  bindkey '^[[B' history-substring-search-down
-  bindkey "$terminfo[kcuu1]" history-substring-search-up
-  bindkey "$terminfo[kcud1]" history-substring-search-down
-  HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
-}
-
-zplugin ice wait"0c" atload"_zsh-history-substring-search-setting" lucid
-zplugin light "zsh-users/zsh-history-substring-search"
-
-_zsh-git-smart-commands-setting() {
-  # + signing
-  alias c='git-smart-commit -S --signoff'
-  alias a='git-smart-add'
-  alias p='git-smart-push seletskiy'
-  alias u='git-smart-pull'
-  # Won't use
-  # alias r='git-smart-remote'
-  alias s='git status'
-}
-
-zplugin ice wait"1a" atload"_zsh-git-smart-commands-setting" blockf lucid
-zplugin light "seletskiy/zsh-git-smart-commands"
-
-zplugin ice wait"1b" lucid
-zplugin light "softmoth/zsh-vim-mode"
-
-zplugin ice wait"2" as"program" pick"tldr" lucid
-zplugin light "raylee/tldr"
-
-zplugin ice wait"2" lucid
-zplugin light "wfxr/forgit"
-
-# https://gist.github.com/ctechols/ca1035271ad134841284
-# On slow systems, checking the cached .zcompdump file to see if it must be
-# regenerated adds a noticable delay to zsh startup.  This little hack restricts
-# it to once a day.  It should be pasted into your own completion file.
-#
-# The globbing is a little complicated here:
-# - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
-# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
-# - '.' matches "regular files"
-# - 'mh+24' matches files (or directories or whatever) that are older than 24 hours.
-
-# Perform compinit only once a day.
-
-# Compile the completion dump to increase startup speed, if dump is newer or doesn't exist,
-# in the background as this is doesn't affect the current session.
-
-setopt EXTENDEDGLOB LOCAL_OPTIONS
-autoload -Uz compinit
-autoload -Uz bashcompinit && bashcompinit
-zmodload -i zsh/complist
-
-local zcd=${ZPLGM[ZCOMPDUMP_PATH]:-${ZDOTDIR:-$HOME}/.zcompdump}
-local zcdc="$zcd.zwc"
-if [[ -f "$zcd"(#qN.m+1) ]]; then
-    compinit -i -d "$zcd"
-    { rm -f "$zcdc" && zcompile "$zcd" } &!
-else
-    compinit -C -d "$zcd"
-    { [[ ! -f "$zcdc" || "$zcd" -nt "$zcdc" ]] && rm -f "$zcdc" && zcompile "$zcd" } &!
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-zplugin cdreplay -q
+###########################
+# tsoporans zshrc config  #
+###########################
+
+# Perf profile
+# zmodload zsh/zprof
+
+# Plugins
+# Syntax highlighting
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Auto suggestions
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Better history search
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# Z lua
+eval "$(lua $HOME/.config/z/z.lua --init zsh)"
 
 # vi mode
 bindkey -v
@@ -138,7 +35,6 @@ alias v="nvim"
 alias vim="nvim"
 alias e="emacsclient -nw"
 alias ls="exa"
-alias g="git"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias rm="rm -i"
 alias ..="cd .."
@@ -155,8 +51,25 @@ alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 alias dco='docker-compose'
 alias dock='docker'
+alias zi='z -I' # Use fzf
+alias zb= 'z -b' # Jump back
+# Git, use gitconfig for less frequent commands
+alias g="git"
+alias c="git commit -S --signoff"
+alias a="git add -p"
+alias ai="git add -i"
+alias co="git checkout"
+alias s="git status"
+alias sta="git stash"
+alias p="git push"
+alias pf="git push --force-with-lease"
+alias pu="git pull"
+alias fe="git fetch"
+alias fep="git fetch --prune"
+alias d="git diff"
+alias ds="git diff --staged"
 
-export EDITOR=vim
+export EDITOR=nvim
 export BROWSER=firefox-developer-edition
 
 export KEYTIMEOUT=1 # Less lag
@@ -188,7 +101,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # NPM
 NPM_CONFIG_PREFIX=~/.npm-global
 
-termquotes get | cowsay -d
+# termquotes get | cowsay -d
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
@@ -214,6 +127,10 @@ setopt interactivecomments # I want my bash comments
 
 # Gruvbox (term colors) pallette
 source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
+
+
+# Powerlevel10k theme
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # zprof
 # exit

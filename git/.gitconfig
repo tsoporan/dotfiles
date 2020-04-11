@@ -5,6 +5,7 @@
 [core]
   editor = vim
   autocrlf = input
+  safecrlf = true
   pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
   ui = true
@@ -22,7 +23,7 @@
 [color "status"]
   added = yellow
   changed = green
-   untracked = cyan
+  untracked = cyan
 [push]
   default = matching
 [color "diff-highlight"]
@@ -34,18 +35,12 @@
   gpgSign = true
 [merge]
   gpgSign = true
+  tool = nvim -d
 [gpg]
   program = gpg2
 [alias]
-  st = status
-  di = diff
-  ch = checkout
-  br = branch
-  lo = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --show-signature
-  ad = add
-  ap = add -p
-  ash = stash
-  fe = fetch
-  com = commit -S --signoff
-  ps = push
-  pu = pull
+  lg = log --oneline
+  last = log -1 HEAD
+  s = status
+[diff]
+  algorithm = patience
