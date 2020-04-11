@@ -11,18 +11,18 @@ theme.dir               = os.getenv("HOME") .. "/.config/awesome/themes/tsoporan
 theme.icons             = theme.dir .. "/icons"
 theme.wallpaper         = os.getenv("HOME") .. "/.wallpapers/space.jpg"
 
-theme.panel             = "#0d1925"
+theme.panel             = "#1d2021"
 theme.panel_height      = dpi(28)
-theme.font              = "Fira Code 9"
+theme.font              = "Fira Code 10"
 
-theme.fg_normal         = "#f9f9f9"
-theme.fg_focus          = "#e4e4e4"
+theme.fg_normal         = "#fbf1c7"
+theme.fg_focus          = "#ffffff"
 theme.fg_urgent         = "#CC9393"
 
-theme.bg_normal         = "#0d1925"
+theme.bg_normal         = "#1d2021"
 theme.bg_focus          = "#000000"
 theme.bg_urgent         = "#3F3F3F"
-theme.bg_systray        = "#0d1925"
+theme.bg_systray        = "#1d2021"
 
 theme.bat_bg_critical   = "#ff0000"
 theme.bat_fg_critical   = "#232323"
@@ -42,11 +42,11 @@ theme.menu_height = dpi(38)
 theme.menu_width  = dpi(100)
 
 -- Notifications
-theme.notification_font         = "Fira Code 9"
-theme.notification_bg           = "#0d1925"
-theme.notification_fg           = "#d9e5f1"
+theme.notification_font         = "Fira Code 10"
+theme.notification_bg           = "#1d2021"
+theme.notification_fg           = "#fbf1c7"
 theme.notification_border_width = dpi(4)
-theme.notification_border_color = "#d9e5f1"
+theme.notification_border_color = "#282828"
 theme.notification_opacity      = 1
 theme.notification_margin       = 100
 theme.notification_padding      = 20
@@ -55,18 +55,18 @@ theme.notification_max_height   = 800
 
 -- Taglist
 
-theme.taglist_bg_empty    = "#0d1925"
-theme.taglist_bg_occupied = "#b879b8"
-theme.taglist_bg_urgent   = "#79b8b8 "
-theme.taglist_bg_focus    = "#79b879"
-theme.taglist_font        = "Fira Mono 9"
+theme.taglist_bg_empty    = "#1d2021"
+theme.taglist_bg_occupied = "#458588"
+theme.taglist_bg_urgent   = "#cc241d"
+theme.taglist_bg_focus    = "#d79921"
+theme.taglist_font        = "Fira Code 10"
 
 -- Tasklist
 
-theme.tasklist_font                 = "Fira Mono 9"
+theme.tasklist_font                 = "Fira Code 10"
 theme.tasklist_disable_icon         = true
-theme.tasklist_bg_normal            = "#0d1925"
-theme.tasklist_bg_focus             = "#0d1925"
+theme.tasklist_bg_normal            = "#1d2021"
+theme.tasklist_bg_focus             = "#282828"
 theme.tasklist_bg_urgent            = "#f03a47"
 theme.tasklist_fg_focus             = "#DDDDDD"
 theme.tasklist_fg_urgent            = "#EEEEEE"
