@@ -29,14 +29,14 @@ xscreensaver -no-splash &
 redshift -O 4800K -P &
 
 # Clipboard
-clipit &
+# clipit &
 
 # Keyring
 # eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
 # Clipboard
-clipster -d &
+# clipster -d &
 
 # Network Manager
 nm-applet &

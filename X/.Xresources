@@ -1,6 +1,6 @@
 ! Xresources Default
 
-Xft.dpi: 192
+Xft.dpi: 104
 Xft.antialias: true
 Xft.hinting: true
 Xft.rgba: rgb
@@ -14,7 +14,7 @@ xcursor.theme:  Vanilla-DMZ
 !--------------------------------
 
 ! Rofi
-rofi.font: Fira Code 22
+rofi.font: Fira Code 14
 !--------------------------------
 
 ! Colors - Monokai - Base16
