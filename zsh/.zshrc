@@ -11,6 +11,7 @@ fi
 
 # Perf profile
 # zmodload zsh/zprof
+autoload -Uz compinit && compinit
 
 # Plugins
 # Syntax highlighting
@@ -27,6 +28,10 @@ eval "$(lua $HOME/.config/z/z.lua --init zsh)"
 bindkey -v
 # Re-map autosuggest-accept (default arrow key), ctrl+space
 bindkey '^ ' autosuggest-accept
+
+# Still use ctrl+a/ctrl+e for beginning/end of line (emacs)
+bindkey "^A" vi-beginning-of-line
+bindkey "^E" vi-end-of-line
 
 export LANG=en_US.UTF-8
 
@@ -52,7 +57,7 @@ alias egrep="egrep --color=auto"
 alias dco='docker-compose'
 alias dock='docker'
 alias zi='z -I' # Use fzf
-alias zb= 'z -b' # Jump back
+alias zb='cd -' # Jump back
 # Git, use gitconfig for less frequent commands
 alias g="git"
 alias c="git commit -S --signoff"
@@ -68,6 +73,7 @@ alias fe="git fetch"
 alias fep="git fetch --prune"
 alias d="git diff"
 alias ds="git diff --staged"
+alias mer="git merge"
 
 export EDITOR=nvim
 export BROWSER=firefox-developer-edition
