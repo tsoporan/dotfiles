@@ -7,6 +7,7 @@ font:
 
   normal:
     family: MesloLGS NF
+    style: Regular
 
   bold:
     family: MesloLGS NF
@@ -15,6 +16,10 @@ font:
   italic:
     family: MesloLGS NF
     style: Italic
+
+  bold_italic:
+    family: MesloLGS
+    style: Bold Italic
 
 colors:
   # Default colors
@@ -46,3 +51,5 @@ colors:
     magenta: '#d3869b'
     cyan:    '#8ec07c'
     white:   '#ebdbb2'
+
+background_opacity: 1

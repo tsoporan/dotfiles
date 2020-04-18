@@ -14,7 +14,7 @@ xcursor.theme:  Vanilla-DMZ
 !--------------------------------
 
 ! Rofi
-rofi.font: Fira Code 14
+rofi.font: MesloLGS NF 14
 !--------------------------------
 
 ! Colors - Monokai - Base16
@@ -54,6 +54,3 @@ rofi.font: Fira Code 14
 ! white
 *.color7:       #f8f8f2
 *.color15:      #f9f8f5
-
-! Emacs
-Emacs.font: Hack 10
