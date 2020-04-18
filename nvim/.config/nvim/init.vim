@@ -15,7 +15,8 @@ Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
 
 " Langs
-Plug 'vim-python/python-syntax' " Python
+"Plug 'vim-python/python-syntax' " Python
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 Plug 'cespare/vim-toml' " Toml
 Plug 'stephpy/vim-yaml' " Yaml
 Plug 'rust-lang/rust.vim' " Rust
@@ -40,7 +41,7 @@ Plug 'airblade/vim-rooter' " Change cwd when opening file/dir
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
-"Plug 'pechorin/any-jump.vim' "Find code defs easFind code defs easily
+"Plug 'pechorin/any-jump.vim' "Find code defs easily
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tagbar replacement
 
@@ -273,4 +274,24 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
 endfunction
