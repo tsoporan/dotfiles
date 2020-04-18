@@ -12,6 +12,11 @@ fi
 # Perf profile
 # zmodload zsh/zprof
 
+# Make git completion bearable
+__git_files () {
+    _wanted files expl 'local files' _files
+}
+
 # Plugins
 # Syntax highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
