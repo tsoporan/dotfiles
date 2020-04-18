@@ -6,14 +6,14 @@ font:
   size: 14
 
   normal:
-    family: FiraMono
+    family: MesloLGS NF
 
   bold:
-    family: FiraMono
+    family: MesloLGS NF
     style: Bold
 
   italic:
-    family: FiraMono
+    family: MesloLGS NF
     style: Italic
 
 colors:
