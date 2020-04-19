@@ -1,7 +1,9 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact", "typescript.tsx", "python"],
-  "diagnostic.warningSign": "•",
-  "diagnostic.infoSign": "•",
+  "diagnostic.infoSign": "ღ",
+  "diagnostic.hintSign": "ஐ",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.errorSign": "✖",
   "python.formatting.provider": "black",
   "python.formatting.blackPath": "/usr/bin/black",
   "python.linting.pylintEnabled": false,

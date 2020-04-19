@@ -88,9 +88,6 @@ export KEYTIMEOUT=1 # Less lag
 # FZF!
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Local bin
-PATH=$PATH:$HOME/.local/bin:$HOME/.npm-global/bin
-
 # Keychain
 eval $(keychain --eval --quiet id_rsa)
 
@@ -109,8 +106,9 @@ export FZF_DEFAULT_OPTS="--ansi"
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# NPM
-NPM_CONFIG_PREFIX=~/.npm-global
+# NPM - user-wide installations
+PATH="$HOME/.node_modules/bin:$PATH"
+export npm_config_prefix=~/.node_modules
 
 # termquotes get | cowsay -d
 
