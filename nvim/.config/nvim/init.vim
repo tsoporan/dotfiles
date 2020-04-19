@@ -5,14 +5,12 @@
 " vim-plug start
 call plug#begin('~/.config/nvim/plugged')
 
-" Syntax
-Plug 'w0rp/ale' " Async syntax linting/fixing
-
 " GUI
 Plug 'itchyny/lightline.vim' "Status bar
 Plug 'morhetz/gruvbox' "Gruvbox colors
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
+Plug 'Yggdroot/indentLine' "Indents indication
 
 " Langs
 "Plug 'vim-python/python-syntax' " Python
@@ -25,9 +23,6 @@ Plug 'plasticboy/vim-markdown' " markdown
 Plug 'fatih/vim-go' " Go
 Plug 'evanleck/vim-svelte' "Svelte
 
-" Intellisense for vim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Text
 Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'godlygeek/tabular' " Alignment
@@ -36,17 +31,16 @@ Plug 'godlygeek/tabular' " Alignment
 Plug 'tpope/vim-fugitive' " Git
 Plug 'mhinz/vim-signify' "VCS changes indication
 
-" Nav
-" Build the extra binary if cargo exists on your syst
-Plug 'airblade/vim-rooter' " Change cwd when opening file/dir
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fuzzy finder
-Plug 'junegunn/fzf.vim'
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
-"Plug 'pechorin/any-jump.vim' "Find code defs easily
+" Nav / working with code
+Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
+Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
-Plug 'liuchengxu/vista.vim' " Tagbar replacement
 
 call plug#end()
+
+syntax on
+filetype plugin indent on
 
 " Colors
 set background=dark
@@ -130,20 +124,23 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "
 " ALE
 let g:ale_linters = {
 \  'javascript': ['eslint'],
-"\  'typescript': ['tsserver', 'tslint'],
+\  'typescript': ['tsserver', 'tslint'],
 \  'vue': ['eslint'],
-\  'python': ['flake8', 'mypy']
+\  'python': ['flake8', 'mypy'],
+\  'svelte': ['eslint']
 \}
 
 let g:ale_fixers = {
 \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-"\   'javascript': ['prettier', 'eslint'],
-"\   'vue': ['prettier', 'eslint'],
-"\   'typescript': ['prettier'],
-\   'python': ['isort', 'black']
-"\   'python': ['add_blank_lines_for_python_control_statements', 'isort', 'black']
-"\   'html': ['prettier']
+\   'javascript': ['prettier', 'eslint'],
+\   'vue': ['prettier', 'eslint'],
+\   'typescript': ['prettier'],
+\   'python': ['isort', 'black'],
+\   'html': ['prettier'],
+\   'svelte': ['prettier', 'eslint']
 \}
+
+let g:ale_linter_aliases = {'svelte': ['css', 'javascript']}
 
 " Speedups
 let b:ale_python_flake8_executable = '/usr/bin/flake8'
@@ -152,8 +149,10 @@ let b:ale_python_mypy_executable = '/usr/bin/mypy'
 let b:ale_python_mypy_use_global = 1
 let g:ale_virtualenv_dir_names = []
 
-let g:ale_linters_explicit=1
+let g:ale_lint_on_save=1
 let g:ale_fix_on_save=1
+let g:ale_lint_on_enter=0
+let g:ale_lint_on_text_changed= 'never'
 
 " Move between linting  errors
 nnoremap ]r :ALENextWrap<CR>
@@ -220,34 +219,7 @@ function! RenameFile()
 endfunction
 map <leader>n :call RenameFile()<cr>
 
-" Vim clap config
-
-let g:clap_theme = 'material_design_dark'
-
-" Working with files, i.e handy vim-clap bindings
-" Search files
-nnoremap <leader>, :Clap files<CR>
-
-" Search text
-nnoremap <leader>. :Clap grep<CR>
-
-" Bring up tags, uses vista.vim
-nnoremap <leader>t :Clap tags<CR>
-nnoremap <leader>b :Vista<CR>
-
-
-" File browser using `maple`
-nnoremap <leader>f :Clap filer<CR>
-
-" Search jumps, i.e places been
-nnoremap <leader>o :Clap jumps<CR>
-
-" Use ripgrep for autocompletion
-if executable('rg')
-  set grepprg=rg\ --no-heading\ --vimgrep
-  set grepformat=%f:%l:%c:%m
-endif
-
+" Show pesky trailing chars
 set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 
 " Coc - completion see https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
@@ -283,9 +255,9 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> <leader>gs :<C-u>CocList -I -N --top symbols<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -296,3 +268,68 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+" Indents
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+map <leader>ii :IndentLinesToggle
+
+" Use ripgrep for autocompletion
+if executable('rg')
+  set grepprg=rg\ --no-heading\ --vimgrep
+  set grepformat=%f:%l:%c:%m
+endif
+
+" Denite settings
+call denite#custom#option('default', {
+      \ 'prompt': '❯'
+      \ })
+
+call denite#custom#var('file/rec', 'command',
+      \ ['fd', '-H', '--full-path'])
+call denite#custom#var('grep', 'command', ['rg'])
+call denite#custom#var('grep', 'default_opts',
+      \ ['--hidden', '--vimgrep', '--smart-case'])
+call denite#custom#var('grep', 'recursive_opts', [])
+call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+call denite#custom#var('grep', 'separator', ['--'])
+call denite#custom#var('grep', 'final_opts', [])
+call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
+call denite#custom#option('_', {
+      \ 'split': 'floating',
+      \ 'highlight_matched_char': 'Underlined',
+      \ 'highlight_matched_range': 'NormalFloat',
+      \ 'wincol': &columns / 6,
+      \ 'winwidth': &columns * 2 / 3,
+      \ 'winrow': &lines / 6,
+      \ 'winheight': &lines * 2 / 3
+      \ })
+
+autocmd FileType denite call s:denite_settings()
+
+function! s:denite_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+        \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> <C-v>
+        \ denite#do_map('do_action', 'vsplit')
+  nnoremap <silent><buffer><expr> <C-h>
+        \ denite#do_map('do_action', 'split')
+  nnoremap <silent><buffer><expr> d
+        \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+        \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> <Esc>
+        \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> q
+        \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+        \ denite#do_map('open_filter_buffer')
+endfunction
+
+" Kill filter buffer with esc
+function! s:denite_filter_settings() abort
+  nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+endfunction
+
+nnoremap <leader>, :<C-u>Denite buffer file/rec<CR>
+nnoremap <leader>. :<C-u>Denite -start-filter grep:::!<CR>
+nnoremap <leader>/ :<C-u>DeniteCursorWord grep:.<CR>
