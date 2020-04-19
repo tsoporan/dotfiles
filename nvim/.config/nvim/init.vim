@@ -23,6 +23,7 @@ Plug 'rust-lang/rust.vim' " Rust
 Plug 'rhysd/vim-clang-format' " C
 Plug 'plasticboy/vim-markdown' " markdown
 Plug 'fatih/vim-go' " Go
+Plug 'evanleck/vim-svelte' "Svelte
 
 " Intellisense for vim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
