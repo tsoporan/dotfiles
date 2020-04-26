@@ -27,20 +27,18 @@ Plug 'evanleck/vim-svelte' "Svelte
 Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'godlygeek/tabular' " Alignment
 
-" VCS
-Plug 'tpope/vim-fugitive' " Git
-Plug 'mhinz/vim-signify' "VCS changes indication
-
 " Nav / working with code
 Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
 Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
+Plug 'liuchengxu/vista.vim' " Tags
 
 call plug#end()
 
 syntax on
 filetype plugin indent on
+
 
 " Colors
 set background=dark
@@ -223,6 +221,10 @@ map <leader>n :call RenameFile()<cr>
 set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 
 " Coc - completion see https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
+" Python config, use host python
+let g:python3_host_prog = '/usr/bin/python'
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-tslint-plugin', 'coc-html', 'coc-css', 'coc-python', 'coc-git']
+
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
@@ -255,9 +257,9 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> <leader>gs :<C-u>CocList -I -N --top symbols<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -268,6 +270,15 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+" CocList
+nnoremap <leader>d : <C-u>CocList diagnostics<CR>
+nnoremap <leader>c : <C-u>CocList commands<CR>
+nnoremap <leader>s : <C-u>CocList -I symbols<CR>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
 " Indents
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
@@ -333,3 +344,17 @@ endfunction
 nnoremap <leader>, :<C-u>Denite buffer file/rec<CR>
 nnoremap <leader>. :<C-u>Denite -start-filter grep:::!<CR>
 nnoremap <leader>/ :<C-u>DeniteCursorWord grep:.<CR>
+
+" Vista
+"--- Vista ---
+let g:vista_default_executive = 'coc'
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+let g:vista_icon_indent = ["▸ ", ""]
+"g:vista_echo_cursor_strategy = 'both'
+
+" Useful keybinds
+inoremap jk <esc>

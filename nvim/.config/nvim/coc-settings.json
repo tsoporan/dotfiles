@@ -1,5 +1,7 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "typescriptreact", "json", "javascriptreact", "typescript.tsx", "python"],
+  "codeLens.enable": true,
+  "signature.enable": true,
   "diagnostic.infoSign": "ღ",
   "diagnostic.hintSign": "ஐ",
   "diagnostic.warningSign": "⚠",
@@ -12,5 +14,17 @@
   "python.linting.flake8Path": "/usr/bin/flake8",
   "python.linting.mypyEnabled": true,
   "python.linting.mypyPath": "/usr/bin/mypy",
-  "python.sortImports.path": "/usr/bin/isort"
+  "python.sortImports.path": "/usr/bin/isort",
+  "python.jediEnabled": false,
+  "html.suggest.html5": true,
+  "git.addedSign.text": "+",
+  "git.changedSign.text": "~",
+  "git.removedSign.text": "-",
+  "git.changeRemovedSign.text": "▶",
+  "git.topRemovedSign.text": "◥",
+  "git.addedSign.hlGroup": "GitGutterAdd",
+  "git.changedSign.hlGroup": "GitGutterChange",
+  "git.removedSign.hlGroup": "GitGutterDelete",
+  "git.topRemovedSign.hlGroup": "GitGutterDelete",
+  "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete"
 }
