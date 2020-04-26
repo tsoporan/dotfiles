@@ -33,7 +33,7 @@ theme.clockgf           = "#f9f9f9"
 
 theme.border_width  = dpi(3)
 theme.border_normal = "#3F3F3F"
-theme.border_focus  = "#458588"
+theme.border_focus  = "#d79921"
 theme.border_marked = "#CC9393"
 
 -- Menu
