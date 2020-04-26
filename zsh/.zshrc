@@ -25,8 +25,27 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Better history search
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# Z lua
-eval "$(lua $HOME/.config/z/z.lua --init zsh)"
+# HistDB
+source $HOME/github/zsh-histdb/sqlite-history.zsh
+
+# Gruvbox (term colors) pallette
+source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
+
+# Powerlevel10k theme
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+
+autoload -Uz add-zsh-hook compinit
+add-zsh-hook precmd histdb-update-outcome
+
+# compinit (completion) speed up: check compdump once a day
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+
+compinit -C
+
+# (Z)oxide
+eval "$(zoxide init zsh)"
 
 # vi mode
 bindkey -v
@@ -110,12 +129,13 @@ export npm_config_prefix=~/.node_modules
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# Note: using histdb
+# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
-HISTSIZE=1000000
-SAVEHIST=$HISTSIZE
-
+# Note: using HistDB
+#[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
+#HISTSIZE=1000000
+#SAVEHIST=$HISTSIZE
 
 ## History command configuration
 setopt extended_history       # record timestamp of command in HISTFILE
@@ -128,12 +148,18 @@ setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
 
-# Gruvbox (term colors) pallette
-source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
+# HistDB autosuggestions
+_zsh_autosuggest_strategy_histdb_top_here() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where places.dir LIKE '$(sql_escape $PWD)%'
+and commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv order by count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
 
-
-# Powerlevel10k theme
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+ZSH_AUTOSUGGEST_STRATEGY=histdb_top_here
 
 # zprof
 # exit
