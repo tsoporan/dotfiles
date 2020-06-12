@@ -27,6 +27,9 @@ Plug 'evanleck/vim-svelte' "Svelte
 Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'godlygeek/tabular' " Alignment
 
+" VCS
+Plug 'tpope/vim-fugitive'
+
 " Nav / working with code
 Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
@@ -71,7 +74,7 @@ set smarttab "spaces instead of tabs
 
 set encoding=utf-8
 
-set textwidth=88
+" set textwidth=88
 set colorcolumn=+1
 
 " Searching
