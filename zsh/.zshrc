@@ -58,7 +58,7 @@ export LANG=en_US.UTF-8
 # Various aliases
 alias v="nvim"
 alias vim="nvim"
-alias e="emacsclient -nw"
+alias e="emacsclient -nc"
 alias ls="exa"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias rm="rm -i"

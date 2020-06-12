@@ -61,6 +61,7 @@ local browser     = "firefox-developer-edition"
 local modkey      = "Mod4"
 local altkey      = "Mod1"
 local scrlock     = "xscreensaver-command -lock"
+local emacs       = "emacsclient -nc"
 
 -- Theme
 local themename  = "tsoporan"
@@ -489,7 +490,16 @@ globalkeys = gears.table.join(
         awful.spawn(scrlock)
       end,
       { description = "lock the screen", group = "custom" }
+    ),
+
+    awful.key(
+      { modkey }, "e",
+      function ()
+        awful.spawn(emacs)
+      end,
+      { description = "emacs client", group = "custom" }
     )
+
 
 )
 
