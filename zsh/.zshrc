@@ -26,17 +26,13 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Better history search
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# HistDB
-source $HOME/github/zsh-histdb/sqlite-history.zsh
-
 # Gruvbox (term colors) pallette
 source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
 
 # Powerlevel10k theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
-autoload -Uz add-zsh-hook compinit
-add-zsh-hook precmd histdb-update-outcome
+autoload -Uz compinit
 
 # compinit (completion) speed up: check compdump once a day
 for dump in ~/.zcompdump(N.mh+24); do
@@ -92,12 +88,15 @@ alias s="git status"
 alias sta="git stash"
 alias p="git push"
 alias pf="git push --force-with-lease"
-alias pu="git pull"
+alias pl="git pull"
 alias fe="git fetch"
 alias fep="git fetch --prune"
 alias d="git diff"
 alias ds="git diff --staged"
 alias mer="git merge"
+alias doom_sync='~/.emacs.d/bin/doom sync'
+alias doom_upgrade='~/.emacs.d/bin/doom upgrade'
+alias doom_doctor='~/.emacs.d/bin/doom doctor'
 
 export EDITOR=nvim
 export BROWSER=firefox-developer-edition
@@ -135,13 +134,14 @@ export npm_config_prefix=~/.node_modules
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
-# Note: using histdb
-# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# Note: using HistDB
-#[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
-#HISTSIZE=1000000
-#SAVEHIST=$HISTSIZE
+#set history size
+export HISTSIZE=100000
+#save history after logout
+export SAVEHIST=100000
+#history file
+export HISTFILE=~/.zhistory
 
 ## History command configuration
 setopt extended_history       # record timestamp of command in HISTFILE
@@ -153,19 +153,6 @@ setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
-
-# HistDB autosuggestions
-_zsh_autosuggest_strategy_histdb_top_here() {
-    local query="select commands.argv from
-history left join commands on history.command_id = commands.rowid
-left join places on history.place_id = places.rowid
-where places.dir LIKE '$(sql_escape $PWD)%'
-and commands.argv LIKE '$(sql_escape $1)%'
-group by commands.argv order by count(*) desc limit 1"
-    suggestion=$(_histdb_query "$query")
-}
-
-ZSH_AUTOSUGGEST_STRATEGY=histdb_top_here
 
 # zprof
 # exit
