@@ -13,15 +13,8 @@ Plug 'machakann/vim-highlightedyank' " Highlight yanks
 Plug 'Yggdroot/indentLine' "Indents indication
 
 " Langs
-"Plug 'vim-python/python-syntax' " Python
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-Plug 'cespare/vim-toml' " Toml
-Plug 'stephpy/vim-yaml' " Yaml
-Plug 'rust-lang/rust.vim' " Rust
-Plug 'rhysd/vim-clang-format' " C
-Plug 'plasticboy/vim-markdown' " markdown
-Plug 'fatih/vim-go' " Go
-Plug 'evanleck/vim-svelte' "Svelte
+Plug 'sheerun/vim-polyglot' "Lang pack
 
 " Text
 Plug 'tpope/vim-surround' " '' => \"\"
@@ -31,11 +24,14 @@ Plug 'godlygeek/tabular' " Alignment
 Plug 'tpope/vim-fugitive'
 
 " Nav / working with code
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
+"Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
+"Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "An efficient fuzzy finder that helps to locate files, buffers, mrus, gtags, etc. on the fly.
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
 Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tags
+Plug 'easymotion/vim-easymotion' " Move around quicker
 
 call plug#end()
 
@@ -285,7 +281,7 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 
 " Indents
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-map <leader>ii :IndentLinesToggle
+map <leader>it :IndentLinesToggle
 
 " Use ripgrep for autocompletion
 if executable('rg')
@@ -294,59 +290,59 @@ if executable('rg')
 endif
 
 " Denite settings
-call denite#custom#option('default', {
-      \ 'prompt': '❯'
-      \ })
-
-call denite#custom#var('file/rec', 'command',
-      \ ['fd', '-H', '--full-path'])
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-      \ ['--hidden', '--vimgrep', '--smart-case'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
-call denite#custom#option('_', {
-      \ 'split': 'floating',
-      \ 'highlight_matched_char': 'Underlined',
-      \ 'highlight_matched_range': 'NormalFloat',
-      \ 'wincol': &columns / 6,
-      \ 'winwidth': &columns * 2 / 3,
-      \ 'winrow': &lines / 6,
-      \ 'winheight': &lines * 2 / 3
-      \ })
-
-autocmd FileType denite call s:denite_settings()
-
-function! s:denite_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-        \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> <C-v>
-        \ denite#do_map('do_action', 'vsplit')
-  nnoremap <silent><buffer><expr> <C-h>
-        \ denite#do_map('do_action', 'split')
-  nnoremap <silent><buffer><expr> d
-        \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-        \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> <Esc>
-        \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> q
-        \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i
-        \ denite#do_map('open_filter_buffer')
-endfunction
-
+"call denite#custom#option('default', {
+"      \ 'prompt': '❯'
+"      \ })
+"
+"call denite#custom#var('file/rec', 'command',
+"      \ ['fd', '-H', '--full-path'])
+"call denite#custom#var('grep', 'command', ['rg'])
+"call denite#custom#var('grep', 'default_opts',
+"      \ ['--hidden', '--vimgrep', '--smart-case'])
+"call denite#custom#var('grep', 'recursive_opts', [])
+"call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+"call denite#custom#var('grep', 'separator', ['--'])
+"call denite#custom#var('grep', 'final_opts', [])
+"call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
+"call denite#custom#option('_', {
+"      \ 'split': 'floating',
+"      \ 'highlight_matched_char': 'Underlined',
+"      \ 'highlight_matched_range': 'NormalFloat',
+"      \ 'wincol': &columns / 6,
+"      \ 'winwidth': &columns * 2 / 3,
+"      \ 'winrow': &lines / 6,
+"      \ 'winheight': &lines * 2 / 3
+"      \ })
+"
+"autocmd FileType denite call s:denite_settings()
+"
+"function! s:denite_settings() abort
+"  nnoremap <silent><buffer><expr> <CR>
+"        \ denite#do_map('do_action')
+"  nnoremap <silent><buffer><expr> <C-v>
+"        \ denite#do_map('do_action', 'vsplit')
+"  nnoremap <silent><buffer><expr> <C-h>
+"        \ denite#do_map('do_action', 'split')
+"  nnoremap <silent><buffer><expr> d
+"        \ denite#do_map('do_action', 'delete')
+"  nnoremap <silent><buffer><expr> p
+"        \ denite#do_map('do_action', 'preview')
+"  nnoremap <silent><buffer><expr> <Esc>
+"        \ denite#do_map('quit')
+"  nnoremap <silent><buffer><expr> q
+"        \ denite#do_map('quit')
+"  nnoremap <silent><buffer><expr> i
+"        \ denite#do_map('open_filter_buffer')
+"endfunction
+"
 " Kill filter buffer with esc
-function! s:denite_filter_settings() abort
-  nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
-endfunction
-
-nnoremap <leader>, :<C-u>Denite buffer file/rec<CR>
-nnoremap <leader>. :<C-u>Denite -start-filter grep:::!<CR>
-nnoremap <leader>/ :<C-u>DeniteCursorWord grep:.<CR>
+"function! s:denite_filter_settings() abort
+"  nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
+"endfunction
+"
+"nnoremap <leader>. :<C-u>Denite file/rec<CR>
+"nnoremap <leader>/ :<C-u>Denite -start-filter grep:::!<CR>
+"nnoremap <leader>/ :<C-u>DeniteCursorWord grep:.<CR>
 
 " Vista
 "--- Vista ---
@@ -361,3 +357,16 @@ let g:vista_icon_indent = ["▸ ", ""]
 
 " Useful keybinds
 inoremap jk <esc>
+
+" Clap config
+let g:clap_layout = { 'relative': 'editor' }
+let g:clap_open_action = { 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
+
+nnoremap <leader>ff :Clap files<CR>
+nnoremap <leader>fh :Clap history<CR>
+nnoremap <leader>fs :Clap grep<CR>
+nnoremap <leader>fw :Clap grep ++query=<cword><CR>
+nnoremap <leader>fb :Clap buffers<CR>
+nnoremap <leader>ft :Clap tags<CR>
+nnoremap <leader>fpt :Clap proj_tags<CR>
+nnoremap <leader>fl :Clap filer<CR>
