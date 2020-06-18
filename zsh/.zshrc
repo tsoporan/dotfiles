@@ -94,6 +94,7 @@ alias fep="git fetch --prune"
 alias d="git diff"
 alias ds="git diff --staged"
 alias mer="git merge"
+alias open_ports="ss -lntu"
 alias doom_sync='~/.emacs.d/bin/doom sync'
 alias doom_upgrade='~/.emacs.d/bin/doom upgrade'
 alias doom_doctor='~/.emacs.d/bin/doom doctor'
@@ -125,7 +126,9 @@ export FZF_DEFAULT_OPTS="--ansi"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # NPM - user-wide installations
-PATH="$HOME/.node_modules/bin:$PATH"
+# + Local bin
+PATH="$HOME/.node_modules/bin:$HOME/.local/bin:$PATH"
+
 export npm_config_prefix=~/.node_modules
 
 # termquotes get | cowsay -d
@@ -153,6 +156,7 @@ setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
+
 
 # zprof
 # exit
