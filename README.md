@@ -6,19 +6,19 @@ Collection of dotfiles for my day-to-day programs.
 
 ### My setup
 
-- [ArchLinux](https://www.archlinux.org/)
-- [AwesomeWM](https://awesomewm.org/)
-- [GNU Stow](https://www.gnu.org/software/stow/)
-- [rofi & rofi-pass](https://github.com/DaveDavenport/rofi)
-- [alacritty terminal](https://github.com/jwilm/alacritty)
-- [vim](https://www.vim.org/)
-- [zsh](https://wiki.archlinux.org/index.php/zsh)
-  - [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh)
-- [fzf](https://github.com/junegunn/fzf)
-- [Fira Code font](https://github.com/tonsky/FiraCode)
-- [ripgrep](https://github.com/BurntSushi/ripgrep)
-- [fd](https://github.com/sharkdp/fd)
-- [z](https://github.com/rupa/z)
+- Distro: [ArchLinux](https://www.archlinux.org/)
+- Window manager: [Awesome](https://awesomewm.org/)
+- Config mgmt.: [GNU Stow](https://www.gnu.org/software/stow/)
+- Window switcher/app runner: [rofi & rofi-pass](https://github.com/DaveDavenport/rofi)
+- Terminal: [alacritty terminal](https://github.com/jwilm/alacritty)
+- Text Editor: [(n)vim](https://www.vim.org/)
+- Shell: [zsh](https://wiki.archlinux.org/index.php/zsh)
+- Working in the shell:
+  - Alternative to `grep`: [ripgrep](https://github.com/BurntSushi/ripgrep)
+  - Alternative to `find`: [fd](https://github.com/sharkdp/fd)
+  - Jump around / MRU nav: [(z)oxide](https://github.com/ajeetdsouza/zoxide)
+  - Fuzzy file finder + vim integration: [fzf/fzf.vim](https://github.com/junegunn/fzf)
+- Font [Fira Code](https://github.com/tonsky/FiraCode)
 
 ### Dotfile usage
 
@@ -40,13 +40,3 @@ The theme is customized for my needs but heavily based on: [awesome-pro](https:/
 
 The main branch contains a HiDPI set up, due to my primary driver, check out the `desktop` branch if you aren't using
 HiDPI.
-
-### Fonts
-
-For emojis using [ttf-emojione](https://aur.archlinux.org/packages/ttf-emojione)
-
-### ZSH
-
-For prompt using [spaceship prompt](https://denysdovhan.com/spaceship-prompt/)
-
-Also using [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) and [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
