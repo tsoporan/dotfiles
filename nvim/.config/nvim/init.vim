@@ -28,11 +28,15 @@ Plug 'tpope/vim-surround' " '' => \"\"
 Plug 'godlygeek/tabular' " Alignment
 
 " Nav / working with code
-Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy finder
+Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree' 
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
 Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tags
+Plug 'easymotion/vim-easymotion' " Move around quicker
+Plug 'tpope/vim-commentary' "Comment stuff out
 
 call plug#end()
 
@@ -355,6 +359,24 @@ let g:vista#renderer#icons = {
 \  }
 let g:vista_icon_indent = ["▸ ", ""]
 "g:vista_echo_cursor_strategy = 'both'
+nnoremap <leader>ft :Vista finder<CR>
 
 " Useful keybinds
 inoremap jk <esc>
+
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fh :History<CR>
+nnoremap <leader>fs :Rg<CR>
+nnoremap <leader>fw :Rg <C-R><C-W><CR>
+nnoremap <leader>fb :Buffers<CR>
+
+
+"NERDTree
+" Open
+nnoremap <leader>op :NERDTreeToggle<CR>
+
+" Open dir of current file
+nnoremap <leader>od :NERDTreeToggle %<CR>
+
+" Open to file loc
+nnoremap <leader>of :NERDTreeFind<CR>

@@ -43,5 +43,6 @@
   lg = log --oneline
   last = log -1 HEAD
   s = status
+  undo = reset HEAD^
 [diff]
   algorithm = patience

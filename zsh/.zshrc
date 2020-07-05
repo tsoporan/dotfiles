@@ -1,4 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+  # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -12,10 +12,12 @@ fi
 # Perf profile
 # zmodload zsh/zprof
 
-# Make git completion bearable
-__git_files () {
-    _wanted files expl 'local files' _files
-}
+# compinit (completion) speed up: check compdump once a day
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 # Plugins
 # Syntax highlighting
@@ -33,16 +35,6 @@ source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
 
 # Powerlevel10k theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-autoload -Uz add-zsh-hook compinit
-add-zsh-hook precmd histdb-update-outcome
-
-# compinit (completion) speed up: check compdump once a day
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-
-compinit -C
 
 # (Z)oxide
 eval "$(zoxide init zsh)"
@@ -147,19 +139,6 @@ setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
-
-# HistDB autosuggestions
-_zsh_autosuggest_strategy_histdb_top_here() {
-    local query="select commands.argv from
-history left join commands on history.command_id = commands.rowid
-left join places on history.place_id = places.rowid
-where places.dir LIKE '$(sql_escape $PWD)%'
-and commands.argv LIKE '$(sql_escape $1)%'
-group by commands.argv order by count(*) desc limit 1"
-    suggestion=$(_histdb_query "$query")
-}
-
-ZSH_AUTOSUGGEST_STRATEGY=histdb_top_here
 
 # zprof
 # exit
