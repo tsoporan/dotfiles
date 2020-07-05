@@ -24,14 +24,15 @@ Plug 'godlygeek/tabular' " Alignment
 Plug 'tpope/vim-fugitive'
 
 " Nav / working with code
-"Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' } "Generic fuzzy finder for all things
-"Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "An efficient fuzzy finder that helps to locate files, buffers, mrus, gtags, etc. on the fly.
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy finder
+Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdtree' 
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
 Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tags
 Plug 'easymotion/vim-easymotion' " Move around quicker
+Plug 'tpope/vim-commentary' "Comment stuff out
 
 call plug#end()
 
@@ -354,19 +355,24 @@ let g:vista#renderer#icons = {
 \  }
 let g:vista_icon_indent = ["▸ ", ""]
 "g:vista_echo_cursor_strategy = 'both'
+nnoremap <leader>ft :Vista finder<CR>
 
 " Useful keybinds
 inoremap jk <esc>
 
-" Clap config
-let g:clap_layout = { 'relative': 'editor' }
-let g:clap_open_action = { 'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fh :History<CR>
+nnoremap <leader>fs :Rg<CR>
+nnoremap <leader>fw :Rg <C-R><C-W><CR>
+nnoremap <leader>fb :Buffers<CR>
 
-nnoremap <leader>ff :Clap files<CR>
-nnoremap <leader>fh :Clap history<CR>
-nnoremap <leader>fs :Clap grep<CR>
-nnoremap <leader>fw :Clap grep ++query=<cword><CR>
-nnoremap <leader>fb :Clap buffers<CR>
-nnoremap <leader>ft :Clap tags<CR>
-nnoremap <leader>fpt :Clap proj_tags<CR>
-nnoremap <leader>fl :Clap filer<CR>
+
+"NERDTree
+" Open
+nnoremap <leader>op :NERDTreeToggle<CR>
+
+" Open dir of current file
+nnoremap <leader>od :NERDTreeToggle %<CR>
+
+" Open to file loc
+nnoremap <leader>of :NERDTreeFind<CR>

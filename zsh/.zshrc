@@ -1,4 +1,4 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+  # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
@@ -13,10 +13,12 @@ fi
 # zmodload zsh/zprof
 autoload -Uz compinit && compinit
 
-# Make git completion bearable
-__git_files () {
-    _wanted files expl 'local files' _files
-}
+# compinit (completion) speed up: check compdump once a day
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 # Plugins
 # Syntax highlighting
@@ -31,15 +33,6 @@ source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
 
 # Powerlevel10k theme
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-autoload -Uz compinit
-
-# compinit (completion) speed up: check compdump once a day
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-
-compinit -C
 
 # (Z)oxide
 eval "$(zoxide init zsh)"
@@ -156,7 +149,6 @@ setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
 setopt interactivecomments # I want my bash comments
-
 
 # zprof
 # exit
