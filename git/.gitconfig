@@ -7,31 +7,34 @@
   editor = vim
   autocrlf = input
   safecrlf = true
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = delta
+[delta]
+  plus-style = syntax "#003800"
+  minus-style = syntax "#3f0001"
+  syntax-theme = Dracula
+  line-numbers = true
+[delta "line-numbers"]
+  line-numbers-left-style = cyan
+  line-numbers-right-style = cyan
+  line-numbers-minus-style = 124
+  line-numbers-plus-style = 28
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none
+  hunk-header-decoration-style = cyan box ul
 [color]
   ui = true
 [color "branch"]
   current = yellow reverse
   local = yellow
   remote = green
-[color "diff"]
-  meta = yellow
-  frag = magenta bold
-  old = red bold
-  new = green bold
-  whitespace = red reverse
-  commit = yellow bold
 [color "status"]
   added = yellow
   changed = green
   untracked = cyan
 [push]
   default = matching
-[color "diff-highlight"]
-  oldNormal = red bold
-  oldHighlight = red bold 52
-  newNormal = green bold
-  newHighlight = green bold 22
 [commit]
   gpgSign = true
 [merge]
@@ -44,5 +47,5 @@
   last = log -1 HEAD
   s = status
   undo = reset HEAD^
-[diff]
-  algorithm = patience
+[interactive]
+  diffFilter = delta --color-only
