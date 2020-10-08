@@ -11,8 +11,6 @@ fi
 
 # Perf profile
 # zmodload zsh/zprof
-autoload -Uz compinit && compinit
-
 # compinit (completion) speed up: check compdump once a day
 autoload -Uz compinit
 for dump in ~/.zcompdump(N.mh+24); do
@@ -49,6 +47,7 @@ bindkey "^E" vi-end-of-line
 export LANG=en_US.UTF-8
 
 # Various aliases
+alias jj="jobs"
 alias v="nvim"
 alias vim="nvim"
 alias e="emacsclient -nc"
