@@ -5,8 +5,7 @@
     "typescriptreact",
     "json",
     "javascriptreact",
-    "typescript.tsx",
-    "python"
+    "typescript.tsx"
   ],
   "codeLens.enable": true,
   "signature.enable": true,
@@ -34,5 +33,6 @@
   "git.changedSign.hlGroup": "GitGutterChange",
   "git.removedSign.hlGroup": "GitGutterDelete",
   "git.topRemovedSign.hlGroup": "GitGutterDelete",
-  "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete"
+  "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete",
+  "git.addGBlameToBufferVar": true
 }

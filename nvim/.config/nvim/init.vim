@@ -26,9 +26,8 @@ Plug 'tpope/vim-fugitive'
 " Nav / working with code
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy finder
 Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdtree' 
+Plug 'preservim/nerdtree' "File browse
 Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
-Plug 'airblade/vim-rooter' "Change cwd when opening file/dir
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tags
 Plug 'easymotion/vim-easymotion' " Move around quicker
@@ -177,10 +176,6 @@ endif
 " Markdown
 let g:vim_markdown_conceal = 0
 
-" Lightline
-let g:lightline = {
-  \ 'colorscheme': 'wombat',
-  \ }
 
 " Use System Clipboard
 set clipboard+=unnamedplus
@@ -223,7 +218,6 @@ set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 " Coc - completion see https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
 " Python config, use host python
 let g:python3_host_prog = '/usr/bin/python'
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-tslint-plugin', 'coc-html', 'coc-css', 'coc-python', 'coc-git']
 
 " Some servers have issues with backup files, see #649.
 set nobackup
@@ -363,6 +357,7 @@ inoremap jk <esc>
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fh :History<CR>
 nnoremap <leader>fs :Rg<CR>
+"Find word under cursor
 nnoremap <leader>fw :Rg <C-R><C-W><CR>
 nnoremap <leader>fb :Buffers<CR>
 
@@ -376,3 +371,30 @@ nnoremap <leader>od :NERDTreeToggle %<CR>
 
 " Open to file loc
 nnoremap <leader>of :NERDTreeFind<CR>
+
+" Coc Command shortcuts
+nnoremap <buffer> <leader>i :CocCommand python.sortImports<CR>
+
+" Light line config with blame
+let g:lightline = {
+  \ 'colorscheme': 'darcula',
+  \ 'active': {
+  \   'left': [
+  \     [ 'mode', 'paste' ],
+  \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
+  \   ],
+  \   'right':[
+  \     [ 'filetype', 'fileencoding', 'lineinfo'],
+  \     [ 'blame' ]
+  \   ],
+  \ },
+  \ 'component_function': {
+  \   'blame': 'LightlineGitBlame',
+  \ }
+\ }
+
+function! LightlineGitBlame() abort
+  let blame = get(b:, 'coc_git_blame', '')
+  " return blame
+  return winwidth(0) > 120 ? blame : ''
+endfunction
