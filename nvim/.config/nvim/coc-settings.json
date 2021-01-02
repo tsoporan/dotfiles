@@ -2,10 +2,16 @@
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "typescript",
-    "typescriptreact",
     "json",
     "javascriptreact",
-    "typescript.tsx"
+    "typescriptreact",
+    "graphql",
+    "python",
+    "vue",
+    "svelte",
+    "markdown",
+    "html",
+    "css"
   ],
   "codeLens.enable": true,
   "signature.enable": true,
