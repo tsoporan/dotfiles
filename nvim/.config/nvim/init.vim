@@ -13,8 +13,11 @@ Plug 'machakann/vim-highlightedyank' " Highlight yanks
 Plug 'Yggdroot/indentLine' "Indents indication
 
 " Langs
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " Python+
 Plug 'sheerun/vim-polyglot' "Lang pack
+
+" Vim Polyglot
+let g:polyglot_disabled = ["markdown"]
 
 " Text
 Plug 'tpope/vim-surround' " '' => \"\"
@@ -27,7 +30,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy finder
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree' "File browse
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " Intellisense
+Plug 'neoclide/coc.nvim', {'branch': 'release'} " 'Intellisense'
 Plug 'andymass/vim-matchup' " More powerful %
 Plug 'liuchengxu/vista.vim' " Tags
 Plug 'easymotion/vim-easymotion' " Move around quicker
@@ -37,7 +40,6 @@ call plug#end()
 
 syntax on
 filetype plugin indent on
-
 
 " Colors
 set background=dark
@@ -398,3 +400,26 @@ function! LightlineGitBlame() abort
   " return blame
   return winwidth(0) > 120 ? blame : ''
 endfunction
+
+"Easymotion
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding.
+" `s{char}{label}`
+nmap s <Plug>(easymotion-overwin-f)
+" or
+" `s{char}{char}{label}`
+" Need one more keystroke, but on average, it may be more comfortable.
+" nmap s <Plug>(easymotion-overwin-f2)
+
+" Turn on case-insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+au BufNewFile,BufRead *.prisma setfiletype graphql
+
+" Prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
