@@ -286,61 +286,6 @@ if executable('rg')
   set grepformat=%f:%l:%c:%m
 endif
 
-" Denite settings
-"call denite#custom#option('default', {
-"      \ 'prompt': '❯'
-"      \ })
-"
-"call denite#custom#var('file/rec', 'command',
-"      \ ['fd', '-H', '--full-path'])
-"call denite#custom#var('grep', 'command', ['rg'])
-"call denite#custom#var('grep', 'default_opts',
-"      \ ['--hidden', '--vimgrep', '--smart-case'])
-"call denite#custom#var('grep', 'recursive_opts', [])
-"call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-"call denite#custom#var('grep', 'separator', ['--'])
-"call denite#custom#var('grep', 'final_opts', [])
-"call denite#custom#option('_', 'max_dynamic_update_candidates', 100000)
-"call denite#custom#option('_', {
-"      \ 'split': 'floating',
-"      \ 'highlight_matched_char': 'Underlined',
-"      \ 'highlight_matched_range': 'NormalFloat',
-"      \ 'wincol': &columns / 6,
-"      \ 'winwidth': &columns * 2 / 3,
-"      \ 'winrow': &lines / 6,
-"      \ 'winheight': &lines * 2 / 3
-"      \ })
-"
-"autocmd FileType denite call s:denite_settings()
-"
-"function! s:denite_settings() abort
-"  nnoremap <silent><buffer><expr> <CR>
-"        \ denite#do_map('do_action')
-"  nnoremap <silent><buffer><expr> <C-v>
-"        \ denite#do_map('do_action', 'vsplit')
-"  nnoremap <silent><buffer><expr> <C-h>
-"        \ denite#do_map('do_action', 'split')
-"  nnoremap <silent><buffer><expr> d
-"        \ denite#do_map('do_action', 'delete')
-"  nnoremap <silent><buffer><expr> p
-"        \ denite#do_map('do_action', 'preview')
-"  nnoremap <silent><buffer><expr> <Esc>
-"        \ denite#do_map('quit')
-"  nnoremap <silent><buffer><expr> q
-"        \ denite#do_map('quit')
-"  nnoremap <silent><buffer><expr> i
-"        \ denite#do_map('open_filter_buffer')
-"endfunction
-"
-" Kill filter buffer with esc
-"function! s:denite_filter_settings() abort
-"  nmap <silent><buffer> <Esc> <Plug>(denite_filter_quit)
-"endfunction
-"
-"nnoremap <leader>. :<C-u>Denite file/rec<CR>
-"nnoremap <leader>/ :<C-u>Denite -start-filter grep:::!<CR>
-"nnoremap <leader>/ :<C-u>DeniteCursorWord grep:.<CR>
-
 " Vista
 "--- Vista ---
 let g:vista_default_executive = 'coc'
@@ -351,7 +296,7 @@ let g:vista#renderer#icons = {
 \  }
 let g:vista_icon_indent = ["▸ ", ""]
 "g:vista_echo_cursor_strategy = 'both'
-nnoremap <leader>ft :Vista finder<CR>
+nnoremap <leader>vt :Vista finder<CR>
 
 " Useful keybinds
 inoremap jk <esc>
@@ -367,22 +312,16 @@ nnoremap <leader>fb :Buffers<CR>
 "NERDTree
 " Open
 nnoremap <leader>op :NERDTreeToggle<CR>
-
 " Open dir of current file
 nnoremap <leader>od :NERDTreeToggle %<CR>
-
 " Open to file loc
 nnoremap <leader>of :NERDTreeFind<CR>
-
-" Coc Command shortcuts
-nnoremap <buffer> <leader>i :CocCommand python.sortImports<CR>
 
 " Light line config with blame
 let g:lightline = {
   \ 'colorscheme': 'darcula',
   \ 'active': {
   \   'left': [
-  \     [ 'mode', 'paste' ],
   \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
   \   ],
   \   'right':[
@@ -405,21 +344,30 @@ endfunction
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
-" `s{char}{label}`
-nmap s <Plug>(easymotion-overwin-f)
-" or
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
-" nmap s <Plug>(easymotion-overwin-f2)
+nmap s <Plug>(easymotion-overwin-f2)
 
 " Turn on case-insensitive feature
 let g:EasyMotion_smartcase = 1
-
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
 
 au BufNewFile,BufRead *.prisma setfiletype graphql
 
 " Prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+" Jump to most-recently-used (mru) files + open buffers
+command! FZFMru call fzf#run({
+\ 'source':  reverse(s:all_files()),
+\ 'sink':    'edit',
+\ 'options': '-m -x +s',
+\ 'down':    '40%' })
+
+function! s:all_files()
+  return extend(
+  \ filter(copy(v:oldfiles),
+  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
+  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+endfunction
+
+nnoremap <leader>mr :FZFMru<CR>
