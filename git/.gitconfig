@@ -5,9 +5,11 @@
 [core]
   excludesfile = ~/.gitignore_global
   editor = vim
-	autocrlf = false
+  autocrlf = false
   safecrlf = true
   pager = delta
+  pager = delta
+# https://github.com/dandavison/delta
 [delta]
   plus-style = syntax "#003800"
   minus-style = syntax "#3f0001"
@@ -43,8 +45,8 @@
 [gpg]
   program = gpg2
 [alias]
-  lg = log --oneline
-  last = log -1 HEAD
+  lg = log --decorate --show-signature
+  last = log -1 HEAD --show-signature
   s = status
   undo = reset HEAD^
 [interactive]
