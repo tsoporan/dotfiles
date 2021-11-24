@@ -5,18 +5,14 @@
 " vim-plug start
 call plug#begin('~/.config/nvim/plugged')
 
-" GUI
-Plug 'itchyny/lightline.vim' "Status bar
-Plug 'morhetz/gruvbox' "Gruvbox colors
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
 Plug 'Yggdroot/indentLine' "Indents indication
+Plug 'morhetz/gruvbox' "Colors
+Plug 'hoob3rt/lualine.nvim' "Status line
 
 " Langs
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " Python+
 Plug 'sheerun/vim-polyglot' "Lang pack
-
-" Vim Polyglot
 let g:polyglot_disabled = ["markdown"]
 
 " Text
@@ -26,15 +22,32 @@ Plug 'godlygeek/tabular' " Alignment
 " VCS
 Plug 'tpope/vim-fugitive'
 
-" Nav / working with code
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } "Fuzzy finder
-Plug 'junegunn/fzf.vim'
-Plug 'preservim/nerdtree' "File browse
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " 'Intellisense'
+" File explorer
+Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+
+" LSP + Completion
+Plug 'neovim/nvim-lspconfig'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+
+" Buffers
+Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
+Plug 'akinsho/bufferline.nvim'
+
+" Build syntax tree / highlight - experimental
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" Find
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" Misc
 Plug 'andymass/vim-matchup' " More powerful %
-Plug 'liuchengxu/vista.vim' " Tags
 Plug 'easymotion/vim-easymotion' " Move around quicker
 Plug 'tpope/vim-commentary' "Comment stuff out
+
+" File formatting
+Plug 'sbdchd/neoformat'
 
 call plug#end()
 
@@ -42,7 +55,9 @@ syntax on
 filetype plugin indent on
 
 " Colors
+set termguicolors
 set background=dark
+let g:gruvbox_italic=1
 colorscheme gruvbox
 
 let mapleader=',' "change from default \
@@ -106,56 +121,11 @@ set pastetoggle=<F2>
 
 set noswapfile
 
-"colors
-"set background=dark
-"colorscheme blazer
-
-"persistent undo
-set undodir=~/.vim/undo
-
-
 "quick esc
 imap jk <ESC>
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | execute "normal g'\"" | endif
-
-" ALE
-let g:ale_linters = {
-\  'javascript': ['eslint'],
-\  'typescript': ['tsserver', 'tslint'],
-\  'vue': ['eslint'],
-\  'python': ['flake8', 'mypy'],
-\  'svelte': ['eslint']
-\}
-
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['prettier', 'eslint'],
-\   'vue': ['prettier', 'eslint'],
-\   'typescript': ['prettier'],
-\   'python': ['isort', 'black'],
-\   'html': ['prettier'],
-\   'svelte': ['prettier', 'eslint']
-\}
-
-let g:ale_linter_aliases = {'svelte': ['css', 'javascript']}
-
-" Speedups
-let b:ale_python_flake8_executable = '/usr/bin/flake8'
-let b:ale_python_flake8_use_global = 1
-let b:ale_python_mypy_executable = '/usr/bin/mypy'
-let b:ale_python_mypy_use_global = 1
-let g:ale_virtualenv_dir_names = []
-
-let g:ale_lint_on_save=1
-let g:ale_fix_on_save=1
-let g:ale_lint_on_enter=0
-let g:ale_lint_on_text_changed= 'never'
-
-" Move between linting  errors
-nnoremap ]r :ALENextWrap<CR>
-nnoremap [r :ALEPreviousWrap<CR>
 
 " FZF auto bind history ctrl-p/ctrl-n
 let g:fzf_history_dir = '~/.local/share/fzf-history'
@@ -175,17 +145,13 @@ if v:version >= 703
   set undofile
 endif
 
-" Markdown
-let g:vim_markdown_conceal = 0
-
-
 " Use System Clipboard
 set clipboard+=unnamedplus
 
 let g:rainbow_active = 1
 
 " Highlight instead of underline
-hi link illuminatedWord Visual
+" hi link illuminatedWord Visual
 
 " Here is my writting notes mode, on and off
 map <leader>w :set tw=120<CR>:set linebreak<CR>:set spell spelllang=en_us<CR>
@@ -217,10 +183,6 @@ map <leader>n :call RenameFile()<cr>
 " Show pesky trailing chars
 set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 
-" Coc - completion see https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.vim
-" Python config, use host python
-let g:python3_host_prog = '/usr/bin/python'
-
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup
@@ -235,50 +197,9 @@ set shortmess+=c
 " diagnostics appear/become resolved.
 set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gi <Plug>(coc-implementation)
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" CocList
-nnoremap <leader>d : <C-u>CocList diagnostics<CR>
-nnoremap <leader>c : <C-u>CocList commands<CR>
-nnoremap <leader>s : <C-u>CocList -I symbols<CR>
-" Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-
 " Indents
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-map <leader>it :IndentLinesToggle
+map <leader>it :IndentLinesToggle<CR>
 
 " Use ripgrep for autocompletion
 if executable('rg')
@@ -287,8 +208,6 @@ if executable('rg')
 endif
 
 " Vista
-"--- Vista ---
-let g:vista_default_executive = 'coc'
 let g:vista#renderer#enable_icon = 1
 let g:vista#renderer#icons = {
 \   "function": "\uf794",
@@ -301,44 +220,36 @@ nnoremap <leader>vt :Vista finder<CR>
 " Useful keybinds
 inoremap jk <esc>
 
-nnoremap <leader>ff :Files<CR>
-nnoremap <leader>fh :History<CR>
-nnoremap <leader>fs :Rg<CR>
-"Find word under cursor
-nnoremap <leader>fw :Rg <C-R><C-W><CR>
-nnoremap <leader>fb :Buffers<CR>
+"nnoremap <leader>ff :Files<CR>
+"nnoremap <leader>fh :History<CR>
+"nnoremap <leader>fs :Rg<CR>
+""Find word under cursor
+"nnoremap <leader>fw :Rg <C-R><C-W><CR>
+"nnoremap <leader>fb :Buffers<CR>
 
-
-"NERDTree
-" Open
-nnoremap <leader>op :NERDTreeToggle<CR>
-" Open dir of current file
-nnoremap <leader>od :NERDTreeToggle %<CR>
-" Open to file loc
-nnoremap <leader>of :NERDTreeFind<CR>
 
 " Light line config with blame
-let g:lightline = {
-  \ 'colorscheme': 'darcula',
-  \ 'active': {
-  \   'left': [
-  \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
-  \   ],
-  \   'right':[
-  \     [ 'filetype', 'fileencoding', 'lineinfo'],
-  \     [ 'blame' ]
-  \   ],
-  \ },
-  \ 'component_function': {
-  \   'blame': 'LightlineGitBlame',
-  \ }
-\ }
-
-function! LightlineGitBlame() abort
-  let blame = get(b:, 'coc_git_blame', '')
-  " return blame
-  return winwidth(0) > 120 ? blame : ''
-endfunction
+"let g:lightline = {
+"  \ 'colorscheme': 'darcula',
+"  \ 'active': {
+"  \   'left': [
+"  \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
+"  \   ],
+"  \   'right':[
+"  \     [ 'filetype', 'fileencoding', 'lineinfo'],
+"  \     [ 'blame' ]
+"  \   ],
+"  \ },
+"  \ 'component_function': {
+"  \   'blame': 'LightlineGitBlame',
+"  \ }
+"\ }
+"
+"function! LightlineGitBlame() abort
+"  let blame = get(b:, 'coc_git_blame', '')
+"  " return blame
+"  return winwidth(0) > 120 ? blame : ''
+"endfunction
 
 "Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -353,21 +264,125 @@ let g:EasyMotion_smartcase = 1
 
 au BufNewFile,BufRead *.prisma setfiletype graphql
 
-" Prettier
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" Ripgrep
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --hidden --ignore-case --no-heading --color=always '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'up:60%')
+  \           : fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}, 'right:50%:hidden', '?'),
+  \   <bang>0)
 
-" Jump to most-recently-used (mru) files + open buffers
-command! FZFMru call fzf#run({
-\ 'source':  reverse(s:all_files()),
-\ 'sink':    'edit',
-\ 'options': '-m -x +s',
-\ 'down':    '40%' })
+set grepprg=rg\ --vimgrep\ --smart-case\ --hidden\ --follow
+let g:rg_derive_root='true'
 
-function! s:all_files()
-  return extend(
-  \ filter(copy(v:oldfiles),
-  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
-  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+" See https://github.com/jonhoo/proximity-sort
+" Uses proximity-sort for FZF :Files
+function! s:list_cmd()
+  let base = fnamemodify(expand('%'), ':h:.:S')
+  return base == '.' ? 'fd -t f' : printf('fd -t f | proximity-sort %s', expand('%'))
 endfunction
 
-nnoremap <leader>mr :FZFMru<CR>
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd(),
+  \                               'options': '--tiebreak=index'}, <bang>0)
+
+
+let g:coq_settings = { 'auto_start': 'shut-up',  }
+
+" LSP
+lua <<EOF
+local nvim_lsp = require "lspconfig"
+local coq = require "coq"
+
+require("bufferline").setup{}
+require("lualine").setup{
+  options = { theme = 'gruvbox' },
+  extensions = {'chadtree'}
+}
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'pyright', 'tsserver', 'html', 'graphql', 'vuels' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+
+
+" Keybinds
+nnoremap <leader>e <cmd>CHADopen<cr>
+nnoremap <leader>cc <cmd>:close<cr>
+
+" Bufferline
+nnoremap <silent><S-L> :BufferLineCycleNext<CR>
+nnoremap <silent><S-H> :BufferLineCyclePrev<CR>
+nnoremap <leader>bb :BufferLinePick<CR>
+nnoremap <leader>bc :BufferLinePickClose<CR>
+
+" Telescope
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fr <cmd>Telescope oldfiles<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fw <cmd>Telescope grep_string<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fs <cmd>Telescope treesitter<cr>
+
+
+" Reload config
+nnoremap <leader>rc :source $MYVIMRC<CR>
+
+let g:python3_host_prog = '/usr/bin/python'
+
+" 'Auto parens'
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+
+" Format on save
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END
+
+let g:neoformat_enabled_python = ['black']
+let g:neoformat_basic_format_trim = 1
