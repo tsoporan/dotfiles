@@ -2,7 +2,8 @@
 
 Collection of dotfiles for my day-to-day programs.
 
-![2019-02-25-231425_3840x2160_scrot](https://user-images.githubusercontent.com/130991/53387138-6e78f380-3953-11e9-86eb-abc36fed6986.png)
+![2021-11-24_10-35](https://user-images.githubusercontent.com/130991/143268401-eabec6a5-24a5-4030-8b08-3f20f1449d3f.png)
+
 
 ### My setup
 
@@ -47,8 +48,3 @@ Enjoy!
 ### WM Theme
 
 The theme is customized for my needs but heavily based on: [awesome-pro](https://github.com/4ban/awesome-pro) - check it out!
-
-### HiDPI
-
-The main branch contains a HiDPI set up, due to my primary driver, check out the `desktop` branch if you aren't using
-HiDPI.
