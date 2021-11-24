@@ -3,22 +3,22 @@ scrolling:
   multiplier : 3
 
 font:
-  size: 14
+  size: 12
 
   normal:
-    family: MesloLGS NF
+    family: Fira Code
     style: Regular
 
   bold:
-    family: MesloLGS NF
+    family: Fira Code
     style: Bold
 
   italic:
-    family: MesloLGS NF
+    family: Fira Code
     style: Italic
 
   bold_italic:
-    family: MesloLGS
+    family: Fira Code
     style: Bold Italic
 
 colors:
