@@ -26,13 +26,13 @@ fi
 xscreensaver -no-splash &
 
 # Color shift
-redshift -O 4800K -P &
+# redshift -O 4800K -P &
 
 # Clipboard
 # clipit &
 
-# Keyring
-# eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+# Start Keyring
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
 export SSH_AUTH_SOCK
 
 # Clipboard
@@ -40,6 +40,9 @@ export SSH_AUTH_SOCK
 
 # Network Manager
 nm-applet &
+
+# Screenshotter
+flameshot &
 
 # WM
 exec awesome
