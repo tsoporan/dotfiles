@@ -30,29 +30,24 @@ source "$HOME/.config/gruvbox/gruvbox_256palette.sh"
 setopt auto_cd # Switch dir by name
 
 #
-# Prompt
-#
-# TODO
-
-#
 # Completions
 #
-setopt extendedglob 
+setopt extendedglob
 setopt automenu
 setopt alwaystoend
 
 # Speed up completions, see: https://lethalman.blogspot.com/2009/10/speeding-up-zsh-completion.html
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path ~/.zsh/cache
+#zstyle ':completion:*' accept-exact '*(N)'
+#zstyle ':completion:*' use-cache on
+#zstyle ':completion:*' cache-path ~/.zsh/cache
 
-# autoload -Uz compinit
-# compinit
+autoload -Uz compinit
+compinit
 
 
 #
 # Key bindings
-#
+
 bindkey -v # Vi mode
 bindkey "^ " autosuggest-accept # Re-map autosuggest-accept (default arrow key), ctrl+space
 bindkey "^A" vi-beginning-of-line # Ctrl-a/e start/end
@@ -91,7 +86,7 @@ alias sha1="openssl sha1"
 alias grep="grep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
-alias dco='docker-compose'
+alias dco='docker compose'
 alias dock='docker'
 alias zi='z -I' # Use fzf
 alias zb='cd -' # Jump back

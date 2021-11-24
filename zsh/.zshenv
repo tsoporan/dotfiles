@@ -2,7 +2,8 @@
 export TERM=alacritty
 export EDITOR=nvim
 export VISUAL=nvim
-export BROWSER=firefox-developer-edition
+export BROWSER=firefox
+
 
 # NPM
 export NPM_CONFIG_PREFIX=~/.node_modules
@@ -19,8 +20,14 @@ export HISTFILE=~/.zhistory
 export KEYTIMEOUT=1
 
 # GPG
-export GPG_TTY=$TTY
+export GPG_TTY=$(tty)
 
 # ZSH Autosuggestions
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+
+NPM_PACKAGES="${HOME}/.node_modules"
+GOBIN="${HOME}/go/bin"
+
+export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$NPM_PACKAGES/bin:$GOBIN:$PATH
