@@ -17,8 +17,20 @@ Collection of dotfiles for my day-to-day programs.
   - Alternative to `grep`: [ripgrep](https://github.com/BurntSushi/ripgrep)
   - Alternative to `find`: [fd](https://github.com/sharkdp/fd)
   - Jump around / MRU nav: [(z)oxide](https://github.com/ajeetdsouza/zoxide)
-  - Fuzzy file finder + vim integration: [fzf/fzf.vim](https://github.com/junegunn/fzf)
 - Font [Fira Code](https://github.com/tonsky/FiraCode)
+- Keyboard: [Ducky 2 Mini](https://www.duckychannel.com.tw/en/Ducky-One2-Mini-Pure-White-RGB)
+  - Note no arrow keys, configured bottom right (Fn, Alt -> Left, Win -> Down, Ctrl -> Right, R-Shift -> Up)
+  - Arrow key setup notes:
+    - Use profile 2, profile 1 cannot be changed
+    - Swap keycaps on right hand side to match: Fn, Alt, win, Ctrl
+    - This version of the keyboard requires re-mapping of the bottom-right Fn key (after previous step)
+    - Hold Fn+Alt+K for 5 secs to see binding, press-hold source key and touch target key to swap around function
+      - Match to colors: Indigo, Green, Blue, Purple
+    - Hold Fn+Alt+Tab (note new binding) for 3s to get into macro recording mode
+    - In this mode tap the source key, and map to the target key, direction keys require pressing function e.g Fn+I for up
+    - Tap Fn+Alt together to record, Esc light should blink
+    - Fn + Alt + Tab to exit
+    - Can always factor reset keyboard holding both win keys (using original positions)
 
 ### Dotfile usage
 
