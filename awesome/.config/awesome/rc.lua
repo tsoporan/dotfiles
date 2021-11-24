@@ -362,10 +362,10 @@ awful.screen.connect_for_each_screen(function(s)
 end)
 -- }}}
 
--- {{{ Mouse bindings
+-- {{{ Global Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({modkey}, 8, awful.tag.viewnext),
+    awful.button({modkey}, 9, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -376,7 +376,7 @@ globalkeys = gears.table.join(
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 10") end),
 
     -- Select screenshot
-    awful.key({ }, "Print", function () awful.util.spawn("scrot -e 'mv $f ~/screenshots/ 2>/dev/null'", false) end),
+    awful.key({ }, "Print", function () awful.util.spawn("flameshot gui", false) end),
 
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
@@ -466,14 +466,6 @@ globalkeys = gears.table.join(
         awful.spawn.with_shell("rofi -show combi -theme gruvbox-dark-hard")
       end,
       {description = "run rofi", group = "custom"}
-    ),
-
-    awful.key(
-      { modkey}, "c",
-      function ()
-        awful.spawn("clipster -p")
-      end,
-      {description = "copy paste", group = "custom"}
     ),
 
     awful.key(
