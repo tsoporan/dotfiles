@@ -26,9 +26,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 
 " LSP + Completion
-Plug 'neovim/nvim-lspconfig'
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
-Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+"Plug 'neovim/nvim-lspconfig'
+"Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+"Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Buffers
 Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
@@ -195,7 +196,7 @@ set updatetime=300
 set shortmess+=c
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-set signcolumn=yes
+set signcolumn=number
 
 " Indents
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
@@ -219,37 +220,7 @@ nnoremap <leader>vt :Vista finder<CR>
 
 " Useful keybinds
 inoremap jk <esc>
-
-"nnoremap <leader>ff :Files<CR>
-"nnoremap <leader>fh :History<CR>
-"nnoremap <leader>fs :Rg<CR>
-""Find word under cursor
-"nnoremap <leader>fw :Rg <C-R><C-W><CR>
-"nnoremap <leader>fb :Buffers<CR>
-
-
-" Light line config with blame
-"let g:lightline = {
-"  \ 'colorscheme': 'darcula',
-"  \ 'active': {
-"  \   'left': [
-"  \     [ 'ctrlpmark', 'git', 'diagnostic', 'cocstatus', 'filename', 'method' ]
-"  \   ],
-"  \   'right':[
-"  \     [ 'filetype', 'fileencoding', 'lineinfo'],
-"  \     [ 'blame' ]
-"  \   ],
-"  \ },
-"  \ 'component_function': {
-"  \   'blame': 'LightlineGitBlame',
-"  \ }
-"\ }
-"
-"function! LightlineGitBlame() abort
-"  let blame = get(b:, 'coc_git_blame', '')
-"  " return blame
-"  return winwidth(0) > 120 ? blame : ''
-"endfunction
+inoremap jj :update<CR>
 
 "Easymotion
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -290,60 +261,69 @@ command! -bang -nargs=? -complete=dir Files
 let g:coq_settings = { 'auto_start': 'shut-up',  }
 
 " LSP
-lua <<EOF
-local nvim_lsp = require "lspconfig"
-local coq = require "coq"
 
-require("bufferline").setup{}
-require("lualine").setup{
-  options = { theme = 'gruvbox' },
-  extensions = {'chadtree'}
+lua <<EOF
+require("bufferline").setup{
+  options = {
+    diagnostics = "coc",
+    show_close_icon = false
+  }
 }
+EOF
+
+lua <<EOF
+--local nvim_lsp = require "lspconfig"
+--local coq = require "coq"
+--
+--require("lualine").setup{
+--  options = { theme = 'gruvbox' },
+--  extensions = {'chadtree'}
+--}
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-
-end
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'tsserver', 'html', 'graphql', 'vuels' }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
-  }
-end
+-- local on_attach = function(client, bufnr)
+--   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+--   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+--
+--   -- Enable completion triggered by <c-x><c-o>
+--   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+--
+--   -- Mappings.
+--   local opts = { noremap=true, silent=true }
+--
+--   -- See `:help vim.lsp.*` for documentation on any of the below functions
+--   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+--   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+--   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+--   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+--   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+--   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+--   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+--   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+--   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+--   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+--   buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+--   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+--   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+--   buf_set_keymap('n', '[dd', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+--   buf_set_keymap('n', ']dd', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+--   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+--   buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+--
+-- end
+--
+-- -- Use a loop to conveniently call 'setup' on multiple servers and
+-- -- map buffer local keybindings when the language server attaches
+-- local servers = { 'pyright', 'tsserver', 'html', 'graphql', 'vuels', 'gopls', 'ccls', 'rust_analyzer'}
+-- for _, lsp in ipairs(servers) do
+--   nvim_lsp[lsp].setup {
+--     on_attach = on_attach,
+--     flags = {
+--       debounce_text_changes = 150,
+--     }
+--   }
+-- end
 EOF
 
 
@@ -372,11 +352,17 @@ nnoremap <leader>rc :source $MYVIMRC<CR>
 let g:python3_host_prog = '/usr/bin/python'
 
 " 'Auto parens'
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
+" NOTE: Using coc-pairs
+"inoremap ( ()<left>
+"inoremap [ []<left>
+"inoremap { {}<left>
+"inoremap {<CR> {<CR>}<ESC>O
+"inoremap {;<CR> {<CR>};<ESC>O
+
+" Enable trimmming of trailing whitespace
+let g:neoformat_basic_format_trim = 1
+
+let g:neoformat_enabled_sql = []
 
 " Format on save
 augroup fmt
@@ -386,3 +372,83 @@ augroup END
 
 let g:neoformat_enabled_python = ['black']
 let g:neoformat_basic_format_trim = 1
+
+" CoC config
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" Symbol renaming.
+nmap <leader>sr <Plug>(coc-rename)
+
+" Creates a session per CWD, re-loads on open
+function! MakeSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  if (filewritable(b:sessiondir) != 2)
+    exe 'silent !mkdir -p ' b:sessiondir
+    redraw!
+  endif
+  let b:filename = b:sessiondir . '/session.vim'
+  exe "mksession! " . b:filename
+endfunction
+
+function! LoadSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+    exe 'source ' b:sessionfile
+  else
+    echo "No session loaded."
+  endif
+endfunction
+
+" Adding automatons for when entering or leaving Vim
+"if(argc() == 0)
+"  au VimEnter * nested :call LoadSession()
+"endif
+"au VimLeave * :call MakeSession()
+
+" Sessions stuff
+set ssop-=options    " do not store global and local values in a session
+set ssop-=folds      " do not store folds
