@@ -27,7 +27,8 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 
-NPM_PACKAGES="${HOME}/.node_modules"
-GOBIN="${HOME}/go/bin"
+export NPM_PACKAGES="${HOME}/.node_modules"
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
 
 export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$NPM_PACKAGES/bin:$GOBIN:$PATH
