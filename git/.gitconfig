@@ -4,7 +4,7 @@
   signingkey = 0x882FD40C9CAEE059
 [core]
   excludesfile = ~/.gitignore_global
-  editor = vim
+  editor = nvim
   autocrlf = false
   safecrlf = true
   pager = delta
@@ -53,3 +53,5 @@
   diffFilter = delta --color-only
 [pull]
   rebase = false
+[init]
+	defaultBranch = main
