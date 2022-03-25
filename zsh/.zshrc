@@ -1,9 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
 
 #
 # Plugins / Addons
@@ -68,8 +68,8 @@ setopt share_history          # share command history data
 # Aliases
 #
 alias jj="jobs"
+alias nv="nvim"
 alias v="nvim"
-alias vim="nvim"
 alias e="emacsclient -nc"
 alias ls="exa"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -95,9 +95,11 @@ alias c="git commit -S --signoff"
 alias a="git add -p"
 alias ai="git add -i"
 alias co="git checkout"
+alias cob="git checkout -b"
 alias s="git status"
 alias sta="git stash"
 alias p="git push"
+alias po='git push origin "$(git symbolic-ref --short HEAD)"'
 alias pf="git push --force-with-lease"
 alias pl="git pull"
 alias fe="git fetch"
@@ -106,7 +108,13 @@ alias d="git diff"
 alias ds="git diff --staged"
 alias mer="git merge"
 alias open_ports="ss -lntu"
+alias tkv="tiktok-scraper video"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+#source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+eval "$(starship init zsh)"
+
+
+
