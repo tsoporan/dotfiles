@@ -7,9 +7,15 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
-Plug 'Yggdroot/indentLine' "Indents indication
 Plug 'morhetz/gruvbox' "Colors
+Plug 'pantharshit00/vim-prisma'
 Plug 'hoob3rt/lualine.nvim' "Status line
+
+" Tags
+Plug 'liuchengxu/vista.vim'
+
+" Indents
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Langs
 Plug 'sheerun/vim-polyglot' "Lang pack
@@ -41,10 +47,13 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Find
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+
+" Movement
+Plug 'phaazon/hop.nvim'
 
 " Misc
 Plug 'andymass/vim-matchup' " More powerful %
-Plug 'easymotion/vim-easymotion' " Move around quicker
 Plug 'tpope/vim-commentary' "Comment stuff out
 
 " File formatting
@@ -199,8 +208,8 @@ set shortmess+=c
 set signcolumn=number
 
 " Indents
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-map <leader>it :IndentLinesToggle<CR>
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" map <leader>it :IndentLinesToggle<CR>
 
 " Use ripgrep for autocompletion
 if executable('rg')
@@ -268,6 +277,15 @@ require("bufferline").setup{
     diagnostics = "coc",
     show_close_icon = false
   }
+}
+require'hop'.setup()
+
+vim.opt.list = true
+vim.opt.listchars:append("eol:↴")
+require('indent_blankline').setup {
+    show_current_context = true,
+    show_current_context_start = true,
+    show_end_of_line = true,
 }
 EOF
 
@@ -452,3 +470,15 @@ endfunction
 " Sessions stuff
 set ssop-=options    " do not store global and local values in a session
 set ssop-=folds      " do not store folds
+
+
+" Explicit Coc extensions
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-pairs', 'coc-pyright', 'coc-html', 'coc-tsserver', 'coc-prettier',  'coc-css', 'coc-diagnostic', 'coc-eslint', 'coc-go', 'coc-graphql', 'coc-highlight', 'coc-json', 'coc-vetur', 'coc-prisma']
+
+" Tags/Vista
+let g:vista#renderer#enable_icon = 1
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:40%']
+
+nmap <leader>t :Vista<CR>
