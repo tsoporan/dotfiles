@@ -7,9 +7,16 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
-Plug 'Yggdroot/indentLine' "Indents indication
-Plug 'morhetz/gruvbox' "Colors
+"Plug 'morhetz/gruvbox' "Colors
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'pantharshit00/vim-prisma'
 Plug 'hoob3rt/lualine.nvim' "Status line
+
+" Tags
+Plug 'liuchengxu/vista.vim'
+
+" Indents
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 " Langs
 Plug 'sheerun/vim-polyglot' "Lang pack
@@ -41,10 +48,13 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " Find
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+
+" Movement
+Plug 'phaazon/hop.nvim'
 
 " Misc
 Plug 'andymass/vim-matchup' " More powerful %
-Plug 'easymotion/vim-easymotion' " Move around quicker
 Plug 'tpope/vim-commentary' "Comment stuff out
 
 " File formatting
@@ -58,8 +68,9 @@ filetype plugin indent on
 " Colors
 set termguicolors
 set background=dark
-let g:gruvbox_italic=1
-colorscheme gruvbox
+"let g:gruvbox_italic=1
+"colorscheme gruvbox
+colorscheme tokyonight
 
 let mapleader=',' "change from default \
 
@@ -199,8 +210,8 @@ set shortmess+=c
 set signcolumn=number
 
 " Indents
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
-map <leader>it :IndentLinesToggle<CR>
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" map <leader>it :IndentLinesToggle<CR>
 
 " Use ripgrep for autocompletion
 if executable('rg')
@@ -222,16 +233,6 @@ nnoremap <leader>vt :Vista finder<CR>
 inoremap jk <esc>
 inoremap jj :update<CR>
 
-"Easymotion
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-
-" Jump to anywhere you want with minimal keystrokes, with just one key binding.
-" `s{char}{char}{label}`
-" Need one more keystroke, but on average, it may be more comfortable.
-nmap s <Plug>(easymotion-overwin-f2)
-
-" Turn on case-insensitive feature
-let g:EasyMotion_smartcase = 1
 
 au BufNewFile,BufRead *.prisma setfiletype graphql
 
@@ -268,6 +269,15 @@ require("bufferline").setup{
     diagnostics = "coc",
     show_close_icon = false
   }
+}
+require'hop'.setup()
+
+vim.opt.list = true
+vim.opt.listchars:append("eol:↴")
+require('indent_blankline').setup {
+    show_current_context = true,
+    show_current_context_start = true,
+    show_end_of_line = true,
 }
 EOF
 
@@ -351,14 +361,6 @@ nnoremap <leader>rc :source $MYVIMRC<CR>
 
 let g:python3_host_prog = '/usr/bin/python'
 
-" 'Auto parens'
-" NOTE: Using coc-pairs
-"inoremap ( ()<left>
-"inoremap [ []<left>
-"inoremap { {}<left>
-"inoremap {<CR> {<CR>}<ESC>O
-"inoremap {;<CR> {<CR>};<ESC>O
-
 " Enable trimmming of trailing whitespace
 let g:neoformat_basic_format_trim = 1
 
@@ -374,21 +376,32 @@ let g:neoformat_enabled_python = ['black']
 let g:neoformat_basic_format_trim = 1
 
 " CoC config
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -403,21 +416,19 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 
+
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
-
 
 " Symbol renaming.
 nmap <leader>sr <Plug>(coc-rename)
@@ -452,3 +463,19 @@ endfunction
 " Sessions stuff
 set ssop-=options    " do not store global and local values in a session
 set ssop-=folds      " do not store folds
+
+
+" Explicit Coc extensions
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-pairs', 'coc-pyright', 'coc-html', 'coc-tsserver', 'coc-prettier',  'coc-css', 'coc-diagnostic', 'coc-eslint', 'coc-go', 'coc-graphql', 'coc-highlight', 'coc-json', 'coc-vetur', 'coc-prisma']
+
+" Tags/Vista
+let g:vista#renderer#enable_icon = 1
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:40%']
+
+nmap <leader>t :Vista<CR>
+
+"Hop keybinds
+nmap <leader>s :HopChar2<CR>
+nmap <leader>sp :HopPattern<CR>
