@@ -1,4 +1,10 @@
 {
+  "diagnostic.errorSign": ">>",
+  "diagnostic.warningSign": ">",
   "python.linting.enabled": true,
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "python.sortImports.path": "isort",
+  "python.linting.ruffEnabled": true,
+  "pyright.organizeimports.provider": "isort",
+  "pyright.testing.provider": "pytest"
 }

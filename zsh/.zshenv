@@ -1,12 +1,17 @@
 #!/bin/zsh
-export TERM=alacritty
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+export TERM=xterm
 export EDITOR=nvim
 export VISUAL=nvim
-export BROWSER=firefox
+export BROWSER=brave
 
 
-# NPM
-export NPM_CONFIG_PREFIX=~/.node_modules
+# NPM + NVM
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # FZF
 export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude .git"
@@ -27,7 +32,8 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 
-export NPM_PACKAGES="${HOME}/.node_modules"
+# Not compatible with nvm
+# export NPM_PACKAGES="${HOME}/.node_modules"
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 

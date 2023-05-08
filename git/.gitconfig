@@ -8,7 +8,6 @@
   autocrlf = false
   safecrlf = true
   pager = delta
-  pager = delta
 # https://github.com/dandavison/delta
 [delta]
   plus-style = syntax "#003800"
@@ -26,15 +25,17 @@
   file-decoration-style = none
   hunk-header-decoration-style = cyan box ul
 [color]
-  ui = true
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
+  ui = auto
+  status = auto
+  diff = auto
+  branch = auto
+  interactive = auto
+  grep = auto
 [color "status"]
-  added = yellow
-  changed = green
-  untracked = cyan
+  added = green
+  changed =  yellow
+  untracked = magenta
+  deleted = red
 [push]
   default = matching
 [commit]
@@ -45,13 +46,15 @@
 [gpg]
   program = gpg2
 [alias]
-  lg = log --decorate --show-signature
+  hist = log --pretty=format:\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\" --graph --date=relative --decorate --all
+  llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
   last = log -1 HEAD --show-signature
-  s = status
   undo = reset HEAD^
 [interactive]
   diffFilter = delta --color-only
 [pull]
   rebase = false
 [init]
-	defaultBranch = main
+  defaultBranch = main
+[github]
+  user = tsoporan
