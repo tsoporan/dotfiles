@@ -90,5 +90,6 @@ alias d="git diff"
 alias ds="git diff --staged"
 alias mer="git merge"
 alias open_ports="ss -lntu"
+alias tkv="tiktok-scraper video"
 
 eval "$(starship init zsh)"
