@@ -1,11 +1,5 @@
 #!/bin/zsh
-
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
-export TERM=xterm
 export EDITOR=nvim
-export VISUAL=nvim
 export BROWSER=brave
 
 
@@ -30,7 +24,6 @@ export GPG_TTY=$(tty)
 # ZSH Autosuggestions
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-
 
 # Not compatible with nvm
 # export NPM_PACKAGES="${HOME}/.node_modules"
