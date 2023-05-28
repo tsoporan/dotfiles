@@ -3,6 +3,9 @@
 
 userresources=$HOME/.Xresources
 usermodmap=$HOME/.Xmodmap
+sysresources=/etc/X11/xinit/.Xresources
+sysmodmap=/etc/X11/xinit/.Xmodmap
+
 
 # merge in defaults and keymaps
 
@@ -22,27 +25,12 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
  unset f
 fi
 
-# Screensaver
-xscreensaver -no-splash &
+# WM - i3 default
+session=${1:-i3}
 
-# Color shift
-# redshift -O 4800K -P &
-
-# Clipboard
-# clipit &
-
-# Start Keyring
-eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
-export SSH_AUTH_SOCK
-
-# Clipboard
-# clipster -d &
-
-# Network Manager
-nm-applet &
-
-# Screenshotter
-flameshot &
-
-# WM
-exec awesome
+case $session in
+    i3|i3wm           ) exec i3;;
+    hyprland          ) exec Hyprland;;
+    # No known session, try to run it as command
+    *                 ) exec $1;;
+esac
