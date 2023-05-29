@@ -7,13 +7,13 @@
 
 source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 
+antidote load
 
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh # Init FZF
-#source ~/.fzf/fzf-git.sh
+source /usr/share/fzf/completion.zsh
+source /usr/share/fzf/key-bindings.zsh
 
 # Z alternative, jump dirs
 eval "$(zoxide init zsh)" 
-
 
 # Key bindings
 #bindkey -e 
@@ -76,7 +76,6 @@ alias dco='docker compose'
 alias zi='z -I' # Use fzf
 alias zb='cd -' # Jump back
 
-antidote load
 
 # Pure prompt
 autoload -U promptinit; promptinit

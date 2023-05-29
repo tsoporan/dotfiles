@@ -8,9 +8,22 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # FZF
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --no-info'
+export FZF_ALT_C_COMMAND="fd -t d --hidden --follow --exclude .git"
 export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude .git"
 export FZF_CTRL_T_COMMAND="fd --hidden --follow --exclude .git"
-export FZF_ALT_C_COMMAND="fd -t d --hidden --follow --exclude .git"
+export FZF_CTRL_T_OPTS="
+  --prompt '∷ '
+  --pointer '▶ '
+  --marker '⇒ '
+  --preview 'bat -n --color=always {}'
+  --bind 'ctrl-/:change-preview-window(down|hidden|)'"
+
+export FZF_CTRL_R_OPTS="
+  --prompt '∷ '
+  --pointer '▶ '
+  --marker '⇒ '
+"
 
 # ZSH
 export HISTSIZE=1000000
