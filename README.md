@@ -36,3 +36,17 @@ Using `stow` simply `stow <dirname>` from within the cloned dir.
 stow vim
 # Notice now that ~/.vimrc is linked
 ```
+
+
+### (Neo)vim
+
+Using [vim-plug](https://github.com/junegunn/vim-plug) to manage plugins, this needs to be initially setup before respective config.
+
+
+```bash
+# Neovim specific
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+```
+
+Open vim and run `:PlugInstall`
