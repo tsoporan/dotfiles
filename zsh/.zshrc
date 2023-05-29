@@ -1,27 +1,21 @@
-#
-# Plugins / Addons
+# tsoporan's zshrc
 
-# Use antigen to manage plugins
-source /usr/share/zsh/share/antigen.zsh
 
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle zsh-users/zsh-history-substring-search
-antigen bundle zsh-users/zsh-completions
+# Clone antidote if needed
+[[ -e ${ZDOTDIR:-~}/.antidote ]] ||
+  git clone https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
 
-antigen apply
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh # Init FZF
-source ~/.fzf/fzf-git.sh
+
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh # Init FZF
+#source ~/.fzf/fzf-git.sh
 
 # Z alternative, jump dirs
 eval "$(zoxide init zsh)" 
 
-# Nav
-setopt auto_cd # Switch dir by name
 
 # Key bindings
-
 #bindkey -e 
 bindkey -v # Vi mode
 bindkey "^ " autosuggest-accept # Re-map autosuggest-accept (default arrow key), ctrl+space
@@ -29,6 +23,9 @@ bindkey "^ " autosuggest-accept # Re-map autosuggest-accept (default arrow key),
 #bindkey "^E" vi-end-of-line
 #bindkey -M vicmd 'k' history-substring-search-up
 #bindkey -M vicmd 'j' history-substring-search-down
+
+# Nav
+setopt auto_cd # Switch dir by name
 
 # History
 setopt extended_history       # record timestamp of command in HISTFILE
@@ -79,4 +76,8 @@ alias dco='docker compose'
 alias zi='z -I' # Use fzf
 alias zb='cd -' # Jump back
 
-eval "$(starship init zsh)"
+antidote load
+
+# Pure prompt
+autoload -U promptinit; promptinit
+prompt pure
