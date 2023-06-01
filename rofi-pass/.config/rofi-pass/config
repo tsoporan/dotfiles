@@ -4,12 +4,12 @@
 
 # rofi command. Make sure to have "$@" as last argument
 _rofi () {
-    rofi -i -no-auto-select "$@" -theme gruvbox-dark-hard
+    rofi -i -no-auto-select "$@"
 }
 
 # default command to generate passwords
 _pwgen () {
-  pwgen -y "$@"
+	pwgen -y "$@"
 }
 
 # image viewer to display qrcode of selected entry
@@ -50,7 +50,7 @@ xdotool_delay=12
 EDITOR='gvim -f'
 
 # Browser
-BROWSER='firefox-developer-edition'
+BROWSER='brave'
 
 ## Misc settings
 
