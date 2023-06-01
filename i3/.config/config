@@ -2,7 +2,7 @@
 
 set $mod Mod4
 
-font pango:JetBrainsMono Nerd Font 12
+font pango:JetBrainsMono Nerd Font 10
 
 # By default start tabbed not tiling
 workspace_layout tabbed
@@ -38,8 +38,9 @@ bindsym $mod+Return exec wezterm
 bindsym $mod+q kill
 
 # A more modern dmenu replacement is rofi:
-bindsym $mod+d exec "rofi -combi-modi drun,window -theme DarkBlue -font 'JetBrainsMono Nerd 12' -show combi -show-icons"
-bindsym $mod+Tab exec "rofi -combi-modi window -theme DarkBlue -font 'JetBrainsMono Nerd 12' -show combi -show-icons"
+bindsym $mod+d exec "rofi -show drun -lines 30 -show-icons"
+bindsym $mod+Tab exec "rofi -show window -lines 30 -show-icons"
+bindsym $mod+T exec "rofi-pass"
 # There also is i3-dmenu-desktop which only displays applications shipping a
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
@@ -174,8 +175,13 @@ bindsym $mod+r mode "resize"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
+#bar {
+#        status_command i3status
+#}
 bar {
-        status_command i3status
+  font pango:JetBrainsMono NF 9
+  tray_output DisplayPort-0
+  status_command bumblebee-status -m nic cpu load memory pasink date time -t gruvbox -p nic.exclude=wlp7s0,lo
 }
 
 # Borders
