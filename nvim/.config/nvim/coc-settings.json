@@ -5,6 +5,9 @@
   "python.formatting.provider": "black",
   "python.sortImports.path": "isort",
   "python.linting.ruffEnabled": true,
+  "python.linting.ruffPath": "/usr/bin/ruff",
+  "python.linting.flake8Enabled": false,
   "pyright.organizeimports.provider": "isort",
-  "pyright.testing.provider": "pytest"
+  "pyright.testing.provider": "pytest",
+  "ruff.autoFixOnSave": true
 }

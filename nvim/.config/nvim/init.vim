@@ -7,8 +7,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'RRethy/vim-illuminate' " Hilite matching words
 Plug 'machakann/vim-highlightedyank' " Highlight yanks
-"Plug 'morhetz/gruvbox' "Colors
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'dracula/vim', { 'as': 'dracula' } " Color
 Plug 'pantharshit00/vim-prisma'
 Plug 'hoob3rt/lualine.nvim' "Status line
 
@@ -41,7 +40,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Exafunction/codeium.vim'
 
 Plug 'MunifTanjim/nui.nvim'
-Plug 'jackMort/ChatGPT.nvim'
+"Plug 'jackMort/ChatGPT.nvim'
 
 " Buffers
 Plug 'kyazdani42/nvim-web-devicons' " Recommended (for coloured icons)
@@ -67,15 +66,15 @@ Plug 'sbdchd/neoformat'
 
 call plug#end()
 
+colorscheme dracula
+
+
 syntax on
 filetype plugin indent on
 
 " Colors
 set termguicolors
 set background=dark
-"let g:gruvbox_italic=1
-"colorscheme gruvbox
-colorscheme tokyonight
 
 let mapleader=',' "change from default \
 
@@ -286,7 +285,7 @@ require('indent_blankline').setup {
 }
 
 -- ChatGPT
-require("chatgpt").setup()
+-- require("chatgpt").setup()
 EOF
 
 
@@ -417,7 +416,6 @@ endfunction
 set ssop-=options    " do not store global and local values in a session
 set ssop-=folds      " do not store folds
 
-
 " Explicit Coc extensions
 let g:coc_global_extensions = [
       \ '@yaegassy/coc-ruff',
@@ -451,13 +449,8 @@ nmap <leader>t :Vista<CR>
 nmap <leader>s :HopChar2<CR>
 nmap <leader>sp :HopPattern<CR>
 
-" Copilot keys
-imap <silent> <C-j> <Plug>(copilot-next)
-imap <silent> <C-k> <Plug>(copilot-previous)
-imap <silent> <C-\> <Plug>(copilot-dismiss)
-
 " Pyright project root
 autocmd FileType python let b:coc_root_patterns = ['.git', '.env', 'venv', '.venv', 'setup.cfg', 'setup.py', 'pyproject.toml', 'pyrightconfig.json']
 
 " Auto sort imports in python with ruff / isort
-" autocmd BufWrite *.py :silent call CocAction('runCommand', 'ruff.executeOrganizeImports')
+autocmd BufWrite *.py :silent call CocAction('runCommand', 'ruff.executeOrganizeImports')
