@@ -1,0 +1,75 @@
+(
+  max_notifications: 5,
+  timeout: 4000,
+  poll_interval: 16,
+  history_length: 20,
+  replacing_enabled: true,
+  replacing_resets_timeout: true,
+  min_window_width: 300,
+  min_window_height: 80,
+  debug: false,
+
+  layout_blocks: [
+        (
+            name: "root",
+            parent: "",
+            hook: (parent_anchor: TR, self_anchor: TR),
+            offset: (x: -8, y: 28),
+            params: NotificationBlock((
+                    monitor: 0,
+                    border_width: 0,
+                    border_rounding: 8,
+                    background_color: Color(hex: "#F5F5F5"),
+                    border_color: Color(hex: "#00000000"),
+                    border_color_low: Color(hex: "#00000000"),
+                    border_color_critical: Color(hex: "#FF0000"),
+                    border_color_paused: Color(hex: "#00000000"),
+                    gap: (x: 0.0, y: 24.0),
+                    notification_hook: (parent_anchor: BM, self_anchor: TM),
+            )),
+        ),
+
+        (
+            name: "summary",
+            parent: "root",
+            hook: (parent_anchor: TL, self_anchor: TL),
+            offset: (x: 10, y: 10),
+            params: TextBlock((
+                    text: "%s",
+                    font: "DejaVu Sans 14",
+                    color: Color(hex: "#000000"),
+                    padding: (left: 0, right: 0, top: 0, bottom: 0),
+                    ellipsize: End,
+                    dimensions: (
+                      width: (min: -1, max: 250),
+                      height: (min: 0, max: 0)
+                    ),
+            )),
+        ),
+
+        (
+            name: "body",
+            parent: "summary",
+            hook: (parent_anchor: TL, self_anchor: TL),
+            offset: (x: 0, y: 24),
+            params: TextBlock((
+                    text: "%b",
+                    font: "DejaVu Sans 11",
+                    color: Color(hex: "#000000"),
+                    padding: (left: 0, right: 0, top: 0, bottom: 0),
+                    ellipsize: End,
+                    dimensions: (
+                      width: (min: -1, max: 185),
+                      height: (min: 0, max: 0)
+                    ),
+            )),
+        ),
+
+    ],
+
+    shortcuts: ShortcutsConfig (
+        notification_interact: 1,
+        notification_close: 2,
+        notification_action1: 3,
+    ),
+)
