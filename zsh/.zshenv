@@ -33,13 +33,12 @@ export KEYTIMEOUT=1
 
 # GPG
 export GPG_TTY=$(tty)
+gpg-connect-agent updatestartuptty /bye >/dev/null
 
 # ZSH Autosuggestions
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
-# Not compatible with nvm
-# export NPM_PACKAGES="${HOME}/.node_modules"
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 

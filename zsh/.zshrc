@@ -1,4 +1,5 @@
 # tsoporan's zshrc
+# zmodload zsh/zprof # profiling
 
 
 # Clone antidote if needed
@@ -11,9 +12,6 @@ antidote load
 
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
-
-# Z alternative, jump dirs
-eval "$(zoxide init zsh)" 
 
 # Key bindings
 #bindkey -e 
@@ -76,7 +74,10 @@ alias dco='docker compose'
 alias zi='z -I' # Use fzf
 alias zb='cd -' # Jump back
 
+# Z alternative, jump dirs
+eval "$(zoxide init zsh)" 
 
-# Pure prompt
-autoload -U promptinit; promptinit
-prompt pure
+# Starship prompt
+eval "$(starship init zsh)"
+
+# zprof # profiling end
