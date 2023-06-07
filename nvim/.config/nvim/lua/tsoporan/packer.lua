@@ -9,9 +9,19 @@ return require('packer').startup(function(use)
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
 
+    -- File browsing w/ telescope
     use {
         "nvim-telescope/telescope-file-browser.nvim",
         requires = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+    }
+
+    -- Use the 'frecency' telescope plugin for finding files
+    use {
+        "nvim-telescope/telescope-frecency.nvim",
+        config = function()
+            require "telescope".load_extension("frecency")
+        end,
+        requires = { "kkharji/sqlite.lua" }
     }
 
     -- Colorscheme

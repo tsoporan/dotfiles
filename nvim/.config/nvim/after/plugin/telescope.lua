@@ -24,6 +24,10 @@ vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fr', builtin.oldfiles, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 
+vim.api.nvim_set_keymap("n", "<leader><leader>", "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
+    { noremap = true, silent = true })
+
+
 vim.api.nvim_set_keymap(
     "n",
     "<leader>x",
