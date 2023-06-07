@@ -3,3 +3,4 @@ plugged
 tags
 .gnupg
 .uuid
+packer_compiled.lua
