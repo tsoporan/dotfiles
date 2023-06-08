@@ -39,7 +39,13 @@ return require('packer').startup(function(use)
     use 'mbbill/undotree'
 
     -- Git
-    use 'tpope/vim-fugitive'
+    use {
+        'lewis6991/gitsigns.nvim',
+        config = function()
+            require('gitsigns').setup({ current_line_blame = true
+            })
+        end
+    }
 
     -- LSP config
     use {
@@ -80,5 +86,15 @@ return require('packer').startup(function(use)
             vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true })
             vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true })
         end
+    }
+
+    -- Movement
+    use {
+        "ggandor/leap.nvim",
+        keys = { "s", "S" },
+        config = function()
+            local leap = require "leap"
+            leap.set_default_keymaps()
+        end,
     }
 end)
