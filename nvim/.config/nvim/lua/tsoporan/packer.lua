@@ -95,6 +95,9 @@ return require('packer').startup(function(use)
         config = function()
             local leap = require "leap"
             leap.set_default_keymaps()
-        end,
+        end
     }
+
+    -- Buffer mgmt
+    use { 'matbme/JABS.nvim' }
 end)
