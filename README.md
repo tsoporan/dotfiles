@@ -2,7 +2,7 @@
 
 Collection of my configuration files and general setup notes
 
-![2021-11-24_10-35](https://user-images.githubusercontent.com/130991/143268401-eabec6a5-24a5-4030-8b08-3f20f1449d3f.png)
+![2023-06-05_13-06](https://github.com/tsoporan/dotfiles/assets/130991/12b55350-cebd-4758-b827-37058f1be4a5)
 
 
 ### Stuff I use
@@ -16,13 +16,17 @@ Collection of my configuration files and general setup notes
   - [zsh](https://en.wikipedia.org/wiki/Z_shell) shell
   - [GNU Stow](https://www.gnu.org/software/stow/) config management (this repo)
   - [neovim](https://neovim.io/) the editor
-  - [antigen](https://github.com/zsh-users/antigen) zsh plugin management
+  - [antidote](https://github.com/mattmc3/antidote) zsh plugin management
   - [fd](https://github.com/sharkdp/fd) "better" `find`
   - [ripgrep](https://github.com/BurntSushi/ripgrep) "better" `grep`
   - [zoxide](https://github.com/ajeetdsouza/zoxide) shell nav (smart `cd`)
   - [sequoia](https://sequoia-pgp.org/) PGP encrypt/decrypt the things
   - [pass](https://www.passwordstore.org/) password manager
   - [rofi/rofi-pass](https://github.com/DaveDavenport/rofi) app runner, window switcher, etc
+  - [rofi-greenclip](https://github.com/erebe/greenclip) clipboard manager
+  - [fzf](https://github.com/junegunn/fzf) fuzzy finder (integrated with zsh)
+
+
 
 
 ### Dotfile usage
@@ -33,8 +37,8 @@ Using `stow` simply `stow <dirname>` from within the cloned dir.
 
 ```bash
 # For example to add the vim config
-stow vim
-# Notice now that ~/.vimrc is linked
+stow nvim 
+# Notice now that ~/.config/nvim/init.vim is linked
 ```
 
 
@@ -50,3 +54,18 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 ```
 
 Open vim and run `:PlugInstall`
+
+
+### Rofi
+
+Configured with:
+- [rofi-greenclip](https://github.com/erebe/greenclip) for clipboard
+    - https://wiki.archlinux.org/title/Greenclip
+- [rofi pass](https://github.com/carnager/rofi-pass) for `pass`
+    - https://github.com/carnagar/rofi-pass
+
+### Candy
+
+- [arc](https://github.com/horst3180/arc-theme) (dark) gtk theme w/ icons
+- [dracula](https://draculatheme.com/) theme for WM/shell/vim
+- [JetBrainsMono](https://www.jetbrains.com/lp/mono/) font
