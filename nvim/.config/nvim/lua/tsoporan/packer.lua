@@ -1,4 +1,4 @@
-vim.cmd [[packadd packer.nvim]]
+vim.cmd.packadd('packer.nvim')
 
 return require('packer').startup(function(use)
     -- Packer can manage itself
@@ -100,6 +100,9 @@ return require('packer').startup(function(use)
 
     -- Buffer mgmt
     use { 'matbme/JABS.nvim' }
+
+    -- Diagnostics++
+    use { 'folke/trouble.nvim' }
 
     -- Le icons
     use { 'nvim-tree/nvim-web-devicons' }
