@@ -100,4 +100,10 @@ return require('packer').startup(function(use)
 
     -- Buffer mgmt
     use { 'matbme/JABS.nvim' }
+
+    -- Le icons
+    use { 'nvim-tree/nvim-web-devicons' }
+
+    -- Fun
+    use { 'eandrju/cellular-automaton.nvim' }
 end)
