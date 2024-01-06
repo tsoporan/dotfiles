@@ -41,16 +41,7 @@ stow nvim
 
 ### (Neo)vim
 
-Using [vim-plug](https://github.com/junegunn/vim-plug) to manage plugins, this
-needs to be initially setup before respective config.
-
-```bash
-# Neovim specific
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-```
-
-Open vim and run `:PlugInstall`
+Swapped to using a slightly customized [LazyVim](https://www.lazyvim.org/)
 
 ### Rofi
 
@@ -63,6 +54,6 @@ Configured with:
 
 ### Candy
 
-- [arc](https://github.com/horst3180/arc-theme) (dark) gtk theme w/ icons
 - [dracula](https://draculatheme.com/) theme for WM/shell/vim
+  - e.g `lxappearance` to set
 - [JetBrainsMono](https://www.jetbrains.com/lp/mono/) font
