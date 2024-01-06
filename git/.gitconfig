@@ -37,7 +37,7 @@
   untracked = magenta
   deleted = red
 [push]
-  default = matching
+  default = current
 [commit]
   gpgSign = true
 [merge]
@@ -50,6 +50,7 @@
   llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
   last = log -1 HEAD --show-signature
   undo = reset HEAD^
+  branchsort = !git for-each-ref --sort=-committerdate refs/heads/ --format '%(refname:short)' | awk '{print $1}'
 [interactive]
   diffFilter = delta --color-only
 [pull]
