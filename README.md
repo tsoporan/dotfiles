@@ -29,8 +29,6 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `hypr` | Hyprland, hyprpaper, hypridle, hyprlock |
 | `lazygit` | Git TUI |
 | `mise` | Runtime version management |
-| `rofi` | App launcher (Wayland) |
-| `rofi-pass` | Password store integration for rofi |
 | `starship` | Shell prompt theme |
 | `swaync` | Notification center |
 | `systemd` | User services (syncthing, wallpaper-rotate) |
@@ -61,7 +59,9 @@ stow -D <package>
 - [fd](https://github.com/sharkdop/fd), [ripgrep](https://github.com/BurntSushi/ripgrep), [eza](https://github.com/eza-community/eza) -- modern coreutils
 - [zoxide](https://github.com/ajeetdsouza/zoxide) -- smart cd
 - [fzf](https://github.com/junegunn/fzf) -- fuzzy finder
-- [pass](https://www.passwordstore.org/) + [rofi-pass](https://github.com/carnager/rofi-pass) -- password management
+- [wofi](https://hg.sr.ht/~scoopta/wofi) + [wofi-pass](https://github.com/schmidtandreas/wofi-pass) -- app launcher + password management
+- [grim](https://github.com/emersion/grim) + [slurp](https://github.com/emersion/slurp) + [satty](https://github.com/gabm/satty) -- screenshots + annotation
+- [cliphist](https://github.com/sentriz/cliphist) -- clipboard history (Wayland)
 - [atuin](https://github.com/atuinsh/atuin) -- shell history
 - [mise](https://mise.jdx.dev/) -- runtime/tool version management
 - [delta](https://github.com/dandavison/delta) -- git diff viewer
