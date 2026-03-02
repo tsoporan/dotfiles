@@ -1,59 +1,67 @@
 # dotfiles
 
-Collection of my configuration files and general setup notes
+Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
-![2023-06-05_13-06](https://github.com/tsoporan/dotfiles/assets/130991/12b55350-cebd-4758-b827-37058f1be4a5)
+## Stack
 
-### Stuff I use
+- **OS:** [Arch Linux](https://www.archlinux.org/)
+- **WM:** [Hyprland](https://hyprland.org/) (Wayland)
+- **Terminal:** [Ghostty](https://ghostty.org/)
+- **Shell:** [Zsh](https://en.wikipedia.org/wiki/Z_shell) + [Antidote](https://github.com/mattmc3/antidote)
+- **Editor:** [Neovim](https://neovim.io/)
+- **Prompt:** [Starship](https://starship.rs/)
+- **Theme:** [Dracula](https://draculatheme.com/)
+- **Font:** [JetBrainsMono Nerd Font](https://www.jetbrains.com/lp/mono/)
 
-- OS/Distro:
-  - [ArchLinux](https://www.archlinux.org/)
-- WM:
-  - [i3](https://i3wm.org/)
-- Tools:
-  - [wezterm](https://wezfurlong.org/wezterm/) term emulator + multiplexer
-  - [zsh](https://en.wikipedia.org/wiki/Z_shell) shell
-  - [GNU Stow](https://www.gnu.org/software/stow/) config management (this repo)
-  - [neovim](https://neovim.io/) the editor
-  - [antidote](https://github.com/mattmc3/antidote) zsh plugin management
-  - [fd](https://github.com/sharkdp/fd) "better" `find`
-  - [ripgrep](https://github.com/BurntSushi/ripgrep) "better" `grep`
-  - [zoxide](https://github.com/ajeetdsouza/zoxide) shell nav (smart `cd`)
-  - [sequoia](https://sequoia-pgp.org/) PGP encrypt/decrypt the things
-  - [pass](https://www.passwordstore.org/) password manager
-  - [rofi/rofi-pass](https://github.com/DaveDavenport/rofi) app runner, window
-    switcher, etc
-  - [rofi-greenclip](https://github.com/erebe/greenclip) clipboard manager
-  - [fzf](https://github.com/junegunn/fzf) fuzzy finder (integrated with zsh)
+## Stow Packages
 
-### Dotfile usage
+| Package | Description |
+|---------|-------------|
+| `atuin` | Shell history with fuzzy search |
+| `bat` | Syntax-highlighted cat |
+| `bin` | Custom utility scripts |
+| `btop` | System monitor |
+| `clipse` | Clipboard manager |
+| `docker` | Rootless Docker systemd units |
+| `ghostty` | Terminal emulator |
+| `git` | Git config, aliases, delta pager |
+| `gnupg` | GPG agent and config |
+| `hypr` | Hyprland, hyprpaper, hypridle, hyprlock |
+| `lazygit` | Git TUI |
+| `mise` | Runtime version management |
+| `rofi` | App launcher (Wayland) |
+| `rofi-pass` | Password store integration for rofi |
+| `starship` | Shell prompt theme |
+| `swaync` | Notification center |
+| `systemd` | User services (syncthing, wallpaper-rotate) |
+| `wallpapers` | Desktop wallpapers |
+| `waybar` | Status bar |
+| `zellij` | Terminal multiplexer |
+| `zsh` | Shell config, plugins, aliases |
 
-Not super ideal across multiple machines, but generally can be managed with git
-branching.
-
-Using `stow` simply `stow <dirname>` from within the cloned dir.
+## Usage
 
 ```bash
-# For example to add the vim config
-stow nvim
-# Notice now that ~/.config/nvim/init.vim is linked
+# Clone the repo
+git clone https://github.com/tsoporan/dotfiles.desktop.git
+cd dotfiles.desktop
+
+# Link a package (creates symlinks in $HOME)
+stow <package>
+
+# Link everything
+for d in */; do stow "$d"; done
+
+# Unlink a package
+stow -D <package>
 ```
 
-### (Neo)vim
+## Key Tools
 
-Swapped to using a slightly customized [LazyVim](https://www.lazyvim.org/)
-
-### Rofi
-
-Configured with:
-
-- [rofi-greenclip](https://github.com/erebe/greenclip) for clipboard
-  - https://wiki.archlinux.org/title/Greenclip
-- [rofi pass](https://github.com/carnager/rofi-pass) for `pass`
-  - https://github.com/carnagar/rofi-pass
-
-### Candy
-
-- [dracula](https://draculatheme.com/) theme for WM/shell/vim
-  - e.g `lxappearance` to set
-- [JetBrainsMono](https://www.jetbrains.com/lp/mono/) font
+- [fd](https://github.com/sharkdop/fd), [ripgrep](https://github.com/BurntSushi/ripgrep), [eza](https://github.com/eza-community/eza) -- modern coreutils
+- [zoxide](https://github.com/ajeetdsouza/zoxide) -- smart cd
+- [fzf](https://github.com/junegunn/fzf) -- fuzzy finder
+- [pass](https://www.passwordstore.org/) + [rofi-pass](https://github.com/carnager/rofi-pass) -- password management
+- [atuin](https://github.com/atuinsh/atuin) -- shell history
+- [mise](https://mise.jdx.dev/) -- runtime/tool version management
+- [delta](https://github.com/dandavison/delta) -- git diff viewer
