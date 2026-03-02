@@ -1,0 +1,24 @@
+# ==============================================================================
+# Bat Configuration
+# Last updated: 2025-12-26
+# ==============================================================================
+# Docs: https://github.com/sharkdp/bat#configuration-file
+
+# Theme (matches Dracula used elsewhere)
+--theme="Dracula"
+
+# Output style: show line numbers, git changes, and filename header
+--style="numbers,changes,header"
+
+# Enable italic text (if terminal supports it)
+--italic-text=always
+
+# Syntax mapping for files bat doesn't recognize
+--map-syntax "*.conf:INI"
+--map-syntax "*.env:Bourne Again Shell (bash)"
+--map-syntax ".env.*:Bourne Again Shell (bash)"
+--map-syntax ".ignore:Git Ignore"
+--map-syntax ".dockerignore:Git Ignore"
+--map-syntax "justfile:Makefile"
+--map-syntax "Justfile:Makefile"
+--map-syntax "*.kdl:JavaScript"
