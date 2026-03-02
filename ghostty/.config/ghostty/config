@@ -1,0 +1,60 @@
+# ==============================================================================
+# Ghostty Terminal Configuration
+# Last updated: 2025-12-26
+# ==============================================================================
+#
+# Docs: https://ghostty.org/docs/config
+# Run `ghostty +show-config --default --docs` for all options
+#
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Font
+# ------------------------------------------------------------------------------
+font-family = JetBrainsMono Nerd Font
+font-size = 14
+adjust-cell-height = 2
+bold-is-bright = false
+
+# ------------------------------------------------------------------------------
+# Theme
+# ------------------------------------------------------------------------------
+theme = Dracula
+background = #111111
+foreground = #f8f8f2
+selection-background = #44475a
+selection-foreground = #f8f8f2
+
+# ------------------------------------------------------------------------------
+# Cursor
+# ------------------------------------------------------------------------------
+cursor-style = block
+cursor-style-blink = false
+cursor-color = #bd93f9
+
+# ------------------------------------------------------------------------------
+# Window
+# ------------------------------------------------------------------------------
+window-padding-x = 4
+window-padding-y = 4
+window-decoration = false
+window-inherit-working-directory = true
+confirm-close-surface = false
+
+# ------------------------------------------------------------------------------
+# Behavior
+# ------------------------------------------------------------------------------
+copy-on-select = clipboard
+mouse-hide-while-typing = true
+scrollback-limit = 50000
+
+# ------------------------------------------------------------------------------
+# Keybindings
+# ------------------------------------------------------------------------------
+# Shift+Enter sends literal newline (useful in some TUI apps)
+keybind = shift+enter=text:\n
+
+# Quick font size adjustments
+keybind = ctrl+plus=increase_font_size:1
+keybind = ctrl+minus=decrease_font_size:1
+keybind = ctrl+0=reset_font_size
