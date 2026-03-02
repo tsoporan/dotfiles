@@ -1,89 +1,177 @@
+# ==============================================================================
 # tsoporan's zshrc
-# zmodload zsh/zprof # profiling
+# Last updated: 2025-12-26
+# ==============================================================================
+#
+# Shell startup order: .zshenv -> .zshrc (interactive) -> .zlogin
+# Environment variables are in .zshenv, interactive config is here.
+#
+# Dependencies:
+#   - antidote (plugin manager)
+#   - starship (prompt)
+#   - zoxide (smart cd)
+#   - atuin (history search)
+#   - direnv (per-directory env)
+#   - fzf, fd, bat, eza (modern CLI tools)
+#   - mise (runtime version manager - replaces nvm/pyenv/etc)
+#
+# ==============================================================================
 
+# zmodload zsh/zprof  # Uncomment to profile startup time
 
-# Clone antidote if needed
+# ------------------------------------------------------------------------------
+# Plugin Manager (Antidote)
+# ------------------------------------------------------------------------------
 [[ -e ${ZDOTDIR:-~}/.antidote ]] ||
   git clone https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
 
 source ${ZDOTDIR:-~}/.antidote/antidote.zsh
-
 antidote load
 
+# ------------------------------------------------------------------------------
+# FZF Integration
+# ------------------------------------------------------------------------------
 source /usr/share/fzf/completion.zsh
 source /usr/share/fzf/key-bindings.zsh
 
-# Key bindings
-#bindkey -e 
-bindkey -v # Vi mode
-bindkey "^ " autosuggest-accept # Re-map autosuggest-accept (default arrow key), ctrl+space
-#bindkey "^A" vi-beginning-of-line # Ctrl-a/e start/end
-#bindkey "^E" vi-end-of-line
-#bindkey -M vicmd 'k' history-substring-search-up
-#bindkey -M vicmd 'j' history-substring-search-down
+# ------------------------------------------------------------------------------
+# Key Bindings
+# ------------------------------------------------------------------------------
+bindkey -v                        # Vi mode
+bindkey "^ " autosuggest-accept   # Ctrl+Space accepts autosuggestion
+export KEYTIMEOUT=1               # Reduce mode switch delay (set in .zshenv too)
 
-# Nav
-setopt auto_cd # Switch dir by name
+# ------------------------------------------------------------------------------
+# Shell Options
+# ------------------------------------------------------------------------------
+# Navigation
+setopt auto_cd                    # cd by typing directory name
 
-# History
-setopt extended_history       # record timestamp of command in HISTFILE
-setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
-setopt hist_ignore_dups       # ignore duplicated commands history list
-setopt hist_ignore_space      # ignore commands that start with space
-setopt hist_verify            # show command with history expansion to user before running it
-setopt inc_append_history     # add commands to HISTFILE in order of execution
-setopt share_history          # share command history data
+# History - comprehensive deduplication and sharing
+setopt extended_history           # Record timestamp of command
+setopt hist_expire_dups_first     # Delete duplicates first when HISTFILE exceeds HISTSIZE
+setopt hist_ignore_all_dups       # Remove older duplicate entries
+setopt hist_ignore_space          # Ignore commands starting with space
+setopt hist_verify                # Show command before running with history expansion
+setopt inc_append_history         # Add commands immediately
+setopt share_history              # Share history between sessions
 
-# Useful aliases
+# ------------------------------------------------------------------------------
+# Aliases - General
+# ------------------------------------------------------------------------------
 alias jj="jobs"
 alias v="nvim"
 alias e="emacsclient -nc"
-alias ls="eza"
 alias rm="rm -i"
+alias cp="cp -i"
 alias ..="cd .."
 alias ~="cd ~"
 alias /="cd /"
-alias cp="cp -i"
 alias df="df -h"
 alias free="free -m"
 alias more="less"
 alias bc="bc -l"
 alias sha1="openssl sha1"
-alias grep="grep --color=auto"
-alias fgrep="fgrep --color=auto"
-alias egrep="egrep --color=auto"
+
+# Modern CLI replacements
+alias l="eza --icons=auto -s accessed --group-directories-first"
+alias ls="eza --icons=auto -s accessed --group-directories-first"
+alias ll="eza --icons=auto -la -s accessed --group-directories-first"
+alias tree="eza --tree --icons=auto"
+alias cat="bat --paging=never"
+alias grep="rg"
+alias fgrep="rg -F"
+alias egrep="rg"
+
+# ------------------------------------------------------------------------------
+# Aliases - Git (short and sweet)
+# ------------------------------------------------------------------------------
 alias g="git"
-alias c="git commit -S --signoff"
+alias s="git status"
 alias a="git add -p"
 alias ai="git add -i"
+alias c="git commit -S --signoff"
 alias co="git checkout"
-alias s="git status"
-alias sta="git stash"
+alias d="git diff"
+alias ds="git diff --staged"
 alias p="git push"
 alias po='git push origin "$(git symbolic-ref --short HEAD)"'
 alias pf="git push --force-with-lease"
 alias pl="git pull"
 alias fe="git fetch"
 alias fep="git fetch --prune"
-alias d="git diff"
-alias ds="git diff --staged"
 alias mer="git merge"
+alias sta="git stash"
+alias gl="git log --oneline --graph -20"
+alias glo="git log --oneline -20"
+alias lg="lazygit"
+
+# ------------------------------------------------------------------------------
+# Aliases - Docker
+# ------------------------------------------------------------------------------
+alias dco='docker compose'
+
+# ------------------------------------------------------------------------------
+# Aliases - Navigation & Multiplexer
+# ------------------------------------------------------------------------------
+alias zb='cd -'                   # Jump back to previous directory
+alias zj="zellij"
+alias zja="zellij attach"
+alias zjl="zellij list-sessions"
+alias zi="zoxide query -i"        # Interactive fuzzy directory picker
+
+# ------------------------------------------------------------------------------
+# Aliases - Utilities
+# ------------------------------------------------------------------------------
 alias open_ports="ss -lntu"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias dco='docker compose'
-alias zi='z -I' # Use fzf
-alias zb='cd -' # Jump back
+alias y="yazi"
 
-# Z alternative, jump dirs
-eval "$(zoxide init zsh)" 
+# Modern CLI tool shortcuts
+alias dus="dust -r"                # Disk usage (largest last)
+alias duf="duf --only local"       # Disk free (skip network mounts)
+alias hf="hyperfine"               # Benchmarking
+alias tk="tokei"                   # Code statistics
+alias http="xh"                    # HTTP client (curl replacement)
+alias j="just"                     # Task runner
+alias we="watchexec"               # File watcher
+alias rec="wf-recorder -f ~/Videos/recording-\$(date +%Y%m%d-%H%M%S).mp4"
 
-# Starship prompt
+# ------------------------------------------------------------------------------
+# Tool Initialization
+# ------------------------------------------------------------------------------
+# Zoxide - smart directory jumping (z command)
+eval "$(zoxide init zsh)"
+
+# Starship - fast, customizable prompt
 eval "$(starship init zsh)"
 
-# Mise (runtime version management)
-eval "$(mise activate zsh)"
-
-# Atuin (shell history)
+# Atuin - better shell history with SQLite backend
+# Ctrl+R for interactive history search, syncs across machines
 eval "$(atuin init zsh)"
 
-# zprof # profiling end
+# Mise - polyglot runtime manager (replaces nvm, pyenv, rbenv, etc)
+# Faster than nvm, manages node/python/ruby/go versions
+eval "$(mise activate zsh)"
+
+# ------------------------------------------------------------------------------
+# Docker (Rootless)
+# ------------------------------------------------------------------------------
+export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
+
+# ------------------------------------------------------------------------------
+# Android SDK (AUR packages: android-sdk, android-emulator, etc.)
+# ------------------------------------------------------------------------------
+export ANDROID_HOME=/opt/android-sdk
+export ANDROID_JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$PATH"
+export PATH="/opt/android-emulator:$PATH"
+
+# ------------------------------------------------------------------------------
+# Bun
+# ------------------------------------------------------------------------------
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# zprof  # Uncomment to see profiling results

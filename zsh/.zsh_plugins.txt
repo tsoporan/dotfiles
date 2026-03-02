@@ -1,6 +1,27 @@
-zsh-users/zsh-completions
+# ==============================================================================
+# Antidote Plugin List
+# Last updated: 2025-12-26
+# ==============================================================================
+#
+# After editing, run: antidote update
+#
+# Plugin syntax:
+#   repo/plugin                     - Standard load
+#   repo/plugin kind:defer          - Deferred loading (faster startup)
+#   repo/plugin path:subdir         - Load specific subdirectory
+#   repo/plugin kind:fpath          - Add to fpath only
+#
+# ==============================================================================
 
-zdharma-continum/fast-syntax-highlighting kind:defer
+# Syntax highlighting (must load before autosuggestions)
+zdharma-continuum/fast-syntax-highlighting kind:defer
 
+# Oh-My-Zsh plugins
+ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z
+
+# Completions
+zsh-users/zsh-completions path:src kind:fpath
+belak/zsh-utils path:completion
+
+# Autosuggestions (history search handled by atuin)
 zsh-users/zsh-autosuggestions kind:defer
-zsh-users/zsh-history-substring-search kind:defer
