@@ -1,0 +1,324 @@
+/* Minimal Black Theme - Matching Waybar */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-weight: 500;
+    font-size: 13px;
+}
+
+/* Control Center */
+.control-center {
+    background: #0a0a0a;
+    border: 1px solid #202020;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Notification popup window */
+.notification-window {
+    background: transparent;
+    border: none;
+    margin: 0 8px 8px 0;
+}
+
+/* Individual notifications */
+.notification {
+    background: #0a0a0a;
+    border: 1px solid #202020;
+    border-radius: 4px;
+    margin: 4px 8px;
+    padding: 12px;
+    color: #c0c0c0;
+}
+
+.notification:hover {
+    background: #141414;
+    border-color: #303030;
+}
+
+/* Urgency indicators */
+.low {
+    border-left: 2px solid #404040;
+}
+
+.normal {
+    border-left: 2px solid #606060;
+}
+
+.critical {
+    border-left: 2px solid #ff5555;
+}
+
+/* Notification content */
+.summary {
+    color: #e0e0e0;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.body {
+    color: #909090;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.time {
+    color: #505050;
+    font-size: 11px;
+    margin-top: 8px;
+}
+
+/* Icons */
+.image {
+    border-radius: 4px;
+    margin-right: 12px;
+}
+
+.app-icon {
+    margin-right: 8px;
+}
+
+/* Action buttons */
+.notification-action {
+    background: #141414;
+    border: 1px solid #303030;
+    border-radius: 4px;
+    color: #a0a0a0;
+    margin: 4px 2px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.notification-action:hover {
+    background: #202020;
+    color: #e0e0e0;
+}
+
+/* Close button */
+.close-button {
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #505050;
+    min-height: 24px;
+    min-width: 24px;
+}
+
+.close-button:hover {
+    background: #ff5555;
+    color: #0a0a0a;
+}
+
+/* Title bar */
+.widget-title {
+    background: #0a0a0a;
+    padding: 12px 16px;
+    color: #808080;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #202020;
+}
+
+.widget-title > button {
+    background: transparent;
+    border: 1px solid #303030;
+    border-radius: 4px;
+    color: #606060;
+    font-size: 11px;
+    padding: 4px 10px;
+}
+
+.widget-title > button:hover {
+    background: #ff5555;
+    border-color: #ff5555;
+    color: #0a0a0a;
+}
+
+/* Do Not Disturb */
+.widget-dnd {
+    background: #0a0a0a;
+    padding: 12px 16px;
+    border-bottom: 1px solid #202020;
+}
+
+.widget-dnd > switch {
+    background: #202020;
+    border-radius: 12px;
+    min-height: 20px;
+    min-width: 40px;
+}
+
+.widget-dnd > switch:checked {
+    background: #50fa7b;
+}
+
+.widget-dnd > switch slider {
+    background: #606060;
+    border-radius: 50%;
+    margin: 2px;
+    min-height: 16px;
+    min-width: 16px;
+}
+
+.widget-dnd > switch:checked slider {
+    background: #0a0a0a;
+}
+
+.widget-dnd-label {
+    color: #808080;
+    font-size: 12px;
+}
+
+/* Notifications list */
+.widget-notifications {
+    background: transparent;
+    padding: 4px;
+}
+
+.notification-group-headers {
+    background: #101010;
+    padding: 8px 12px;
+    color: #606060;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.notification-group-count {
+    background: #303030;
+    border-radius: 8px;
+    color: #808080;
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+/* MPRIS (Media Player) */
+.widget-mpris {
+    background: #0a0a0a;
+    padding: 12px;
+    border-bottom: 1px solid #202020;
+}
+
+.widget-mpris-player {
+    background: #101010;
+    border: 1px solid #202020;
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.widget-mpris-album-art {
+    border-radius: 4px;
+    margin-right: 12px;
+}
+
+.widget-mpris-title {
+    color: #c0c0c0;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.widget-mpris-subtitle {
+    color: #606060;
+    font-size: 11px;
+}
+
+.widget-mpris-player button {
+    background: #141414;
+    border: 1px solid #303030;
+    border-radius: 4px;
+    color: #808080;
+    min-height: 28px;
+    min-width: 28px;
+}
+
+.widget-mpris-player button:hover {
+    background: #202020;
+    color: #e0e0e0;
+}
+
+/* Volume Widget */
+.widget-volume {
+    background: #0a0a0a;
+    padding: 12px 16px;
+    border-bottom: 1px solid #202020;
+}
+
+.widget-volume-label {
+    color: #606060;
+    font-size: 14px;
+    margin-right: 12px;
+}
+
+.widget-volume scale trough {
+    background: #202020;
+    border-radius: 2px;
+    min-height: 4px;
+}
+
+.widget-volume scale highlight {
+    background: #606060;
+    border-radius: 2px;
+}
+
+.widget-volume scale slider {
+    background: #808080;
+    border: none;
+    border-radius: 50%;
+    min-height: 12px;
+    min-width: 12px;
+}
+
+/* Menubar */
+.widget-menubar {
+    background: #0a0a0a;
+    padding: 8px;
+}
+
+.widget-menubar button {
+    background: #101010;
+    border: 1px solid #202020;
+    border-radius: 4px;
+    color: #707070;
+    font-size: 14px;
+    padding: 8px 12px;
+    margin: 2px;
+}
+
+.widget-menubar button:hover {
+    background: #202020;
+    color: #c0c0c0;
+}
+
+/* Scrollbar */
+scrollbar {
+    background: transparent;
+    width: 6px;
+}
+
+scrollbar trough {
+    background: #101010;
+    border-radius: 3px;
+}
+
+scrollbar slider {
+    background: #303030;
+    border-radius: 3px;
+    min-height: 20px;
+}
+
+scrollbar slider:hover {
+    background: #404040;
+}
+
+/* Empty state */
+.blank-window {
+    background: #0a0a0a;
+}
+
+.blank-window label {
+    color: #404040;
+    font-size: 13px;
+}

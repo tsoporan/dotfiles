@@ -1,0 +1,189 @@
+/* Minimal Black Theme - Productivity Focused */
+
+* {
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: 500;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+window#waybar {
+    background: #0a0a0a;
+    color: #c0c0c0;
+}
+
+/* Workspaces */
+#workspaces {
+    margin: 0 8px 0 4px;
+}
+
+#workspaces button {
+    padding: 0 10px;
+    color: #606060;
+    background: transparent;
+}
+
+#workspaces button:hover {
+    color: #909090;
+    background: transparent;
+    box-shadow: none;
+}
+
+#workspaces button.active {
+    color: #ffffff;
+}
+
+#workspaces button.urgent {
+    color: #ff5555;
+}
+
+/* Submap indicator */
+#submap {
+    color: #0a0a0a;
+    background: #ffb86c;
+    padding: 0 12px;
+    font-weight: bold;
+}
+
+/* Window title */
+#window {
+    color: #505050;
+    font-style: italic;
+    padding: 0 12px;
+}
+
+/* Clock */
+#clock {
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+/* Media */
+#custom-media {
+    color: #707070;
+    padding: 0 8px;
+}
+
+#custom-media.spotify {
+    color: #1db954;
+}
+
+/* System modules - minimal style */
+#custom-updates,
+#custom-systemd-failed,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#network,
+#bluetooth,
+#pulseaudio,
+#privacy,
+#idle_inhibitor,
+#custom-notification,
+#tray {
+    padding: 0 8px;
+    color: #808080;
+}
+
+/* Updates - only visible when there are updates */
+#custom-updates {
+    color: #e6fb04;
+}
+
+/* Failed systemd units - red alert */
+#custom-systemd-failed {
+    color: #ff5555;
+}
+
+/* Disk usage */
+#disk.warning {
+    color: #ffb86c;
+}
+
+#disk.critical {
+    color: #ff5555;
+}
+
+/* States */
+#cpu.warning,
+#memory.warning {
+    color: #ffb86c;
+}
+
+#cpu.critical,
+#memory.critical,
+#disk.critical,
+#temperature.critical {
+    color: #ff5555;
+}
+
+#network.disconnected {
+    color: #ff5555;
+}
+
+#pulseaudio.muted {
+    color: #404040;
+}
+
+/* Privacy - visible when active */
+#privacy {
+    color: #ff5555;
+}
+
+/* Idle inhibitor */
+#idle_inhibitor.activated {
+    color: #50fa7b;
+}
+
+#idle_inhibitor.deactivated {
+    color: #404040;
+}
+
+/* Bluetooth */
+#bluetooth.connected {
+    color: #8be9fd;
+}
+
+#bluetooth.disabled {
+    color: #404040;
+}
+
+/* Tray */
+#tray {
+    padding: 0 4px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}
+
+/* Power */
+#custom-power {
+    color: #606060;
+    padding: 0 12px 0 8px;
+}
+
+#custom-power:hover {
+    color: #ff5555;
+}
+
+/* Tooltips */
+tooltip {
+    background: #0a0a0a;
+    border: 1px solid #202020;
+    border-radius: 4px;
+}
+
+tooltip label {
+    color: #c0c0c0;
+    padding: 4px 8px;
+}

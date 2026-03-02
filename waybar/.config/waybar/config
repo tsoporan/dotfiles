@@ -1,0 +1,220 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 32,
+    "spacing": 4,
+    "margin": 0,
+
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/submap",
+        "hyprland/window"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "custom/media",
+        "custom/updates",
+        "custom/systemd-failed",
+        "cpu",
+        "memory",
+        "disk",
+        "temperature#cpu",
+        "temperature#gpu",
+        "network",
+        "bluetooth",
+        "pulseaudio",
+        "privacy",
+        "idle_inhibitor",
+        "custom/notification",
+        "tray",
+        "custom/power"
+    ],
+
+    "hyprland/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "format": "{id}"
+    },
+
+    "hyprland/submap": {
+        "format": "{}",
+        "tooltip": false
+    },
+
+    "hyprland/window": {
+        "format": "{}",
+        "max-length": 50,
+        "separate-outputs": true
+    },
+
+    "clock": {
+        "format": "{:%a %b %d  %H:%M}",
+        "format-alt": "{:%Y-%m-%d %H:%M:%S}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "weeks-pos": "right",
+            "format": {
+                "today": "<b><u>{}</u></b>"
+            }
+        },
+        "on-click": "calendar-popup"
+    },
+
+    "custom/media": {
+        "format": "{icon} {}",
+        "return-type": "json",
+        "max-length": 30,
+        "format-icons": {
+            "spotify": "",
+            "default": ""
+        },
+        "escape": true,
+        "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{title}}\", \"tooltip\": \"{{playerName}}: {{artist}} - {{title}}\", \"class\": \"{{playerName}}\"}' -F 2>/dev/null",
+        "on-click": "playerctl play-pause",
+        "on-click-right": "playerctl next",
+        "on-scroll-up": "playerctl volume 0.05+",
+        "on-scroll-down": "playerctl volume 0.05-"
+    },
+
+    "custom/updates": {
+        "format": " {}",
+        "return-type": "",
+        "interval": 3600,
+        "exec": "count=$(checkupdates 2>/dev/null | wc -l); [ \"$count\" -gt 0 ] && echo \"$count\" || echo ''",
+        "on-click": "ghostty -e sudo pacman -Syu"
+    },
+
+    "custom/systemd-failed": {
+        "format": "󰀦 {}",
+        "return-type": "",
+        "interval": 60,
+        "exec": "count=$(systemctl --user list-units --state=failed --no-legend 2>/dev/null | wc -l); [ \"$count\" -gt 0 ] && echo \"$count\" || echo ''"
+    },
+
+    "disk": {
+        "format": "󰋊 {percentage_used}%",
+        "path": "/",
+        "interval": 30,
+        "tooltip-format": "{path}: {used} / {total} ({percentage_used}%)\n{free} free",
+        "states": {
+            "warning": 80,
+            "critical": 95
+        }
+    },
+
+    "cpu": {
+        "format": " {usage}%",
+        "interval": 5,
+        "on-click": "ghostty -e btop",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "memory": {
+        "format": " {used:0.1f}G",
+        "interval": 5,
+        "on-click": "ghostty -e btop",
+        "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        }
+    },
+
+    "temperature#cpu": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:18.3/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 85,
+        "format": " {temperatureC}°",
+        "tooltip-format": "CPU: {temperatureC}°C"
+    },
+
+    "temperature#gpu": {
+        "hwmon-path-abs": "/sys/devices/pci0000:00/0000:00:01.1/0000:01:00.0/0000:02:00.0/0000:03:00.0/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 90,
+        "format": "󰢮 {temperatureC}°",
+        "tooltip-format": "GPU: {temperatureC}°C"
+    },
+
+    "network": {
+        "format-ethernet": "󰈁",
+        "format-wifi": "󰤨 {signalStrength}%",
+        "format-disconnected": "󰈂",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}\n↑ {bandwidthUpBytes} ↓ {bandwidthDownBytes}",
+        "on-click": "nm-connection-editor"
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-connected": "󰂱 {num_connections}",
+        "format-disabled": "󰂲",
+        "tooltip-format": "{controller_alias}\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "on-click": "blueman-manager"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟",
+        "format-icons": {
+            "default": ["󰕿", "󰖀", "󰕾"]
+        },
+        "scroll-step": 5,
+        "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+        "on-click-right": "pavucontrol",
+        "tooltip-format": "{desc}\n{volume}%"
+    },
+
+    "privacy": {
+        "icon-spacing": 4,
+        "icon-size": 14,
+        "transition-duration": 250,
+        "modules": [
+            { "type": "screenshare", "tooltip": true, "tooltip-icon-size": 16 },
+            { "type": "audio-in", "tooltip": true, "tooltip-icon-size": 16 }
+        ]
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰛊",
+            "deactivated": "󰾪"
+        },
+        "tooltip-format-activated": "Idle inhibitor: ON",
+        "tooltip-format-deactivated": "Idle inhibitor: OFF"
+    },
+
+    "custom/notification": {
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󰂚",
+            "none": "󰂜",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+
+    "custom/power": {
+        "format": "⏻",
+        "tooltip-format": "Power menu",
+        "on-click": "wlogout"
+    }
+}

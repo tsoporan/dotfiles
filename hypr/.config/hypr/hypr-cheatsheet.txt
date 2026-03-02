@@ -1,0 +1,44 @@
++----------------------+----------------------+-----------------------------------------------------------+
+| Category             | Key Combo            | Action                                                    |
++----------------------+----------------------+-----------------------------------------------------------+
+| Launch & Session     | SUPER+Return         | Open terminal (ghostty)                                   |
+|                      | SUPER+d              | App launcher (wofi drun)                                  |
+|                      | SUPER+Tab            | Window switcher (wofi window list)                        |
+|                      | SUPER+Shift+g        | Launch Lutris                                             |
+|                      | SUPER+Shift+r        | Reload Hyprland                                           |
+|                      | SUPER+Shift+e        | Exit Hyprland                                             |
+| Locking & Idle       | SUPER+Shift+l        | Manual Hyprlock                                           |
+| Focus & Layout       | SUPER+f              | Toggle fullscreen                                         |
+|                      | SUPER+s              | Toggle hy3 tab/tile                                       |
+|                      | SUPER+q              | Close window                                              |
+|                      | SUPER+Escape         | Last workspace                                            |
+|                      | SUPER+Space          | Focus floating window                                     |
+|                      | SUPER+Shift+Space    | Toggle floating                                           |
+|                      | SUPER+Shift+c        | Center window                                             |
+| Focus Movement       | SUPER+Arrow keys     | Focus (arrow keys)                                        |
+|                      | SUPER+h/j/k/l        | Focus (vi keys: left/down/up/right)                       |
+| Window Movement      | SUPER+Shift+Arrows   | Move window (arrow keys)                                  |
+|                      | SUPER+Shift+h/j/k/l  | Move window (vi keys)                                     |
+| Window Resizing      | SUPER+Ctrl+h/j/k/l   | Resize window (vi keys)                                   |
+| Clipboard & Text     | SUPER+p              | Clipboard history (cliphist)                              |
+|                      | SUPER+c              | Send copy (Ctrl+Shift+C)                                  |
+|                      | SUPER+v              | Send paste (Ctrl+Shift+V)                                 |
+| Security             | SUPER+T              | Wofi-pass copy                                            |
+| Notifications        | SUPER+n              | Toggle SwayNC                                             |
+|                      | SUPER+Shift+n        | Toggle DND                                                |
+| Scratchpad           | SUPER+-              | Toggle scratchpad                                         |
+|                      | SUPER+Shift+-        | Move window to scratchpad                                 |
+| Screenshots          | SUPER+Shift+s        | Area screenshot to clipboard                              |
+|                      | SUPER+Shift+a        | Area screenshot to satty (annotate/save)                  |
+|                      | Print                | Fullscreen screenshot to satty                            |
+| Workspaces           | SUPER+1-0            | Switch workspaces                                         |
+|                      | SUPER+Shift+1-0      | Move window to workspace                                  |
+| Workspace Cycling    | SUPER+scroll up/down | Cycle workspaces                                          |
+| Resize Mode          | SUPER+r              | Enter resize mode                                         |
+|                      | resize: h/j/k/l      | Resize (vi keys: left/down/up/right)                      |
+|                      | resize: Arrow keys   | Resize with arrow keys                                    |
+|                      | resize: Enter / Esc  | Exit resize mode                                          |
+| Mouse                | SUPER+LMB drag       | Move window                                               |
+|                      | SUPER+RMB drag       | Resize window                                             |
+| Cheat Sheet          | SUPER+Shift+Tab      | Show this cheat sheet                                     |
++----------------------+----------------------+-----------------------------------------------------------+
