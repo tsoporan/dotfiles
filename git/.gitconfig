@@ -1,6 +1,6 @@
 [user]
-  name = Titus Soporan
-  email = titus@tsoporan.com
+	name = Titus Soporan
+	email = titus@tsoporan.com
   signingkey = 0x882FD40C9CAEE059
 [core]
   excludesfile = ~/.gitignore_global
@@ -51,11 +51,19 @@
   last = log -1 HEAD --show-signature
   undo = reset HEAD^
   branchsort = !git for-each-ref --sort=-committerdate refs/heads/ --format '%(refname:short)' | awk '{print $1}'
+  latest = log -n 5 --name-only --format=
+	co = checkout
+	br = branch
+	ci = commit
+  st = status
+  comp = git diff main --stat
 [interactive]
   diffFilter = delta --color-only
 [pull]
-  rebase = false
+	rebase = true
 [init]
   defaultBranch = main
 [github]
   user = tsoporan
+[rerere]
+	enabled = true
