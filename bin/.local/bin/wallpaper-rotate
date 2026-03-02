@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Fetch Bing's daily wallpaper and set it via hyprpaper
+
+set -euo pipefail
+
+WALLPAPER_DIR="$HOME/.wallpapers"
+CURRENT="$WALLPAPER_DIR/current.jpg"
+PREVIOUS="$WALLPAPER_DIR/previous.jpg"
+
+mkdir -p "$WALLPAPER_DIR"
+
+# Keep previous wallpaper as backup
+[[ -f "$CURRENT" ]] && cp "$CURRENT" "$PREVIOUS"
+
+# idx=0 is today, idx=1 is yesterday, etc. Bing keeps 8 days.
+if [[ "${1:-}" == "random" ]]; then
+    IDX=$((RANDOM % 8))
+    echo "Fetching random Bing wallpaper (idx=$IDX)..."
+else
+    IDX=0
+    echo "Fetching Bing daily wallpaper..."
+fi
+
+# Get wallpaper URL from Bing API (UHD resolution)
+API_URL="https://www.bing.com/HPImageArchive.aspx?format=js&idx=$IDX&n=1&mkt=en-US"
+RESPONSE=$(xh -b GET "$API_URL" 2>/dev/null || curl -fsSL "$API_URL")
+
+# Extract the image path and build full URL with UHD resolution
+IMAGE_PATH=$(echo "$RESPONSE" | jq -r '.images[0].urlbase')
+IMAGE_URL="https://www.bing.com${IMAGE_PATH}_UHD.jpg"
+
+echo "Downloading: $IMAGE_URL"
+
+if ! { xh -Fd -o "$CURRENT" "$IMAGE_URL" 2>/dev/null || curl -fsSL -o "$CURRENT" "$IMAGE_URL"; }; then
+    echo "Failed to download wallpaper" >&2
+    [[ -f "$PREVIOUS" ]] && mv "$PREVIOUS" "$CURRENT"
+    exit 1
+fi
+
+# Verify it's a valid image
+if ! file "$CURRENT" | grep -qE '(JPEG|PNG|image)'; then
+    echo "Downloaded file is not a valid image" >&2
+    [[ -f "$PREVIOUS" ]] && mv "$PREVIOUS" "$CURRENT"
+    exit 1
+fi
+
+echo "Wallpaper saved to $CURRENT"
+
+# Update via IPC
+if pgrep -x hyprpaper > /dev/null; then
+    echo "Applying wallpaper via IPC..."
+    hyprctl hyprpaper wallpaper ", $CURRENT"
+    echo "Wallpaper applied"
+else
+    echo "hyprpaper not running, wallpaper will apply on next start"
+fi

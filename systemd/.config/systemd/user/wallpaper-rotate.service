@@ -1,0 +1,11 @@
+[Unit]
+Description=Rotate wallpaper from Bing daily
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/sleep 30
+ExecStart=%h/.local/bin/wallpaper-rotate
+Restart=on-failure
+RestartSec=60
