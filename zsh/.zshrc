@@ -38,7 +38,7 @@ setopt share_history          # share command history data
 alias jj="jobs"
 alias v="nvim"
 alias e="emacsclient -nc"
-alias ls="exa"
+alias ls="eza"
 alias rm="rm -i"
 alias ..="cd .."
 alias ~="cd ~"
@@ -79,5 +79,11 @@ eval "$(zoxide init zsh)"
 
 # Starship prompt
 eval "$(starship init zsh)"
+
+# Mise (runtime version management)
+eval "$(mise activate zsh)"
+
+# Atuin (shell history)
+eval "$(atuin init zsh)"
 
 # zprof # profiling end
