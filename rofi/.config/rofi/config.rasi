@@ -5,7 +5,7 @@ configuration {
 
   font: "JetBrainsMono NF 12";
   show-icons: true;
-  terminal: "wezterm";
+  terminal: "ghostty";
 
   timeout {
       action: "kb-cancel";
