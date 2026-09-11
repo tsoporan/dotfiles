@@ -214,7 +214,7 @@
 
     "custom/power": {
         "format": "⏻",
-        "tooltip-format": "Power menu",
-        "on-click": "wlogout"
+        "tooltip-format": "Lock screen",
+        "on-click": "pidof hyprlock || hyprlock"
     }
 }

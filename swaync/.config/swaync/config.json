@@ -82,7 +82,7 @@
         "actions": [
           {
             "label": "󰌾 Lock",
-            "command": "swaylock"
+            "command": "pidof hyprlock || hyprlock"
           },
           {
             "label": "󰍃 Logout", 
