@@ -5,3 +5,13 @@ __pycache__
 *.o
 *.dat
 *~
+
+**/.claude/settings.local.json
+
+# Personal local-only cruft convention (applies to every repo):
+#   - drop throwaway files/dirs under a "_local/" folder, or
+#   - name a one-off file "<name>.local.<ext>"
+# Repo-specific cruft that can't follow this convention goes in that repo's
+# .git/info/exclude instead (keeps the shared .gitignore clean for teammates).
+**/_local/
+*.local.*

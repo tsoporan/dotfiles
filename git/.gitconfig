@@ -1,7 +1,7 @@
 [user]
 	name = Titus Soporan
 	email = titus@tsoporan.com
-  signingkey = 0x882FD40C9CAEE059
+	signingkey = key::ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC9lFy9zXEqJPMXGKCyR1mmHRT6wUOArmD4g5EQbGx4CHWhGOBi3cFS+9TusFD0LqujndKlAMQaOuFnICzQEOgfDJ8coQuadUJO+RJ6NOtZTEvUjco3mGSs4dOS67Q5KrDhC1UL8iXpFN8kuW7LACtN8Nm9TUfcZHntde3WSEscPma345wo7SPnjLRAeRiBIaj5/RagkiJZflBAXLzBPnmk2OS6dqs5PxZ7P0cLESPy8ks0YI7pxHCKUE4ZoM4tNSlq09/8TWkz6mB3vwHL7l9EI9f/bXQnmYPHyhPC6XrPMoeiL7RDmDFhHnX78GzwOwnr1xjrr8xn4xbYhwgMZ4XvJ8H5A2Wyhy07HROiOnSf9hGF2PFywQeXteTsWzoL0KWZiuOuQZ4+IDl+Y5BB/K1ufcySRoADwHsFvypG5csrNsENuOaQ4mjOYYEKiJodNfIACy6RPNMC5ymweXvBmptjEGLkEaZjn9R/TqYQW87oTOZi738wigI5QKBma1yXXV17DHlLRIJkGVmIDlPFsvD+SpNjdgjOi4Kj1EPAA1FqpwLne5wUyfN3iOWfBOnbIKObM7d/gK9vudgR4rcOepOIMk0WOuU62RSPm+yS2+zxL9b3GK5GU6toyItei1KKiEJQRmJ2noep8BeUW5A7643++g4j8H2FXToABeeELNyAyw== openpgp:0xFB6690A1
 [core]
   excludesfile = ~/.gitignore_global
   editor = nvim
@@ -45,6 +45,7 @@
   tool = nvim -d
 [gpg]
   program = gpg2
+	format = ssh
 [alias]
   hist = log --pretty=format:\"%Cgreen%h %Creset%cd %Cblue[%cn] %Creset%s%C(yellow)%d%C(reset)\" --graph --date=relative --decorate --all
   llog = log --graph --name-status --pretty=format:\"%C(red)%h %C(reset)(%cd) %C(green)%an %Creset%s %C(yellow)%d%Creset\" --date=relative
@@ -67,3 +68,5 @@
   user = tsoporan
 [rerere]
 	enabled = true
+[gpg "ssh"]
+	allowedSignersFile = /home/tsoporan/.ssh/allowed_signers
