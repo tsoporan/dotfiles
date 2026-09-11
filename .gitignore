@@ -1,7 +1,8 @@
-plugged
-.netrwhist
-tags
-.gnupg
-.uuid
-packer_compiled.lua
 .claude/
+*.bak
+*.bak.*
+
+# GPG: only the two conf files are tracked. Never add keyrings or agent state.
+gnupg/.gnupg/**
+!gnupg/.gnupg/gpg.conf
+!gnupg/.gnupg/gpg-agent.conf

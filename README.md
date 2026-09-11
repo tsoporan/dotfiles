@@ -8,7 +8,7 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 - **WM:** [Hyprland](https://hyprland.org/) (Wayland)
 - **Terminal:** [Ghostty](https://ghostty.org/)
 - **Shell:** [Zsh](https://en.wikipedia.org/wiki/Z_shell) + [Antidote](https://github.com/mattmc3/antidote)
-- **Editor:** [Neovim](https://neovim.io/)
+- **Editor:** [Neovim](https://neovim.io/) (config not in this repo)
 - **Prompt:** [Starship](https://starship.rs/)
 - **Theme:** [Dracula](https://draculatheme.com/)
 - **Font:** [JetBrainsMono Nerd Font](https://www.jetbrains.com/lp/mono/)
@@ -21,14 +21,14 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `bat` | Syntax-highlighted cat |
 | `bin` | Custom utility scripts |
 | `btop` | System monitor |
-| `clipse` | Clipboard manager |
-| `docker` | Rootless Docker systemd units |
+| `clipse` | Clipse TUI config (not autostarted; Hyprland uses cliphist) |
 | `ghostty` | Terminal emulator |
 | `git` | Git config, aliases, delta pager |
-| `gnupg` | GPG agent and config |
+| `gnupg` | GPG agent confs only (`gpg.conf`, `gpg-agent.conf`) |
 | `hypr` | Hyprland, hyprpaper, hypridle, hyprlock |
 | `lazygit` | Git TUI |
 | `mise` | Runtime version management |
+| `ripgrep` | Ripgrep flags (`~/.ripgreprc`) |
 | `starship` | Shell prompt theme |
 | `swaync` | Notification center |
 | `systemd` | User services (syncthing, wallpaper-rotate) |
@@ -37,26 +37,34 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `zellij` | Terminal multiplexer |
 | `zsh` | Shell config, plugins, aliases |
 
+`gnupg` links the two conf files into `~/.gnupg`. Do not `stow --adopt gnupg` — that copies live keyrings into this tree.
+
+Machine-local zsh overrides go in `~/.zshrc.local` (not git).
+
 ## Usage
+
+Run commands from the repo root (`.stowrc` sets `--target=$HOME`).
 
 ```bash
 # Clone the repo
-git clone https://github.com/tsoporan/dotfiles.desktop.git
-cd dotfiles.desktop
+git clone git@github.com:tsoporan/dotfiles.git
+cd dotfiles
+
+# Dry-run / inventory / script syntax
+just check
 
 # Link a package (creates symlinks in $HOME)
 stow <package>
-
-# Link everything
-for d in */; do stow "$d"; done
 
 # Unlink a package
 stow -D <package>
 ```
 
+`just check` must be green before stowing a new machine. Do not blindly `stow */`.
+
 ## Key Tools
 
-- [fd](https://github.com/sharkdop/fd), [ripgrep](https://github.com/BurntSushi/ripgrep), [eza](https://github.com/eza-community/eza) -- modern coreutils
+- [fd](https://github.com/sharkdp/fd), [ripgrep](https://github.com/BurntSushi/ripgrep), [eza](https://github.com/eza-community/eza) -- modern coreutils
 - [zoxide](https://github.com/ajeetdsouza/zoxide) -- smart cd
 - [fzf](https://github.com/junegunn/fzf) -- fuzzy finder
 - [wofi](https://hg.sr.ht/~scoopta/wofi) + [wofi-pass](https://github.com/schmidtandreas/wofi-pass) -- app launcher + password management

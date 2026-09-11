@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Show 3-month calendar in a floating terminal
+
+ghostty --class=calendar-popup -e bash -c 'cal -3; read -n 1 -s -r -p ""'

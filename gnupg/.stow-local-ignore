@@ -1,0 +1,29 @@
+# Local ignore replaces Stow's built-in list for this package, so keep
+# the defaults plus GPG runtime/key material.
+#
+# Never `stow --adopt gnupg` — that copies ~/.gnupg keyrings into git.
+
+RCS
+.+,v
+
+CVS
+\.\#.+
+\.cvsignore
+
+\.svn
+_darcs
+\.hg
+
+\.git
+\.gitignore
+\.gitmodules
+
+.+~
+\#.*\#
+
+^/README.*
+^/LICENSE.*
+^/COPYING
+
+# Only gpg.conf and gpg-agent.conf should be linked into ~/.gnupg.
+\.gnupg/(?!gpg\.conf$|gpg-agent\.conf$).+

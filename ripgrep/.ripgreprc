@@ -1,0 +1,38 @@
+# ==============================================================================
+# Ripgrep Configuration
+# Last updated: 2025-12-26
+# ==============================================================================
+# Docs: https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md
+#
+# This file is read when RIPGREP_CONFIG_PATH is set in environment.
+# One flag per line. Comments start with #.
+# ==============================================================================
+
+# Smart case: case-insensitive unless pattern has uppercase
+--smart-case
+
+# Search hidden files (dotfiles)
+--hidden
+
+# Follow symlinks
+--follow
+
+# Don't search these directories
+--glob=!.git
+--glob=!.svn
+--glob=!.hg
+--glob=!node_modules
+--glob=!vendor
+--glob=!.venv
+--glob=!venv
+--glob=!__pycache__
+--glob=!.mypy_cache
+--glob=!.pytest_cache
+--glob=!.ruff_cache
+--glob=!*.pyc
+--glob=!.next
+--glob=!.nuxt
+--glob=!dist
+--glob=!build
+--glob=!target
+--glob=!.cargo

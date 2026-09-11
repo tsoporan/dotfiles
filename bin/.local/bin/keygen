@@ -1,2 +1,3 @@
+#!/usr/bin/env bash
 # Keys with comment for easy id
 ssh-keygen -C "$(whoami)@$(hostname)-$(date -I)"

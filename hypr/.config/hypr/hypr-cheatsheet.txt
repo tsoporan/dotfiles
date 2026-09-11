@@ -4,12 +4,18 @@
 | Launch & Session     | SUPER+Return         | Open terminal (ghostty)                                   |
 |                      | SUPER+d              | App launcher (wofi drun)                                  |
 |                      | SUPER+Tab            | Window switcher (wofi window list)                        |
+|                      | SUPER+Shift+Tab      | Show this cheat sheet                                     |
 |                      | SUPER+Shift+g        | Launch Lutris                                             |
 |                      | SUPER+Shift+r        | Reload Hyprland                                           |
 |                      | SUPER+Shift+e        | Exit Hyprland                                             |
-| Locking & Idle       | SUPER+Shift+l        | Manual Hyprlock                                           |
-| Focus & Layout       | SUPER+f              | Toggle fullscreen                                         |
-|                      | SUPER+s              | Toggle hy3 tab/tile                                       |
+| Locking & Idle       | SUPER+Ctrl+l         | Manual Hyprlock                                           |
+| Focus & Layout       | SUPER+f              | Toggle true fullscreen                                    |
+|                      | SUPER+a              | Maximize (keep bar)                                       |
+|                      | SUPER+Shift+a        | True fullscreen                                           |
+|                      | SUPER+s              | Toggle group (tabbed container)                           |
+|                      | SUPER+e              | Toggle dwindle split h/v                                  |
+|                      | SUPER+w              | Cycle group tabs forward                                  |
+|                      | SUPER+Shift+w        | Cycle group tabs backward                                 |
 |                      | SUPER+q              | Close window                                              |
 |                      | SUPER+Escape         | Last workspace                                            |
 |                      | SUPER+Space          | Focus floating window                                     |
@@ -29,7 +35,7 @@
 | Scratchpad           | SUPER+-              | Toggle scratchpad                                         |
 |                      | SUPER+Shift+-        | Move window to scratchpad                                 |
 | Screenshots          | SUPER+Shift+s        | Area screenshot to clipboard                              |
-|                      | SUPER+Shift+a        | Area screenshot to satty (annotate/save)                  |
+|                      | SUPER+Shift+x        | Area screenshot to satty (annotate/save)                  |
 |                      | Print                | Fullscreen screenshot to satty                            |
 | Workspaces           | SUPER+1-0            | Switch workspaces                                         |
 |                      | SUPER+Shift+1-0      | Move window to workspace                                  |
@@ -40,5 +46,4 @@
 |                      | resize: Enter / Esc  | Exit resize mode                                          |
 | Mouse                | SUPER+LMB drag       | Move window                                               |
 |                      | SUPER+RMB drag       | Resize window                                             |
-| Cheat Sheet          | SUPER+Shift+Tab      | Show this cheat sheet                                     |
 +----------------------+----------------------+-----------------------------------------------------------+

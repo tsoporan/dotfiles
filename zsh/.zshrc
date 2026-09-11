@@ -11,7 +11,6 @@
 #   - starship (prompt)
 #   - zoxide (smart cd)
 #   - atuin (history search)
-#   - direnv (per-directory env)
 #   - fzf, fd, bat, eza (modern CLI tools)
 #   - mise (runtime version manager - replaces nvm/pyenv/etc)
 #
@@ -40,6 +39,19 @@ source /usr/share/fzf/key-bindings.zsh
 bindkey -v                        # Vi mode
 bindkey "^ " autosuggest-accept   # Ctrl+Space accepts autosuggestion
 export KEYTIMEOUT=1               # Reduce mode switch delay (set in .zshenv too)
+
+# ------------------------------------------------------------------------------
+# Wayland env self-heal
+# ------------------------------------------------------------------------------
+# Multiplexer servers (zellij/tmux) started under X11 keep that environment for
+# every pane they spawn, so nvim/wl-copy never see WAYLAND_DISPLAY after a
+# switch to Hyprland. Recover it from the live compositor socket.
+if [[ -z $WAYLAND_DISPLAY && -n $XDG_RUNTIME_DIR ]]; then
+  for _wl_sock in $XDG_RUNTIME_DIR/wayland-<->(N); do
+    [[ -S $_wl_sock ]] && export WAYLAND_DISPLAY=${_wl_sock:t} XDG_SESSION_TYPE=wayland && break
+  done
+  unset _wl_sock
+fi
 
 # ------------------------------------------------------------------------------
 # Shell Options
@@ -155,6 +167,17 @@ eval "$(atuin init zsh)"
 eval "$(mise activate zsh)"
 
 # ------------------------------------------------------------------------------
+# GPG Agent (SSH signing via YubiKey)
+# Remote: use stable symlink to forwarded agent (updated by ~/.ssh/rc on each login)
+# Local: use gpg-agent with SSH support
+# ------------------------------------------------------------------------------
+if [[ -S "$HOME/.ssh/agent-forward.sock" ]] && [[ -n "$ZELLIJ" || -n "$ZELLIJ_SESSION_NAME" ]]; then
+    export SSH_AUTH_SOCK="$HOME/.ssh/agent-forward.sock"
+elif [[ -z "$SSH_AUTH_SOCK" ]] || [[ "$SSH_AUTH_SOCK" == *"gpg-agent"* ]]; then
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+fi
+
+# ------------------------------------------------------------------------------
 # Docker (Rootless)
 # ------------------------------------------------------------------------------
 export DOCKER_HOST=unix://$XDG_RUNTIME_DIR/docker.sock
@@ -175,3 +198,6 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # zprof  # Uncomment to see profiling results
+
+# Machine-local overrides (not in git). Installers should append here, not above.
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

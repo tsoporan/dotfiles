@@ -1,6 +1,7 @@
 // ==============================================================================
 // Zellij Configuration
 // Last updated: 2025-12-26
+// Stow-managed. If Zellij rewrites this file, restore from git.
 // ==============================================================================
 //
 // Keybinding cheatsheet:
@@ -343,9 +344,9 @@ default_mode "normal"
 // Options:
 //   - true (default)
 //   - false
-// 
-// mouse_mode false
- 
+//
+mouse_mode false
+
 // Toggle having pane frames around the panes
 // Options:
 //   - true (default, enabled)
@@ -388,7 +389,11 @@ scroll_buffer_size 50000
 // copy_command "xclip -selection clipboard" // x11
 // copy_command "wl-copy"                    // wayland
 // copy_command "pbcopy"                     // osx
-copy_command "wl-copy"
+//
+// Disabled: copy_command sent selections to the system clipboard only, which
+// broke middle-click (primary-selection) paste. With mouse_mode false, the
+// terminal handles selection + middle-click paste natively.
+// copy_command "wl-copy"
  
 // Choose the destination for copied text
 // Allows using the primary selection buffer (on x11/wayland) instead of the system clipboard.
