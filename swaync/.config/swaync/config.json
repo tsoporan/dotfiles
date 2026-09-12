@@ -1,5 +1,5 @@
 {
-  // SwayNC Configuration - Dracula Themed for Hyprland
+  // SwayNC — black + yellow desktop, Adwaita-dark GTK
   "$schema": "https://raw.githubusercontent.com/ErikReider/SwayNotificationCenter/main/src/configSchema.json",
   
   // Positioning and Display

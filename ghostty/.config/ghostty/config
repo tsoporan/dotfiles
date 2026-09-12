@@ -25,20 +25,20 @@ selection-background = #2a2a2a
 selection-foreground = #e6fb04
 
 palette = 0=#111111
-palette = 1=#ff5555
-palette = 2=#50fa7b
+palette = 1=#c01c28
+palette = 2=#26a269
 palette = 3=#e6fb04
-palette = 4=#8a9bb5
-palette = 5=#ffb86c
-palette = 6=#8be9fd
+palette = 4=#3584e4
+palette = 5=#813d9c
+palette = 6=#1a9b8a
 palette = 7=#e0e0e0
 palette = 8=#606060
-palette = 9=#ff6b6b
-palette = 10=#69ff94
+palette = 9=#e01b24
+palette = 10=#33d17a
 palette = 11=#f5ff5a
-palette = 12=#b8c4d8
-palette = 13=#ffc98a
-palette = 14=#b8f4ff
+palette = 12=#62a0ea
+palette = 13=#c061cb
+palette = 14=#5bc8af
 palette = 15=#ffffff
 
 # ------------------------------------------------------------------------------

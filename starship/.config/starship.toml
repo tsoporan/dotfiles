@@ -4,7 +4,7 @@
 # ==============================================================================
 #
 # Docs: https://starship.rs/config/
-# Performance-focused config with Dracula-inspired colors
+# Performance-focused config; yellow accent matches the desktop
 #
 # ==============================================================================
 
@@ -48,7 +48,7 @@ read_only_style = "red"
 [git_branch]
 format = "[$symbol$branch]($style) "
 symbol = " "
-style = "bold purple"
+style = "bold yellow"
 
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
@@ -107,8 +107,8 @@ show_milliseconds = false
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"
 vimcmd_symbol = "[❮](bold green)"
-vimcmd_replace_one_symbol = "[❮](bold purple)"
-vimcmd_replace_symbol = "[❮](bold purple)"
+vimcmd_replace_one_symbol = "[❮](bold yellow)"
+vimcmd_replace_symbol = "[❮](bold yellow)"
 vimcmd_visual_symbol = "[❮](bold yellow)"
 
 # ------------------------------------------------------------------------------

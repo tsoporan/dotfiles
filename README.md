@@ -10,7 +10,7 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 - **Shell:** [Zsh](https://en.wikipedia.org/wiki/Z_shell) + [Antidote](https://github.com/mattmc3/antidote)
 - **Editor:** [Neovim](https://neovim.io/) (config not in this repo)
 - **Prompt:** [Starship](https://starship.rs/)
-- **Theme:** black + electric yellow (`#e6fb04`); GTK still [Dracula](https://draculatheme.com/)
+- **Theme:** black + electric yellow (`#e6fb04`); GTK [Adwaita-dark](https://gnome.pages.gitlab.gnome.org/libadwaita/)
 - **Font:** [JetBrainsMono Nerd Font](https://www.jetbrains.com/lp/mono/)
 
 ## Stow Packages

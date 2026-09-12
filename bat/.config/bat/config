@@ -4,8 +4,8 @@
 # ==============================================================================
 # Docs: https://github.com/sharkdp/bat#configuration-file
 
-# Theme (matches Dracula used elsewhere)
---theme="Dracula"
+# Follow the terminal palette (Ghostty black + yellow)
+--theme="ansi"
 
 # Output style: show line numbers, git changes, and filename header
 --style="numbers,changes,header"

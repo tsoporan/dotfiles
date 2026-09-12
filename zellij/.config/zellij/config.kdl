@@ -307,7 +307,60 @@ load_plugins {
  
 // Choose the theme that is specified in the themes section.
 // Default: default
-theme "dracula"
+theme "black-yellow"
+
+themes {
+    black-yellow {
+        text_unselected {
+            base "#e0e0e0"
+            background "#111111"
+            emphasis_0 "#e6fb04"
+            emphasis_1 "#3584e4"
+            emphasis_2 "#26a269"
+            emphasis_3 "#c01c28"
+        }
+        text_selected {
+            base "#111111"
+            background "#e6fb04"
+            emphasis_0 "#c01c28"
+            emphasis_1 "#3584e4"
+            emphasis_2 "#26a269"
+            emphasis_3 "#111111"
+        }
+        ribbon_unselected {
+            base "#e0e0e0"
+            background "#202020"
+            emphasis_0 "#e6fb04"
+            emphasis_1 "#e0e0e0"
+            emphasis_2 "#3584e4"
+            emphasis_3 "#c01c28"
+        }
+        ribbon_selected {
+            base "#111111"
+            background "#e6fb04"
+            emphasis_0 "#c01c28"
+            emphasis_1 "#111111"
+            emphasis_2 "#111111"
+            emphasis_3 "#111111"
+        }
+        frame_selected {
+            base "#e6fb04"
+            background "#111111"
+            emphasis_0 "#e6fb04"
+            emphasis_1 "#e6fb04"
+            emphasis_2 "#e6fb04"
+            emphasis_3 "#e6fb04"
+        }
+        frame_unselected {
+            base "#202020"
+            background "#111111"
+            emphasis_0 "#606060"
+            emphasis_1 "#606060"
+            emphasis_2 "#606060"
+            emphasis_3 "#606060"
+        }
+    }
+}
  
 // Choose the base input mode of zellij.
 // Default: normal

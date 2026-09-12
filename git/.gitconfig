@@ -12,7 +12,7 @@
 [delta]
   plus-style = syntax "#003800"
   minus-style = syntax "#3f0001"
-  syntax-theme = Dracula
+  syntax-theme = ansi
   line-numbers = true
 [delta "line-numbers"]
   line-numbers-left-style = cyan
