@@ -448,8 +448,10 @@ serialize_pane_viewport true
 // Scrollback lines to serialize along with the pane viewport when serializing sessions, 0
 // defaults to the scrollback size. If this number is higher than the scrollback size, it will
 // also default to the scrollback size. This does nothing if `serialize_pane_viewport` is not true.
-// 
-// scrollback_lines_to_serialize 10000
+//
+// After reboot the processes are gone; this is the last N lines of text so you
+// can see which agent/tab was which before starting a fresh session.
+scrollback_lines_to_serialize 10000
  
 // Enable or disable the rendering of styled and colored underlines (undercurl).
 // May need to be disabled for certain unsupported terminals
@@ -458,9 +460,8 @@ serialize_pane_viewport true
 // 
 // styled_underlines false
  
-// How often in seconds sessions are serialized
-// 
-// serialization_interval 10000
+// How often in seconds sessions are serialized (default 60).
+serialization_interval 60
  
 // Enable or disable writing of session metadata to disk (if disabled, other sessions might not know
 // metadata info on this session)

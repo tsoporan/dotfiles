@@ -50,7 +50,7 @@ check-scripts:
     set -euo pipefail
     cd "{{ justfile_directory() }}"
     shopt -s nullglob
-    scripts=(bin/.local/bin/*)
+    scripts=(bin/.local/bin/* hypr/.config/hypr/scripts/*)
     if (( ${#scripts[@]} == 0 )); then
       echo "no scripts" >&2
       exit 1

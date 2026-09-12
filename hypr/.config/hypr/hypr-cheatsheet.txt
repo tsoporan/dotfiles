@@ -26,17 +26,18 @@
 | Window Movement      | SUPER+Shift+Arrows   | Move window (arrow keys)                                  |
 |                      | SUPER+Shift+h/j/k/l  | Move window (vi keys)                                     |
 | Window Resizing      | SUPER+Ctrl+h/j/k/l   | Resize window (vi keys)                                   |
-| Clipboard & Text     | SUPER+p              | Clipboard history (cliphist)                              |
-|                      | SUPER+c              | Send copy (Ctrl+Shift+C)                                  |
-|                      | SUPER+v              | Send paste (Ctrl+Shift+V)                                 |
+| Clipboard & Text     | SUPER+p              | Clipboard history (clipse)                                |
+|                      | SUPER+c              | Copy (Ctrl+C, or Ctrl+Insert in terminals)                |
+|                      | SUPER+v              | Paste (Ctrl+V, or Shift+Insert in terminals)              |
 | Security             | SUPER+T              | Wofi-pass copy                                            |
 | Notifications        | SUPER+n              | Toggle SwayNC                                             |
 |                      | SUPER+Shift+n        | Toggle DND                                                |
 | Scratchpad           | SUPER+-              | Toggle scratchpad                                         |
 |                      | SUPER+Shift+-        | Move window to scratchpad                                 |
 | Screenshots          | SUPER+Shift+s        | Area screenshot to clipboard                              |
-|                      | SUPER+Shift+x        | Area screenshot to satty (annotate/save)                  |
-|                      | Print                | Fullscreen screenshot to satty                            |
+|                      | SUPER+Shift+x        | Area to satty (Enter: copy+save, Esc: discard)            |
+|                      | Print                | Fullscreen to satty (same Enter/Esc)                      |
+|                      | SUPER+Print          | Color picker (copy hex)                                   |
 | Workspaces           | SUPER+1-0            | Switch workspaces                                         |
 |                      | SUPER+Shift+1-0      | Move window to workspace                                  |
 | Workspace Cycling    | SUPER+scroll up/down | Cycle workspaces                                          |

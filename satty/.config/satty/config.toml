@@ -1,0 +1,27 @@
+# Annotate, Enter copies to clipboard + writes ~/Pictures, then exits.
+# Super+Shift+s still skips this and copies the raw region.
+
+[general]
+copy-command = "wl-copy"
+early-exit = ["copy", "save"]
+output-filename = "~/Pictures/screenshot-%Y-%m-%d_%H-%M-%S.png"
+actions-on-enter = ["save-to-clipboard", "save-to-file", "exit"]
+actions-on-escape = ["exit"]
+initial-tool = "arrow"
+corner-roundness = 0
+floating-hack = true
+no-window-decoration = true
+notification-thumbnail = "screenshot"
+
+[font]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[color-palette]
+palette = [
+    "#e6fb04ff",
+    "#ff5555ff",
+    "#50fa7bff",
+    "#8be9fdff",
+    "#ffffffff",
+]

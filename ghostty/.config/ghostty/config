@@ -1,6 +1,6 @@
 # ==============================================================================
 # Ghostty Terminal Configuration
-# Last updated: 2025-12-26
+# Last updated: 2026-09-11
 # ==============================================================================
 #
 # Docs: https://ghostty.org/docs/config
@@ -17,20 +17,36 @@ adjust-cell-height = 2
 bold-is-bright = false
 
 # ------------------------------------------------------------------------------
-# Theme
+# Theme (same black + electric yellow as Hyprland / waybar)
 # ------------------------------------------------------------------------------
-theme = Dracula
 background = #111111
-foreground = #f8f8f2
-selection-background = #44475a
-selection-foreground = #f8f8f2
+foreground = #e0e0e0
+selection-background = #2a2a2a
+selection-foreground = #e6fb04
+
+palette = 0=#111111
+palette = 1=#ff5555
+palette = 2=#50fa7b
+palette = 3=#e6fb04
+palette = 4=#8a9bb5
+palette = 5=#ffb86c
+palette = 6=#8be9fd
+palette = 7=#e0e0e0
+palette = 8=#606060
+palette = 9=#ff6b6b
+palette = 10=#69ff94
+palette = 11=#f5ff5a
+palette = 12=#b8c4d8
+palette = 13=#ffc98a
+palette = 14=#b8f4ff
+palette = 15=#ffffff
 
 # ------------------------------------------------------------------------------
 # Cursor
 # ------------------------------------------------------------------------------
 cursor-style = block
 cursor-style-blink = false
-cursor-color = #bd93f9
+cursor-color = #e6fb04
 
 # ------------------------------------------------------------------------------
 # Window
@@ -44,13 +60,22 @@ confirm-close-surface = false
 # ------------------------------------------------------------------------------
 # Behavior
 # ------------------------------------------------------------------------------
-copy-on-select = clipboard
+# PRIMARY only. clipboard would overwrite Ctrl+V on every highlight.
+copy-on-select = true
 mouse-hide-while-typing = true
 scrollback-limit = 50000
+
+# Hyprland: avoid the GTK renderer stall
+# https://github.com/ghostty-org/ghostty/discussions/3224
+async-backend = epoll
 
 # ------------------------------------------------------------------------------
 # Keybindings
 # ------------------------------------------------------------------------------
+# Super+C/V inject these in terminals (see hypr/scripts/clipboard.sh)
+keybind = shift+insert=paste_from_clipboard
+keybind = control+insert=copy_to_clipboard
+
 # Shift+Enter sends literal newline (useful in some TUI apps)
 keybind = shift+enter=text:\n
 

@@ -1,0 +1,6 @@
+allow_images=true
+allow_markup=true
+insensitive=true
+hide_scroll=true
+matching=contains
+no_actions=true
