@@ -19,12 +19,12 @@ bold-is-bright = false
 # ------------------------------------------------------------------------------
 # Theme (same black + electric yellow as Hyprland / waybar)
 # ------------------------------------------------------------------------------
-background = #111111
+background = #0a0a0a
 foreground = #e0e0e0
 selection-background = #2a2a2a
 selection-foreground = #e6fb04
 
-palette = 0=#111111
+palette = 0=#0a0a0a
 palette = 1=#c01c28
 palette = 2=#26a269
 palette = 3=#e6fb04
@@ -56,6 +56,10 @@ window-padding-y = 4
 window-decoration = false
 window-inherit-working-directory = true
 confirm-close-surface = false
+background-opacity = 1
+unfocused-split-opacity = 1
+# Do not use Adwaita window chrome; that grey is lighter than the bar.
+window-theme = ghostty
 
 # ------------------------------------------------------------------------------
 # Behavior

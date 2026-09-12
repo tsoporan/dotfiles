@@ -22,6 +22,7 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `bin` | Custom utility scripts |
 | `btop` | System monitor |
 | `clipse` | Clipse clipboard manager (Hyprland autostarts `clipse -listen`) |
+| `eza` | `ls` replacement; directories use Adwaita blue, not eza’s default purple |
 | `ghostty` | Terminal emulator |
 | `git` | Git config, aliases, delta pager |
 | `gnupg` | GPG agent confs only (`gpg.conf`, `gpg-agent.conf`) |

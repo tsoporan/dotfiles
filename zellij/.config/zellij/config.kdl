@@ -313,19 +313,19 @@ themes {
     black-yellow {
         text_unselected {
             base "#e0e0e0"
-            background "#111111"
+            background "#0a0a0a"
             emphasis_0 "#e6fb04"
             emphasis_1 "#3584e4"
             emphasis_2 "#26a269"
             emphasis_3 "#c01c28"
         }
         text_selected {
-            base "#111111"
+            base "#0a0a0a"
             background "#e6fb04"
             emphasis_0 "#c01c28"
             emphasis_1 "#3584e4"
             emphasis_2 "#26a269"
-            emphasis_3 "#111111"
+            emphasis_3 "#0a0a0a"
         }
         ribbon_unselected {
             base "#e0e0e0"
@@ -336,16 +336,16 @@ themes {
             emphasis_3 "#c01c28"
         }
         ribbon_selected {
-            base "#111111"
+            base "#0a0a0a"
             background "#e6fb04"
             emphasis_0 "#c01c28"
-            emphasis_1 "#111111"
-            emphasis_2 "#111111"
-            emphasis_3 "#111111"
+            emphasis_1 "#0a0a0a"
+            emphasis_2 "#0a0a0a"
+            emphasis_3 "#0a0a0a"
         }
         frame_selected {
             base "#e6fb04"
-            background "#111111"
+            background "#0a0a0a"
             emphasis_0 "#e6fb04"
             emphasis_1 "#e6fb04"
             emphasis_2 "#e6fb04"
@@ -353,7 +353,7 @@ themes {
         }
         frame_unselected {
             base "#202020"
-            background "#111111"
+            background "#0a0a0a"
             emphasis_0 "#606060"
             emphasis_1 "#606060"
             emphasis_2 "#606060"

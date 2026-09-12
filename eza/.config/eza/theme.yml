@@ -1,0 +1,11 @@
+# eza default paints directories Purple (ANSI 5). Use Adwaita blue instead.
+colourful: true
+
+filekinds:
+  directory:
+    foreground: Blue
+    is_bold: true
+  symlink:
+    foreground: Cyan
+  executable:
+    foreground: Green
