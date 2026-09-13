@@ -1,9 +1,12 @@
 # ==============================================================================
-# Antidote Plugin List
-# Last updated: 2025-12-26
+# Antidote plugin list
 # ==============================================================================
 #
-# After editing, run: antidote update
+# This file is in git. Clones and the generated ~/.zsh_plugins.zsh are not.
+# Config: ~/.config/antidote/config.zsh (stowed from zsh/.config/antidote/).
+#
+#   just zsh-plugins-outdated   # dry-run
+#   just zsh-plugins-update     # pull plugins + antidote, snapshot SHAs
 #
 # Plugin syntax:
 #   repo/plugin                     - Standard load

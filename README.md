@@ -66,6 +66,25 @@ stow -D <package>
 
 `just check` must be green before stowing a new machine. Do not blindly `stow */`.
 
+## Zsh plugins
+
+[Antidote](https://github.com/mattmc3/antidote) reads `zsh/.zsh_plugins.txt`. That file is in git. The rest is machine-local:
+
+| Path | What |
+|---|---|
+| `~/.antidote` | Plugin manager, cloned on first interactive zsh |
+| `~/.cache/antidote/` | Plugin git clones (`owner/repo`) |
+| `~/.zsh_plugins.zsh` | Generated static load file |
+| `~/.local/share/antidote/snapshots/` | SHA snapshots after an update |
+| `~/.config/antidote/config.zsh` | zstyles (stowed from `zsh/.config/antidote/`) |
+
+```bash
+just zsh-plugins-outdated   # dry-run
+just zsh-plugins-update     # pull plugins + antidote, then snapshot
+```
+
+`antidote update` walks every clone under `~/.cache/antidote`, including leftovers not in the plugin list. Drop unused clones with `rm`. If a pull is bad, `zsh -c 'source ~/.antidote/antidote.zsh && antidote snapshot restore'`.
+
 ## Key Tools
 
 - [fd](https://github.com/sharkdp/fd), [ripgrep](https://github.com/BurntSushi/ripgrep), [eza](https://github.com/eza-community/eza) -- modern coreutils
