@@ -26,15 +26,16 @@ check-stow:
     fi
     echo "stow -n: ok"
 
-# gnupg package must contain only the two conf files
+# gnupg package must contain only the conf files
 check-gnupg:
     #!/usr/bin/env bash
     set -euo pipefail
     cd "{{ justfile_directory() }}"
     failed=0
+    allowed='gpg.conf|gpg-agent.conf'
     while IFS= read -r f; do
       base="${f##*/}"
-      if [[ "$base" != gpg.conf && "$base" != gpg-agent.conf ]]; then
+      if [[ ! $base =~ ^($allowed)$ ]]; then
         printf 'unexpected in gnupg package: %s\n' "$f" >&2
         failed=1
       fi
@@ -49,7 +50,7 @@ check-gnupg:
           *) continue ;;
         esac
         base="${link##*/}"
-        if [[ "$base" != gpg.conf && "$base" != gpg-agent.conf ]]; then
+        if [[ ! $base =~ ^($allowed)$ ]]; then
           printf 'leftover stow link: %s -> %s\n' "$link" "$(readlink "$link")" >&2
           failed=1
         fi

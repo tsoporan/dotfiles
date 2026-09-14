@@ -25,7 +25,8 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `eza` | `ls` replacement; directories use Adwaita blue, not eza’s default purple |
 | `ghostty` | Terminal emulator |
 | `git` | Git config, aliases, delta pager |
-| `gnupg` | GPG agent confs only (`gpg.conf`, `gpg-agent.conf`) |
+| `gnupg` | GPG agent confs (`gpg.conf`, `gpg-agent.conf`) |
+| `sequoia` | `sq` config: encrypt/sign as self via the YubiKey |
 | `gtk` | GTK 3/4 settings (theme, dark, primary paste) |
 | `hypr` | Hyprland, hyprpaper, hypridle, hyprlock |
 | `lazygit` | Git TUI |
@@ -41,7 +42,16 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `zellij` | Terminal multiplexer |
 | `zsh` | Shell config, plugins, aliases |
 
-`gnupg` links the two conf files into `~/.gnupg`. Do not `stow --adopt gnupg` — that copies live keyrings into this tree.
+`gnupg` links the conf files into `~/.gnupg`. Do not `stow --adopt gnupg` — that copies live keyrings into this tree.
+
+File encrypt/sign/decrypt/verify (YubiKey subkeys, `sq` via gpg-agent):
+
+```bash
+pgpe notes.txt      # -> notes.txt.pgp
+pgpd notes.txt.pgp  # -> notes.txt
+pgps notes.txt      # -> notes.txt.sig
+pgpv notes.txt      # verifies notes.txt.sig
+```
 
 Machine-local zsh overrides go in `~/.zshrc.local` (not git).
 

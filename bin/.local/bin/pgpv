@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Verify a detached signature. pgpv FILE looks for FILE.sig; pgpv FILE.sig uses FILE.
+set -euo pipefail
+unset XAUTHORITY
+export GPG_TTY=${GPG_TTY:-${TTY:-}}
+if [[ $# -ne 1 || ! -f $1 ]]; then
+  printf 'usage: pgpv FILE|FILE.sig\n' >&2
+  exit 1
+fi
+if [[ $1 == *.sig ]]; then
+  sig=$1
+  file=${1%.sig}
+else
+  file=$1
+  sig=$1.sig
+fi
+if [[ ! -f $file ]]; then
+  printf 'pgpv: missing %s\n' "$file" >&2
+  exit 1
+fi
+if [[ ! -f $sig ]]; then
+  printf 'pgpv: missing %s\n' "$sig" >&2
+  exit 1
+fi
+sq verify --signature-file "$sig" "$file"

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Decrypt FILE.pgp/.gpg/.asc (YubiKey encryption subkey via gpg-agent).
+set -euo pipefail
+unset XAUTHORITY
+export GPG_TTY=${GPG_TTY:-${TTY:-}}
+if [[ $# -ne 1 || ! -f $1 ]]; then
+  printf 'usage: pgpd FILE.pgp\n' >&2
+  exit 1
+fi
+in=$1
+case $in in
+  *.pgp) out=${in%.pgp} ;;
+  *.gpg) out=${in%.gpg} ;;
+  *.asc) out=${in%.asc} ;;
+  *)
+    printf 'pgpd: expected .pgp, .gpg, or .asc\n' >&2
+    exit 1
+    ;;
+esac
+if [[ -e $out ]]; then
+  printf 'pgpd: %s exists\n' "$out" >&2
+  exit 1
+fi
+tmp=$out.$$
+cleanup() { rm -f "$tmp"; }
+trap cleanup EXIT
+sq decrypt --output "$tmp" "$in"
+mv -f "$tmp" "$out"
+trap - EXIT
+printf '%s\n' "$out"

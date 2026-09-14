@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Encrypt and sign FILE to FILE.pgp for yourself (YubiKey via gpg-agent).
+set -euo pipefail
+# Empty XAUTHORITY makes gpg-agent return "IPC syntax error".
+unset XAUTHORITY
+export GPG_TTY=${GPG_TTY:-${TTY:-}}
+if [[ $# -ne 1 || ! -f $1 ]]; then
+  printf 'usage: pgpe FILE\n' >&2
+  exit 1
+fi
+out=$1.pgp
+if [[ -e $out ]]; then
+  printf 'pgpe: %s exists\n' "$out" >&2
+  exit 1
+fi
+tmp=$out.$$
+cleanup() { rm -f "$tmp"; }
+trap cleanup EXIT
+sq encrypt --for-self --signer-self --output "$tmp" "$1"
+mv -f "$tmp" "$out"
+trap - EXIT
+printf '%s\n' "$out"

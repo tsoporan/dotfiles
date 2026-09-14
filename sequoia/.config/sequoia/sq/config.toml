@@ -1,0 +1,9 @@
+# Daily file encrypt/sign uses the YubiKey via gpg-agent.
+# Offline certify key stays GnuPG / DrDuh. Do not generate a new sq key.
+
+[encrypt]
+for-self = ["BFF6620C89B1F3A74BFB008059D03D532467C916"]
+profile = "rfc4880"
+
+[sign]
+signer-self = ["BFF6620C89B1F3A74BFB008059D03D532467C916"]

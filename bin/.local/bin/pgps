@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Detached signature FILE.sig (YubiKey signing subkey via gpg-agent).
+set -euo pipefail
+unset XAUTHORITY
+export GPG_TTY=${GPG_TTY:-${TTY:-}}
+if [[ $# -ne 1 || ! -f $1 ]]; then
+  printf 'usage: pgps FILE\n' >&2
+  exit 1
+fi
+out=$1.sig
+if [[ -e $out ]]; then
+  printf 'pgps: %s exists\n' "$out" >&2
+  exit 1
+fi
+tmp=$out.$$
+cleanup() { rm -f "$tmp"; }
+trap cleanup EXIT
+sq sign --signer-self --signature-file "$tmp" "$1"
+mv -f "$tmp" "$out"
+trap - EXIT
+printf '%s\n' "$out"
