@@ -1,11 +1,10 @@
 # ==============================================================================
 # tsoporan's zshenv
-# Last updated: 2025-12-26
+# Last updated: 2026-09-13
 # ==============================================================================
 #
-# This file is sourced for ALL zsh sessions (interactive, login, scripts).
-# Keep it minimal - only environment variables that ALL sessions need.
-# Interactive-only config goes in .zshrc.
+# Sourced for ALL zsh sessions (interactive, login, scripts).
+# Keep it minimal. Interactive-only config goes in .zshrc.
 #
 # ==============================================================================
 
@@ -37,13 +36,13 @@ export FZF_ALT_C_COMMAND="fd -t d --hidden --follow --exclude .git"
 # Ctrl+R: handled by atuin (not fzf)
 
 # ------------------------------------------------------------------------------
-# ZSH History
+# ZSH History (fallback only; Atuin is the real search)
 # ------------------------------------------------------------------------------
-export HISTSIZE=1000000
-export SAVEHIST=1000000
+export HISTSIZE=10000
+export SAVEHIST=10000
 export HISTFILE=~/.zhistory
-export HISTORY_IGNORE="(fc|fg|bg|jobs|kill|exit|ls|cd|pwd|echo|man|cat|less|more|vi|vim|nvim|v)"
-export KEYTIMEOUT=1               # Faster vi mode switching
+export HISTORY_IGNORE="(fc|fg|bg|jobs|kill|exit|ls|l|ll|s|clear|cd|pwd|echo|man|cat|less|more|vi|vim|nvim|v|z|zi|zb)"
+export KEYTIMEOUT=1
 
 # ------------------------------------------------------------------------------
 # ZSH Autosuggestions
@@ -52,27 +51,11 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ffffff,bg=#ff5f00,bold,underline"
 export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # ------------------------------------------------------------------------------
-# Language Runtimes
-# ------------------------------------------------------------------------------
-# Go
-export GOPATH="${HOME}/go"
-export GOBIN="${GOPATH}/bin"
-
-# Ruby (lazy - only set if gem command exists)
-if command -v gem &>/dev/null; then
-  export GEM_HOME="${HOME}/.gem/ruby"
-  export PATH="$PATH:$GEM_HOME/bin"
-fi
-
-# ------------------------------------------------------------------------------
 # PATH
 # ------------------------------------------------------------------------------
+export GOPATH="${HOME}/go"
+export GOBIN="${GOPATH}/bin"
 export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$GOBIN:$PATH"
-
-# ------------------------------------------------------------------------------
-# GPG
-# ------------------------------------------------------------------------------
-export GPG_TTY=$(tty)
 
 # ------------------------------------------------------------------------------
 # Ripgrep

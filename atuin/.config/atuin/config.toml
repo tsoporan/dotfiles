@@ -43,7 +43,7 @@ search_mode = "skim"
 ## which filter mode to use by default
 ## possible values: "global", "host", "session", "session-preload", "directory", "workspace"
 ## consider using search.filters to customize the enablement and order of filter modes
-filter_mode = "host"
+filter_mode = "workspace"
 
 ## With workspace filtering enabled, Atuin will filter for commands executed
 ## in any directory within a git repository tree (default: false).
@@ -51,7 +51,7 @@ filter_mode = "host"
 ## To use workspace mode by default when available, set this to true and
 ## set filter_mode to "workspace" or leave it unspecified and 
 ## set search.filters to include "workspace" before other filter modes.
-# workspaces = false
+workspaces = true
 
 ## which filter mode to use when atuin is invoked from a shell up-key binding
 ## the accepted values are identical to those of "filter_mode"
@@ -69,7 +69,7 @@ style = "compact"
 
 ## the maximum number of lines the interface should take up
 ## set it to 0 to always go full screen
-# inline_height = 0
+inline_height = 20
 
 ## the maximum number of lines the interface should take up
 ## when atuin is invoked from a shell up-key binding
@@ -77,7 +77,7 @@ style = "compact"
 # inline_height_shell_up_key_binding = 0
 
 ## Invert the UI - put the search bar at the top , Default to `false`
-# invert = false
+invert = true
 
 ## enable or disable showing a preview of the selected command
 ## useful when the command is longer than the terminal width and is cut off
@@ -112,10 +112,28 @@ style = "compact"
 ## with ^ or end with $, they'll match anywhere in the command.
 ## For details on the supported regular expression syntax, see
 ## https://docs.rs/regex/latest/regex/#syntax
-# history_filter = [
-#   "^secret-cmd",
-#   "^innocuous-cmd .*--secret=.+",
-# ]
+history_filter = [
+  "^ls($| )",
+  "^l($| )",
+  "^ll($| )",
+  "^s$",
+  "^clear$",
+  "^cd($| )",
+  "^pwd$",
+  "^exit$",
+  "^echo($| )",
+  # zoxide / auto_cd — jumps belong in zoxide, not Ctrl+R
+  "(?i)^z($| )",
+  "(?i)^zi($| )",
+  "^zb$",
+  "^\\.$",
+  "^\\.\\.$",
+  "^\\.\\./",
+  # fat-finger ls / clear / fep
+  "^(sl|lsl|lls|rls|l;s|;s|LS|lsf|lks)$",
+  "^(clea|clera|celar|clearl|clearls|lear|slc)$",
+  "^(fpe|lfep|sfep|sfpe|slfe|lfe|fel|ep)$",
+]
 
 ## prevent commands run with cwd matching any of these regexes from being written
 ## to history. Note that these regular expressions are unanchored, i.e. if they don't
@@ -167,7 +185,7 @@ enter_accept = true
 ## keybinding is defined.  If this is set to "emacs", "vim-insert", or
 ## "vim-normal", the startup keymap mode in the Atuin search is forced to be
 ## the specified one.
-keymap_mode = "auto"
+keymap_mode = "emacs"
 
 ## Cursor style in each keymap mode.  If specified, the cursor style is changed
 ## in entering the cursor shape.  Available values are "default" and
@@ -214,11 +232,21 @@ keymap_mode = "auto"
 # common_prefix = ["sudo"]
 
 ## Set commands that will be completely ignored from stats
-# ignored_commands = [
-#   "cd",
-#   "ls",
-#   "vi"
-# ]
+ignored_commands = [
+  "cd",
+  "ls",
+  "l",
+  "ll",
+  "s",
+  "clear",
+  "pwd",
+  "exit",
+  "echo",
+  "z",
+  "zi",
+  "zb",
+  "..",
+]
 
 [keys]
 # Defaults to true. If disabled, using the up/down key won't exit the TUI when scrolled past the first/last entry.
@@ -286,4 +314,5 @@ records = true
 ## The list of enabled filter modes, in order of priority.
 ## The "workspace" mode is skipped when not in a workspace or workspaces = false.
 ## Default filter mode can be overridden with the filter_mode setting.
-# filters = [ "global", "host", "session", "session-preload", "workspace", "directory" ]
+## Ctrl+R inside the TUI cycles this list.
+filters = [ "workspace", "directory", "session", "host", "global" ]
