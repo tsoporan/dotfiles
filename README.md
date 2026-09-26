@@ -76,6 +76,14 @@ stow -D <package>
 
 `just check` must be green before stowing a new machine. Do not blindly `stow */`.
 
+## Hyprland
+
+Keybinds live in [`hypr/.config/hypr/hyprland.conf`](hypr/.config/hypr/hyprland.conf). Super+Shift+Tab opens [`hypr-cheatsheet.txt`](hypr/.config/hypr/hypr-cheatsheet.txt).
+
+Super+1 through Super+0 focus workspaces 1 through 10. Pressing the key for the workspace that is already focused returns to the previous workspace. From workspace 4, Super+2 focuses 2, and Super+2 again returns to 4. Focusing any other workspace replaces the one that jump remembers. Super+Escape focuses that previous workspace directly. Both read Hyprland's workspace history (`binds:workspace_back_and_forth`, and `workspace, previous` for Escape). The setting is under [binds](https://wiki.hypr.land/configuring/core/config-options/).
+
+Super+Shift+1 through Super+0 moves the focused window (`movetoworkspace`).
+
 ## Zsh plugins
 
 [Antidote](https://github.com/mattmc3/antidote) reads `zsh/.zsh_plugins.txt`. That file is in git. The rest is machine-local:
