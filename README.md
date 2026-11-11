@@ -55,6 +55,25 @@ pgpv notes.txt      # verifies notes.txt.sig
 
 Machine-local zsh overrides go in `~/.zshrc.local` (not git).
 
+### Claude Code notifications
+
+`claude-notify` (in `bin`) sends a desktop notification when a Claude Code turn that ran a minute or longer finishes, or when Claude needs permission. The title is the Zellij session and the Claude session name; the body is the first line of Claude's reply. Clicking it, or pressing Super+U, focuses the window, Zellij tab and pane that Claude runs in. It also renames the Zellij tab to the session name.
+
+The hooks live in `~/.claude/settings.json`, which is not in this repo:
+
+```json
+{
+  "preferredNotifChannel": "notifications_disabled",
+  "hooks": {
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "\"$HOME/.local/bin/claude-notify\"", "timeout": 5 }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "\"$HOME/.local/bin/claude-notify\"", "timeout": 5 }] }],
+    "Notification": [{ "hooks": [{ "type": "command", "command": "\"$HOME/.local/bin/claude-notify\"", "timeout": 5 }] }]
+  }
+}
+```
+
+`preferredNotifChannel` turns off Claude Code's own terminal notification, which would otherwise arrive as a duplicate.
+
 ## Usage
 
 Run commands from the repo root (`.stowrc` sets `--target=$HOME`).

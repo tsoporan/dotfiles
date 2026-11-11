@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+# Desktop notifications and Zellij tab names for Claude Code hooks
+# (wired up in ~/.claude/settings.json).
+#
+#   UserPromptSubmit  records when the turn started and which window it was
+#                     typed in; prints nothing
+#   Stop              notifies with the first line of Claude's reply, but only
+#                     when the turn ran at least CLAUDE_NOTIFY_MIN_SECONDS (60)
+#   Notification      notifies for permission prompts and questions; the idle
+#                     reminder is dropped because Stop already covers it
+#
+# Title: "<zellij session> · <session name>", falling back to the directory.
+# Clicking a notification focuses the window the last prompt was typed in and,
+# inside Zellij, the tab and pane Claude runs in. `claude-notify --jump` (bound
+# to a key in Hyprland) does the same for the newest notification still open
+# and dismisses it; press again to walk back through older ones. Sending a
+# prompt in a session dismisses that session's notifications.
+#
+# On UserPromptSubmit and Stop the Zellij tab is renamed to the session name,
+# unless the tab was renamed by hand.
+#
+# Never writes to stdout: UserPromptSubmit stdout is injected into the prompt.
+
+set -uo pipefail
+exec >/dev/null
+
+state_dir=${XDG_RUNTIME_DIR:-/tmp}/claude-notify
+mkdir -p "$state_dir"
+
+# Open notifications, oldest first. One line per notification, fields joined
+# by the unit separator: id, claude session, window, zellij session, tab, pane.
+pending=$state_dir/pending
+sep=$'\x1f'
+
+pending_add() {
+  (flock 9 && printf '%s\n' "$1" >>"$pending") 9>"$state_dir/lock"
+}
+
+# Drop every line whose field $1 equals $2.
+pending_drop() {
+  (
+    flock 9 && [[ -f $pending ]] || exit 0
+    awk -F"$sep" -v f="$1" -v v="$2" '$f != v' "$pending" >"$pending.tmp" && mv "$pending.tmp" "$pending"
+  ) 9>"$state_dir/lock"
+}
+
+close_notification() {
+  gdbus call --session --dest org.freedesktop.Notifications \
+    --object-path /org/freedesktop/Notifications \
+    --method org.freedesktop.Notifications.CloseNotification "$1" >/dev/null 2>&1
+}
+
+# focus_target <window> <zellij session> <tab id> <pane id>
+focus_target() {
+  [[ -n $1 ]] && hyprctl dispatch "hl.dsp.focus({ window = \"address:$1\" })"
+  if [[ -n $2 && -n $3 ]]; then
+    zellij --session "$2" action go-to-tab-by-id "$3"
+    zellij --session "$2" action focus-pane-id "terminal_$4"
+  fi
+}
+
+case ${1:-} in
+  # Detached helper: show the notification, wait for a click, then focus.
+  #   claude-notify --wait-click <claude session> <title> <body> <window> <zellij session> <tab id> <pane id>
+  --wait-click)
+    shift
+    id="" action=""
+    trap '[[ -n $id ]] && pending_drop 1 "$id"' EXIT
+    # notify-send prints the notification id at once and the action on a click.
+    # Unclicked notifications sit in swaync's panel; stop waiting after an hour.
+    {
+      read -r id && pending_add "$id$sep$1$sep$4$sep$5$sep$6$sep$7"
+      read -r action
+    } < <(timeout 3600 notify-send -p -a "Claude Code" -A default=Open "$2" "$3" 2>/dev/null)
+    [[ $action == default ]] && focus_target "$4" "$5" "$6" "$7"
+    exit 0
+    ;;
+  --jump)
+    entry=$(tail -n1 "$pending" 2>/dev/null)
+    if [[ -z $entry ]]; then
+      notify-send -t 1500 -a "Claude Code" "No Claude notifications waiting"
+      exit 0
+    fi
+    IFS=$sep read -r id _ window zj_session tab_id pane_id <<<"$entry"
+    pending_drop 1 "$id"
+    focus_target "$window" "$zj_session" "$tab_id" "$pane_id"
+    close_notification "$id"
+    exit 0
+    ;;
+esac
+
+min_seconds=${CLAUDE_NOTIFY_MIN_SECONDS:-60}
+
+input=$(cat)
+field() { jq -r "$1 // empty" <<<"$input" 2>/dev/null; }
+
+event=$(field .hook_event_name)
+session_id=$(field .session_id)
+[[ -n $event && -n $session_id ]] || exit 0
+state=$state_dir/$session_id # .start, .window, .tab
+
+# Name from `claude -n` or /rename, else the auto-generated title, else nothing.
+session_name() {
+  local transcript line
+  transcript=$(field .transcript_path)
+  [[ -r $transcript ]] || return 0
+  # No early exit (grep -m1 after tac): under pipefail the SIGPIPE reads as failure.
+  line=$(grep -E '"type":"(custom-title|agent-name)"' "$transcript" | tail -n1)
+  [[ -n $line ]] || line=$(grep -F '"type":"ai-title"' "$transcript" | tail -n1)
+  [[ -n $line ]] && jq -r '.customTitle // .agentName // .aiTitle // empty' <<<"$line" 2>/dev/null
+}
+
+# Stable id of the Zellij tab this pane lives in; empty outside Zellij.
+zellij_tab_id() {
+  [[ -n ${ZELLIJ_SESSION_NAME:-} && -n ${ZELLIJ_PANE_ID:-} ]] || return 0
+  zellij action list-panes -t -j 2>/dev/null |
+    jq -r --argjson pane "$ZELLIJ_PANE_ID" \
+      'first(.[] | select((.is_plugin | not) and .id == $pane) | .tab_id) // empty' 2>/dev/null
+}
+
+# Rename the tab to the session name. Leaves alone a tab whose name is neither
+# Zellij's default ("Tab #3") nor the name this script last gave it.
+rename_tab() {
+  local tab_id name current
+  tab_id=$(zellij_tab_id)
+  name=$(session_name | cut -c1-32)
+  [[ -n $tab_id && -n $name ]] || return 0
+  current=$(zellij action list-panes -t -j 2>/dev/null |
+    jq -r --argjson tab "$tab_id" 'first(.[] | select(.tab_id == $tab) | .tab_name) // empty' 2>/dev/null)
+  [[ $current == "$name" ]] && return 0
+  if [[ $current =~ ^Tab\ #[0-9]+$ || ( -r $state.tab && $current == "$(<"$state.tab")" ) ]]; then
+    zellij action rename-tab-by-id "$tab_id" "$name" && printf '%s' "$name" >"$state.tab"
+  fi
+}
+
+# The focused window, if it is a terminal: where the prompt was just typed.
+remember_window() {
+  local win
+  win=$(hyprctl activewindow -j 2>/dev/null) || return 0
+  [[ $(jq -r '.class // empty' <<<"$win") =~ ^(com\.mitchellh\.ghostty|Alacritty|kitty|foot|org\.codeberg\.dnkl\.foot)$ ]] || return 0
+  jq -r '.address' <<<"$win" >"$state.window"
+}
+
+# First non-empty line, with markdown markers stripped, capped at 200 chars.
+first_line() {
+  sed -E '/^[[:space:]]*$/d; s/^[[:space:]]*(#+|[-*>]|[0-9]+\.)[[:space:]]+//; s/(\*\*|__|`)//g; q' |
+    cut -c1-200
+}
+
+# Hand off to a detached copy of this script so the hook returns immediately.
+send() {
+  local name cwd title window=""
+  name=$(session_name)
+  cwd=$(field .cwd)
+  title="${ZELLIJ_SESSION_NAME:+$ZELLIJ_SESSION_NAME · }${name:-${cwd##*/}}"
+  [[ -r $state.window ]] && window=$(<"$state.window")
+  setsid -f "$0" --wait-click "$session_id" "$title" "$1" "$window" \
+    "${ZELLIJ_SESSION_NAME:-}" "$(zellij_tab_id)" "${ZELLIJ_PANE_ID:-}" </dev/null 2>/dev/null
+}
+
+# The user is back in this session: close its notifications.
+dismiss_session() {
+  local id
+  [[ -f $pending ]] || return 0
+  awk -F"$sep" -v s="$session_id" '$2 == s { print $1 }' "$pending" | while read -r id; do
+    close_notification "$id"
+  done
+  pending_drop 2 "$session_id"
+}
+
+case $event in
+  UserPromptSubmit)
+    date +%s >"$state.start"
+    # Prompts injected by timers or background tasks say nothing about focus.
+    if [[ $(field .source) =~ ^(user)?$ ]]; then
+      remember_window
+      dismiss_session
+    fi
+    rename_tab
+    ;;
+  Stop)
+    rename_tab
+    if [[ -r $state.start ]]; then
+      elapsed=$(($(date +%s) - $(<"$state.start")))
+      ((elapsed >= min_seconds)) || exit 0
+    fi
+    body=$(field .last_assistant_message | first_line)
+    send "${body:-Finished}"
+    ;;
+  Notification)
+    [[ $(field .notification_type) == idle_prompt ]] && exit 0
+    send "$(field .message | first_line)"
+    ;;
+esac
+exit 0

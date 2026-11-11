@@ -383,6 +383,8 @@ hl.bind(mainMod .. " + SHIFT + G", hl.dsp.exec_cmd("lutris"))
 -- === NOTIFICATIONS (SwayNC) ===
 hl.bind(mainMod .. " + N", hl.dsp.exec_cmd("swaync-client -t -sw"))
 hl.bind(mainMod .. " + SHIFT + N", hl.dsp.exec_cmd("swaync-client -d -sw"))
+-- Jump to the Claude Code session behind the newest notification (repeat for older ones)
+hl.bind(mainMod .. " + U", hl.dsp.exec_cmd("~/.local/bin/claude-notify --jump"))
 
 -- === SCRATCHPAD ===
 hl.bind(mainMod .. " + minus", hl.dsp.workspace.toggle_special("scratchpad"))

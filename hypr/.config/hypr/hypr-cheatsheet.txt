@@ -32,6 +32,7 @@
 | Security             | SUPER+T              | Wofi-pass copy                                            |
 | Notifications        | SUPER+n              | Toggle SwayNC                                             |
 |                      | SUPER+Shift+n        | Toggle DND                                                |
+|                      | SUPER+u              | Jump to newest Claude notification                        |
 | Scratchpad           | SUPER+-              | Toggle scratchpad                                         |
 |                      | SUPER+Shift+-        | Move window to scratchpad                                 |
 | Screenshots          | SUPER+Shift+s        | Area screenshot to clipboard                              |
