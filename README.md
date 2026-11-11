@@ -78,11 +78,11 @@ stow -D <package>
 
 ## Hyprland
 
-Keybinds live in [`hypr/.config/hypr/hyprland.conf`](hypr/.config/hypr/hyprland.conf). Super+Shift+Tab opens [`hypr-cheatsheet.txt`](hypr/.config/hypr/hypr-cheatsheet.txt).
+Keybinds live in [`hypr/.config/hypr/hyprland.lua`](hypr/.config/hypr/hyprland.lua). Hyprland 0.57 reads that file only. Super+Shift+Tab opens [`hypr-cheatsheet.txt`](hypr/.config/hypr/hypr-cheatsheet.txt).
 
-Super+1 through Super+0 focus workspaces 1 through 10. Pressing the key for the workspace that is already focused returns to the previous workspace. From workspace 4, Super+2 focuses 2, and Super+2 again returns to 4. Focusing any other workspace replaces the one that jump remembers. Super+Escape focuses that previous workspace directly. Both read Hyprland's workspace history (`binds:workspace_back_and_forth`, and `workspace, previous` for Escape). The setting is under [binds](https://wiki.hypr.land/configuring/core/config-options/).
+Super+1 through Super+0 focus workspaces 1 through 10. Pressing the key for the workspace that is already focused returns to the previous workspace. From workspace 4, Super+2 focuses 2, and Super+2 again returns to 4. Focusing any other workspace replaces the one that jump remembers. Super+Escape focuses that previous workspace directly. Both read Hyprland's workspace history (`binds.workspace_back_and_forth`, and `hl.dsp.focus({ workspace = "previous" })` for Escape). The setting is under [binds](https://wiki.hypr.land/configuring/core/config-options/).
 
-Super+Shift+1 through Super+0 moves the focused window (`movetoworkspace`).
+Super+Shift+1 through Super+0 moves the focused window (`hl.dsp.window.move({ workspace = N })`).
 
 ## Zsh plugins
 
