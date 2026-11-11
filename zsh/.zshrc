@@ -76,16 +76,22 @@ setopt share_history
 # ------------------------------------------------------------------------------
 alias v="nvim"
 alias e="emacsclient -nc"
-alias rm="rm -i"
-alias cp="cp -i"
 alias ..="cd .."
 alias ~="cd ~"
 alias df="df -h"
 alias free="free -m"
 alias bc="bc -l"
 
+# Prompting rm/cp and eza-as-ls are for a human at a terminal. Agent shells
+# (Claude Code sets CLAUDECODE; Codex runs without a tty) get the plain
+# commands, so `rm` doesn't hang on a y/n prompt and `ls -t` keeps GNU flags.
+if [[ -t 0 && -z $CLAUDECODE ]]; then
+  alias rm="rm -i"
+  alias cp="cp -i"
+  alias ls="eza --icons=auto -s accessed --group-directories-first"
+fi
+
 alias l="eza --icons=auto -s accessed --group-directories-first"
-alias ls="eza --icons=auto -s accessed --group-directories-first"
 alias ll="eza --icons=auto -la -s accessed --group-directories-first"
 alias tree="eza --tree --icons=auto"
 
@@ -140,6 +146,19 @@ alias http="xh"
 alias j="just"
 alias we="watchexec"
 alias rec="wf-recorder -f ~/Videos/recording-\$(date +%Y%m%d-%H%M%S).mp4"
+
+# Second Claude account (separate usage limits). Shares everything in ~/.claude
+# via symlinks except the login; ~/.claude-work/.claude.json holds its account.
+# Hop accounts mid-conversation with `claude-work -c` / `claude -c`.
+claude-work() {
+  local a=~/.claude b=~/.claude-work f
+  mkdir -p $b
+  for f in $a/*(DN); do
+    case ${f:t} in .credentials.json|daemon|daemon.log) continue ;; esac
+    [[ -e $b/${f:t} || -L $b/${f:t} ]] || ln -s $f $b/${f:t}
+  done
+  CLAUDE_CONFIG_DIR=$b command claude "$@"
+}
 
 # ------------------------------------------------------------------------------
 # Tool Initialization
