@@ -1,0 +1,27 @@
+# herdr: terminal workspace manager for coding agents. On trial next to Zellij.
+# Only what differs from the defaults; `herdr --default-config` prints the rest.
+
+# Desktop notifications come from ~/.local/bin/claude-notify, so skip the
+# first-run notification setup.
+onboarding = false
+
+[theme]
+# Use Ghostty's palette (black + electric yellow) instead of a built-in theme.
+name = "terminal"
+
+[keys]
+# The default ctrl+b is Claude Code's "run in background" key. ctrl+g matches
+# the Zellij unlock key, so both multiplexers start from the same chord.
+prefix = "ctrl+g"
+previous_agent = "prefix+shift+k"
+next_agent = "prefix+shift+j"
+
+[ui]
+accent = "#e6fb04"
+# List agents as an attention queue (blocked and done first), not by workspace.
+agent_panel_sort = "priority"
+status_indicators = "symbols"
+
+[ui.toast]
+# In-app toast when an agent in another workspace needs attention.
+delivery = "herdr"

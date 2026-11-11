@@ -28,6 +28,7 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `gnupg` | GPG agent confs (`gpg.conf`, `gpg-agent.conf`) |
 | `sequoia` | `sq` config: encrypt/sign as self via the YubiKey |
 | `gtk` | GTK 3/4 settings (theme, dark, primary paste) |
+| `herdr` | Agent workspace manager, on trial next to Zellij (`Ctrl+g` prefix) |
 | `hypr` | Hyprland, hyprpaper, hypridle, hyprlock |
 | `lazygit` | Git TUI |
 | `mise` | Runtime version management |
