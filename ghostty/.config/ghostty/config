@@ -64,8 +64,9 @@ window-theme = ghostty
 # ------------------------------------------------------------------------------
 # Behavior
 # ------------------------------------------------------------------------------
-# PRIMARY only. clipboard would overwrite Ctrl+V on every highlight.
-copy-on-select = true
+# Both PRIMARY (middle-click) and CLIPBOARD (Ctrl+Shift+V / Super+V / clipse).
+# true is PRIMARY only, so a mouse highlight never reaches the copy buffer.
+copy-on-select = clipboard
 mouse-hide-while-typing = true
 scrollback-limit = 50000
 
