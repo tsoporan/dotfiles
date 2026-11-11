@@ -14,6 +14,7 @@
   minus-style = syntax "#3f0001"
   syntax-theme = ansi
   line-numbers = true
+  navigate = true
 [delta "line-numbers"]
   line-numbers-left-style = cyan
   line-numbers-right-style = cyan
@@ -38,11 +39,13 @@
   deleted = red
 [push]
   default = current
+  autoSetupRemote = true
 [commit]
   gpgSign = true
 [merge]
   gpgSign = true
   tool = nvimdiff
+  conflictStyle = zdiff3
 [gpg]
   program = gpg2
 	format = ssh
@@ -57,11 +60,20 @@
 	br = branch
 	ci = commit
   st = status
-  comp = git diff main --stat
+  comp = diff main --stat
 [interactive]
   diffFilter = delta --color-only
 [pull]
 	rebase = true
+[rebase]
+  autoStash = true
+  updateRefs = true
+[fetch]
+  prune = true
+[diff]
+  algorithm = histogram
+[branch]
+  sort = -committerdate
 [init]
   defaultBranch = main
 [github]
