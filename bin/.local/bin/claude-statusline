@@ -2,16 +2,16 @@
 # Claude Code status line (wired up as statusLine.command in
 # ~/.claude/settings.json). Reads the session JSON on stdin and prints:
 #
-#   Opus 5.5 high · 312k/500k · 5h 41% · 7d 18% · landmark-spine
+#   Opus 5.5 high · 312k/700k · 5h 41% · 7d 18% · landmark-spine
 #
 # The context figure is the input tokens of the last request against
-# CLAUDE_STATUSLINE_HANDOFF_AT (500000, keep it equal to autoCompactWindow).
+# CLAUDE_STATUSLINE_HANDOFF_AT (700000, keep it equal to autoCompactWindow).
 # It turns yellow at 60% of that and red with "handoff" at 80%, so there is
 # time to hand off before Claude Code compacts.
 
 set -uo pipefail
 
-handoff_at=${CLAUDE_STATUSLINE_HANDOFF_AT:-500000}
+handoff_at=${CLAUDE_STATUSLINE_HANDOFF_AT:-700000}
 
 jq -r --argjson limit "$handoff_at" '
   def color(c): "\u001b[" + c + "m" + . + "\u001b[0m";

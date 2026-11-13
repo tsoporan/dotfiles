@@ -77,12 +77,12 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
 ### Claude Code status line
 
-`claude-statusline` (in `bin`) prints the model, effort, context size against a 500k handoff limit, and 5-hour and weekly usage. The context figure turns red and says `handoff` at 400k. In `~/.claude/settings.json`:
+`claude-statusline` (in `bin`) prints the model, effort, context size against a 700k handoff limit, and 5-hour and weekly usage. The context figure turns red and says `handoff` at 560k. In `~/.claude/settings.json`:
 
 ```json
 {
   "statusLine": { "type": "command", "command": "\"$HOME/.local/bin/claude-statusline\"" },
-  "autoCompactWindow": 500000
+  "autoCompactWindow": 700000
 }
 ```
 
