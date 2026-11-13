@@ -75,6 +75,17 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
 `preferredNotifChannel` turns off Claude Code's own terminal notification, which would otherwise arrive as a duplicate.
 
+### Claude Code status line
+
+`claude-statusline` (in `bin`) prints the model, effort, context size against a 500k handoff limit, and 5-hour and weekly usage. The context figure turns red and says `handoff` at 400k. In `~/.claude/settings.json`:
+
+```json
+{
+  "statusLine": { "type": "command", "command": "\"$HOME/.local/bin/claude-statusline\"" },
+  "autoCompactWindow": 500000
+}
+```
+
 ## Usage
 
 Run commands from the repo root (`.stowrc` sets `--target=$HOME`).

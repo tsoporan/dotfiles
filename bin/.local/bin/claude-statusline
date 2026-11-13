@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Claude Code status line (wired up as statusLine.command in
+# ~/.claude/settings.json). Reads the session JSON on stdin and prints:
+#
+#   Opus 5.5 high · 312k/500k · 5h 41% · 7d 18% · landmark-spine
+#
+# The context figure is the input tokens of the last request against
+# CLAUDE_STATUSLINE_HANDOFF_AT (500000, keep it equal to autoCompactWindow).
+# It turns yellow at 60% of that and red with "handoff" at 80%, so there is
+# time to hand off before Claude Code compacts.
+
+set -uo pipefail
+
+handoff_at=${CLAUDE_STATUSLINE_HANDOFF_AT:-500000}
+
+jq -r --argjson limit "$handoff_at" '
+  def color(c): "\u001b[" + c + "m" + . + "\u001b[0m";
+  def k: if . >= 1000 then "\(. / 1000 | round)k" else tostring end;
+  def by_level(warn; crit): if . >= crit then "31" elif . >= warn then "33" else "90" end;
+  def usage(name): by_level(70; 90) as $c | "\(name) \(round)%" | color($c);
+
+  ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100 | round) as $tokens
+  | ($tokens * 100 / $limit) as $pct
+  | [
+      ((.model.display_name // "Claude") | color("2"))
+        + (if .effort.level then " " + (.effort.level | color("36")) else "" end),
+      ("\($tokens | k)/\($limit | k)" + (if $pct >= 80 then " handoff" else "" end)
+        | color($pct | by_level(60; 80))),
+      (.rate_limits.five_hour.used_percentage // empty | usage("5h")),
+      (.rate_limits.seven_day.used_percentage // empty | usage("7d")),
+      ((.workspace.current_dir // .cwd // "") | split("/") | last // "" | color("33"))
+    ]
+  | map(select(. != null and . != "")) | join(" \u001b[90m·\u001b[0m ")
+' 2>/dev/null || printf 'Claude Code'
