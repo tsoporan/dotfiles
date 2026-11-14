@@ -32,6 +32,7 @@
 -- mod+f          = Fullscreen
 -- mod+r          = Resize mode
 -- mod+ctrl+l     = Lock screen
+-- mod+shift+d    = Toggle HDR on DP-1 (for games)
 --
 --------------------------------------------------------------------------------
 
@@ -40,13 +41,34 @@
 ----------------
 
 -- See https://wiki.hypr.land/configuring/core/monitors/
--- Auto detect monitor with 1.5x scaling
-hl.monitor({
-    output   = "",
-    mode     = "preferred",
+-- ASUS PG27UCDM: native 4K@240, 10-bit, VRR for fullscreen apps only (games)
+local main_monitor = {
+    output   = "DP-1",
+    mode     = "3840x2160@240",
     position = "auto",
     scale    = 1.5,
-})
+    bitdepth = 10,
+    vrr      = 2,
+    cm       = "srgb",
+}
+hl.monitor(main_monitor)
+
+local function main_monitor_with(cm)
+    local spec = {}
+    for k, v in pairs(main_monitor) do spec[k] = v end
+    spec.cm = cm
+    return spec
+end
+
+-- Flip DP-1 between SDR and HDR by hand (mod+shift+d), since render.cm_auto_hdr
+-- is off. Switch on before launching an HDR game, off after; each flip is a
+-- modeset, so the screen blanks for a moment.
+local function toggle_hdr()
+    local current = hl.get_monitor(main_monitor.output)
+    local next_cm = (current and current.cm == "hdr") and "srgb" or "hdr"
+    hl.monitor(main_monitor_with(next_cm))
+    hl.exec_cmd("notify-send -t 2000 'Display' 'HDR " .. (next_cm == "hdr" and "on" or "off") .. "'")
+end
 
 
 -------------------
@@ -308,6 +330,12 @@ hl.config({
     xwayland = {
         force_zero_scaling = true,
     },
+
+    render = {
+        -- Don't auto-switch the monitor to HDR when an app goes fullscreen;
+        -- the modeset blanks the OLED (seen with Brave on mod+f).
+        cm_auto_hdr = 0,
+    },
 })
 
 
@@ -345,6 +373,7 @@ hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + Tab", hl.dsp.exec_cmd("wofi --show window --lines 30"))
 hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.exec_cmd("~/.config/hypr/scripts/show-cheatsheet.sh"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen" })) -- true fullscreen
+hl.bind(mainMod .. " + SHIFT + D", toggle_hdr)
 hl.bind(mainMod .. " + Escape", hl.dsp.focus({ workspace = "previous" }))
 
 -- === CLIPBOARD MANAGEMENT ===
