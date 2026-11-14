@@ -8,27 +8,73 @@
 # CLAUDE_STATUSLINE_HANDOFF_AT (700000, keep it equal to autoCompactWindow).
 # It turns yellow at 60% of that and red with "handoff" at 80%, so there is
 # time to hand off before Claude Code compacts.
+#
+# Two side outputs, both for herdr:
+#   - inside a herdr pane, the context size goes on the agent's sidebar row as
+#     the $ctx token, and $handoff is set once it is time to hand off;
+#   - the usage figures go to $XDG_RUNTIME_DIR/claude-statusline/usage, which
+#     herdr's tab bar shows.
 
 set -uo pipefail
 
 handoff_at=${CLAUDE_STATUSLINE_HANDOFF_AT:-700000}
 
-jq -r --argjson limit "$handoff_at" '
-  def color(c): "\u001b[" + c + "m" + . + "\u001b[0m";
-  def k: if . >= 1000 then "\(. / 1000 | round)k" else tostring end;
-  def by_level(warn; crit): if . >= crit then "31" elif . >= warn then "33" else "90" end;
-  def usage(name): by_level(70; 90) as $c | "\(name) \(round)%" | color($c);
+# One line of tab-separated fields; a missing value is "-".
+fields=$(jq -r '
+  [
+    (.model.display_name // "Claude"),
+    (.effort.level // "-"),
+    ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100 | round),
+    (.rate_limits.five_hour.used_percentage // "-" | if type == "number" then round else . end),
+    (.rate_limits.seven_day.used_percentage // "-" | if type == "number" then round else . end),
+    ((.workspace.current_dir // .cwd // "") | split("/") | last // "" | if . == "" then "-" else . end)
+  ] | map(tostring) | join("\t")
+' 2>/dev/null) || fields=""
+if [[ -z $fields ]]; then
+  printf 'Claude Code'
+  exit 0
+fi
+IFS=$'\t' read -r model effort tokens five_hour seven_day dir <<<"$fields"
 
-  ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100 | round) as $tokens
-  | ($tokens * 100 / $limit) as $pct
-  | [
-      ((.model.display_name // "Claude") | color("2"))
-        + (if .effort.level then " " + (.effort.level | color("36")) else "" end),
-      ("\($tokens | k)/\($limit | k)" + (if $pct >= 80 then " handoff" else "" end)
-        | color($pct | by_level(60; 80))),
-      (.rate_limits.five_hour.used_percentage // empty | usage("5h")),
-      (.rate_limits.seven_day.used_percentage // empty | usage("7d")),
-      ((.workspace.current_dir // .cwd // "") | split("/") | last // "" | color("33"))
-    ]
-  | map(select(. != null and . != "")) | join(" \u001b[90m·\u001b[0m ")
-' 2>/dev/null || printf 'Claude Code'
+paint() { printf '\033[%sm%s\033[0m' "$1" "$2"; }
+# level <value> <warn> <crit>: grey, yellow or red.
+level() { if (($1 >= $3)); then echo 31; elif (($1 >= $2)); then echo 33; else echo 90; fi; }
+thousands() { if (($1 >= 1000)); then echo "$((($1 + 500) / 1000))k"; else echo "$1"; fi; }
+
+ctx="$(thousands "$tokens")"
+ctx_pct=$((tokens * 100 / handoff_at))
+handoff=""
+((ctx_pct >= 80)) && handoff="handoff"
+
+parts=("$(paint 2 "$model")")
+[[ $effort != - ]] && parts[0]+=" $(paint 36 "$effort")"
+parts+=("$(paint "$(level "$ctx_pct" 60 80)" "$ctx/$(thousands "$handoff_at")${handoff:+ $handoff}")")
+usage=""
+if [[ $five_hour != - ]]; then
+  parts+=("$(paint "$(level "$five_hour" 70 90)" "5h $five_hour%")")
+  usage="5h $five_hour%"
+fi
+if [[ $seven_day != - ]]; then
+  parts+=("$(paint "$(level "$seven_day" 70 90)" "7d $seven_day%")")
+  usage+="${usage:+ · }7d $seven_day%"
+fi
+[[ $dir != - ]] && parts+=("$(paint 33 "$dir")")
+
+sep=" $(paint 90 "·") "
+line=""
+for part in "${parts[@]}"; do line+="${line:+$sep}$part"; done
+printf '%s' "$line"
+
+# Side outputs run detached so a slow herdr never delays the status line.
+{
+  if [[ -n $usage ]]; then
+    usage_dir=${XDG_RUNTIME_DIR:-/tmp}/claude-statusline
+    mkdir -p "$usage_dir"
+    printf '%s' "$usage" >"$usage_dir/usage.$$" && mv "$usage_dir/usage.$$" "$usage_dir/usage"
+  fi
+  if [[ ${HERDR_ENV:-} == 1 && -n ${HERDR_PANE_ID:-} ]]; then
+    report=(herdr pane report-metadata "$HERDR_PANE_ID" --source claude-statusline --token "ctx=$ctx")
+    if [[ -n $handoff ]]; then report+=(--token "handoff=$handoff"); else report+=(--clear-token handoff); fi
+    timeout 2 "${report[@]}"
+  fi
+} >/dev/null 2>&1 &

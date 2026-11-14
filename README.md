@@ -36,7 +36,7 @@ Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](
 | `satty` | Screenshot annotation (Enter copies + saves) |
 | `starship` | Shell prompt theme |
 | `swaync` | Notification center |
-| `systemd` | User services (syncthing, wallpaper-rotate) |
+| `systemd` | User services (syncthing, wallpaper-rotate, herdr server started by Hyprland) |
 | `wallpapers` | Desktop wallpapers |
 | `waybar` | Status bar |
 | `wofi` | App launcher + window switcher theme |
@@ -58,7 +58,7 @@ Machine-local zsh overrides go in `~/.zshrc.local` (not git).
 
 ### Claude Code notifications
 
-`claude-notify` (in `bin`) sends a desktop notification when a Claude Code turn that ran a minute or longer finishes, or when Claude needs permission. The title is the Zellij session and the Claude session name; the body is the first line of Claude's reply. Clicking it, or pressing Super+U, focuses the window, Zellij tab and pane that Claude runs in. It also renames the Zellij tab to the session name.
+`claude-notify` (in `bin`) sends a desktop notification when a Claude Code turn that ran a minute or longer finishes, or when Claude needs permission. The title is the Zellij session and the Claude session name; the body is the first line of Claude's reply. Clicking it, or pressing Super+U, focuses the window and the Zellij tab and pane, or herdr pane, that Claude runs in. It also renames the Zellij tab to the session name.
 
 The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
@@ -85,6 +85,12 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
   "autoCompactWindow": 700000
 }
 ```
+
+Inside herdr the script also puts the context size on the agent's sidebar row and writes the usage figures for herdr's tab bar.
+
+### Starting the next Claude session
+
+`claude-next <name> <prompt-file>` (in `bin`) opens a new herdr or Zellij tab in the current directory with Claude already working on the prompt, and leaves focus where it was. Handoffs end with it.
 
 ## Usage
 

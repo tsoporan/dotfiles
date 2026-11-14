@@ -1,0 +1,15 @@
+[Unit]
+Description=herdr server (agent workspace manager)
+Documentation=https://herdr.dev
+
+# No [Install] section: Hyprland starts this after it has exported the session
+# environment (see the hyprland.start handler), so panes get WAYLAND_DISPLAY
+# and the clipboard and notifications work in them.
+
+[Service]
+ExecStart=/usr/bin/herdr server
+Restart=on-failure
+RestartSec=2
+# Signal only the server on stop so it can save the session before panes die.
+KillMode=mixed
+TimeoutStopSec=20

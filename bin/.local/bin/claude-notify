@@ -10,8 +10,8 @@
 #                     reminder is dropped because Stop already covers it
 #
 # Title: "<zellij session> · <session name>", falling back to the directory.
-# Clicking a notification focuses the window the last prompt was typed in and,
-# inside Zellij, the tab and pane Claude runs in. `claude-notify --jump` (bound
+# Clicking a notification focuses the window the last prompt was typed in and
+# the pane Claude runs in: the Zellij tab and pane, or the herdr pane. `claude-notify --jump` (bound
 # to a key in Hyprland) does the same for the newest notification still open
 # and dismisses it; press again to walk back through older ones. Sending a
 # prompt in a session dismisses that session's notifications.
@@ -28,7 +28,8 @@ state_dir=${XDG_RUNTIME_DIR:-/tmp}/claude-notify
 mkdir -p "$state_dir"
 
 # Open notifications, oldest first. One line per notification, fields joined
-# by the unit separator: id, claude session, window, zellij session, tab, pane.
+# by the unit separator: id, claude session, window, zellij session, tab, pane,
+# herdr pane, herdr socket.
 pending=$state_dir/pending
 sep=$'\x1f'
 
@@ -50,18 +51,25 @@ close_notification() {
     --method org.freedesktop.Notifications.CloseNotification "$1" >/dev/null 2>&1
 }
 
-# focus_target <window> <zellij session> <tab id> <pane id>
+# focus_target <window> <zellij session> <tab id> <pane id> <herdr pane> <herdr socket>
 focus_target() {
   [[ -n $1 ]] && hyprctl dispatch "hl.dsp.focus({ window = \"address:$1\" })"
   if [[ -n $2 && -n $3 ]]; then
     zellij --session "$2" action go-to-tab-by-id "$3"
     zellij --session "$2" action focus-pane-id "terminal_$4"
   fi
+  if [[ -n ${5:-} ]]; then
+    if [[ -n ${6:-} ]]; then
+      HERDR_SOCKET_PATH=$6 herdr agent focus "$5"
+    else
+      herdr agent focus "$5"
+    fi
+  fi
 }
 
 case ${1:-} in
   # Detached helper: show the notification, wait for a click, then focus.
-  #   claude-notify --wait-click <claude session> <title> <body> <window> <zellij session> <tab id> <pane id>
+  #   claude-notify --wait-click <claude session> <title> <body> <window> <zellij session> <tab id> <pane id> <herdr pane> <herdr socket>
   --wait-click)
     shift
     id="" action=""
@@ -69,10 +77,10 @@ case ${1:-} in
     # notify-send prints the notification id at once and the action on a click.
     # Unclicked notifications sit in swaync's panel; stop waiting after an hour.
     {
-      read -r id && pending_add "$id$sep$1$sep$4$sep$5$sep$6$sep$7"
+      read -r id && pending_add "$id$sep$1$sep$4$sep$5$sep$6$sep$7$sep${8:-}$sep${9:-}"
       read -r action
     } < <(timeout 3600 notify-send -p -a "Claude Code" -A default=Open "$2" "$3" 2>/dev/null)
-    [[ $action == default ]] && focus_target "$4" "$5" "$6" "$7"
+    [[ $action == default ]] && focus_target "$4" "$5" "$6" "$7" "${8:-}" "${9:-}"
     exit 0
     ;;
   --jump)
@@ -81,9 +89,9 @@ case ${1:-} in
       notify-send -t 1500 -a "Claude Code" "No Claude notifications waiting"
       exit 0
     fi
-    IFS=$sep read -r id _ window zj_session tab_id pane_id <<<"$entry"
+    IFS=$sep read -r id _ window zj_session tab_id pane_id herdr_pane herdr_socket <<<"$entry"
     pending_drop 1 "$id"
-    focus_target "$window" "$zj_session" "$tab_id" "$pane_id"
+    focus_target "$window" "$zj_session" "$tab_id" "$pane_id" "$herdr_pane" "$herdr_socket"
     close_notification "$id"
     exit 0
     ;;
@@ -149,13 +157,15 @@ first_line() {
 
 # Hand off to a detached copy of this script so the hook returns immediately.
 send() {
-  local name cwd title window=""
+  local name cwd title window="" herdr_pane=""
   name=$(session_name)
   cwd=$(field .cwd)
   title="${ZELLIJ_SESSION_NAME:+$ZELLIJ_SESSION_NAME · }${name:-${cwd##*/}}"
   [[ -r $state.window ]] && window=$(<"$state.window")
+  [[ ${HERDR_ENV:-} == 1 ]] && herdr_pane=${HERDR_PANE_ID:-}
   setsid -f "$0" --wait-click "$session_id" "$title" "$1" "$window" \
-    "${ZELLIJ_SESSION_NAME:-}" "$(zellij_tab_id)" "${ZELLIJ_PANE_ID:-}" </dev/null 2>/dev/null
+    "${ZELLIJ_SESSION_NAME:-}" "$(zellij_tab_id)" "${ZELLIJ_PANE_ID:-}" \
+    "$herdr_pane" "${HERDR_SOCKET_PATH:-}" </dev/null 2>/dev/null
 }
 
 # The user is back in this session: close its notifications.

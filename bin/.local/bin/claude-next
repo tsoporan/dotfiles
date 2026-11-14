@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# Starts the next Claude Code session from a handoff: a new tab next to the
+# current one, in the same directory, with Claude already working on the
+# starting prompt. Focus stays where it is.
+#
+# Usage: claude-next <name> <prompt-file>
+#   <name>         session and tab name, e.g. "estimates-m2"
+#   <prompt-file>  the starting prompt; it must outlive this command
+#
+# Inside herdr it opens a tab in the current workspace; inside Zellij a tab in
+# the current session. Prints one line:
+#   STARTED herdr <pane-id> <name>
+#   STARTED zellij <tab-id> <name>
+#   NO_MULTIPLEXER            exit 3: not in herdr or Zellij, paste the prompt instead
+# The account follows the caller: CLAUDE_CONFIG_DIR is passed on when set.
+
+set -euo pipefail
+
+name=${1:?usage: claude-next <name> <prompt-file>}
+prompt_file=${2:?usage: claude-next <name> <prompt-file>}
+[[ -s $prompt_file ]] || { echo "claude-next: $prompt_file is missing or empty" >&2; exit 2; }
+prompt_file=$(readlink -f "$prompt_file")
+
+if [[ ${HERDR_ENV:-} == 1 && -n ${HERDR_WORKSPACE_ID:-} ]]; then
+  # herdr agent names: [a-z][a-z0-9_-]{0,31}, unique among live agents.
+  agent=$(tr '[:upper:]' '[:lower:]' <<<"$name" | tr -cs 'a-z0-9_-' '-' | sed -E 's/^[^a-z]+//; s/-+$//' | cut -c1-28)
+  agent=${agent:-next}
+  base=$agent
+  n=2
+  while herdr agent get "$agent" >/dev/null 2>&1; do
+    agent="$base-$n"
+    n=$((n + 1))
+  done
+
+  tab_args=(--workspace "$HERDR_WORKSPACE_ID" --cwd "$PWD" --label "$name" --no-focus)
+  [[ -n ${CLAUDE_CONFIG_DIR:-} ]] && tab_args+=(--env "CLAUDE_CONFIG_DIR=$CLAUDE_CONFIG_DIR")
+  pane=$(herdr tab create "${tab_args[@]}" | jq -r '.result.root_pane.pane_id')
+  [[ -n $pane && $pane != null ]] || { echo "claude-next: herdr did not return a pane" >&2; exit 1; }
+
+  herdr agent start "$agent" --kind claude --pane "$pane" -- -n "$name" >/dev/null
+  herdr agent prompt "$agent" "$(<"$prompt_file")" >/dev/null
+  echo "STARTED herdr $pane $name"
+  exit 0
+fi
+
+if [[ -n ${ZELLIJ_SESSION_NAME:-} ]]; then
+  here=$(zellij action list-panes -t -j 2>/dev/null |
+    jq -r --arg pane "${ZELLIJ_PANE_ID:-}" \
+      'first(.[] | select((.is_plugin | not) and (.id | tostring) == $pane) | .tab_id) // empty' 2>/dev/null || true)
+  # An interactive zsh so PATH and aliases match a hand-started session; the
+  # shell stays when Claude exits. %q quoting is read the same by zsh.
+  run=(zsh -ic "claude -n $(printf '%q' "$name") \"\$(<$(printf '%q' "$prompt_file"))\"; exec zsh")
+  # The tab must not look like a child of the session that asked for it.
+  run=(env -u CLAUDECODE -u CLAUDE_CODE_CHILD_SESSION "${run[@]}")
+  [[ -n ${CLAUDE_CONFIG_DIR:-} ]] && run=(env "CLAUDE_CONFIG_DIR=$CLAUDE_CONFIG_DIR" "${run[@]}")
+  tab=$(zellij action new-tab --name "$name" --cwd "$PWD" -- "${run[@]}")
+  # new-tab takes focus; give it back.
+  [[ -n $here ]] && zellij action go-to-tab-by-id "$here"
+  echo "STARTED zellij $tab $name"
+  exit 0
+fi
+
+echo "NO_MULTIPLEXER"
+exit 3

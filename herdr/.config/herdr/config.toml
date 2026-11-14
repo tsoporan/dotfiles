@@ -21,6 +21,27 @@ accent = "#e6fb04"
 # List agents as an attention queue (blocked and done first), not by workspace.
 agent_panel_sort = "priority"
 status_indicators = "symbols"
+# Room for a session name and the context figure on each agent row.
+sidebar_width = 32
+sidebar_max_width = 40
+# With split panes, name the agent on each pane's border.
+show_agent_labels_on_pane_borders = true
+# Right of the tab bar: Claude usage (written by ~/.local/bin/claude-statusline)
+# and the time.
+tab_bar_right = [
+  { type = "command", command = "cat \"${XDG_RUNTIME_DIR:-/tmp}/claude-statusline/usage\" 2>/dev/null", interval_seconds = 30, timeout_seconds = 2 },
+  { type = "datetime", format = "%H:%M" },
+]
+tab_bar_right_separator = "  "
+
+# Claude rows: what the session is about, then where it runs, its state in
+# words, and how full its context is. $ctx and $handoff come from
+# claude-statusline; $handoff appears once it is time to hand off.
+[ui.sidebar.agents.rows_by_agent]
+claude = [
+  ["state_icon", { token = "terminal_title_stripped", bold = true }],
+  [{ token = "workspace", dim = true }, "state_text", { token = "$ctx", dim = true }, { token = "$handoff", fg = "#ff5555", bold = true }],
+]
 
 [ui.toast]
 # In-app toast when an agent in another workspace needs attention.

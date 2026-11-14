@@ -103,7 +103,8 @@ hl.on("hyprland.start", function()
 
     -- GTK / portal session env (Wayland + dark + primary paste)
     hl.exec_cmd("~/.config/hypr/scripts/session-settings.sh")
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+    -- herdr starts only after the environment is exported, so its panes inherit it.
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all && systemctl --user start herdr.service")
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland")
 end)
