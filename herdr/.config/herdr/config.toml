@@ -48,6 +48,11 @@ previous_agent = ["prefix+shift+k", "ctrl+alt+up"]
 next_agent = ["prefix+shift+j", "ctrl+alt+down"]
 previous_tab = ["prefix+p", "ctrl+alt+left"]
 next_tab = ["prefix+n", "ctrl+alt+right"]
+# Workspaces: Ctrl+Alt+1..9 jumps to one by its place in the sidebar, and
+# Ctrl+Alt+Shift+Up/Down steps through them.
+switch_workspace = "ctrl+alt+1..9"
+previous_workspace = "ctrl+alt+shift+up"
+next_workspace = "ctrl+alt+shift+down"
 
 # Jump to the agent that most needs you: blocked first, then the one that
 # finished most recently (see ~/.local/bin/herdr-attention).

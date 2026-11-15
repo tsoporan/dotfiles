@@ -106,7 +106,7 @@ Inside herdr the script also puts the context size on the agent's sidebar row an
 
 ### Jumping to the agent that needs you
 
-Inside herdr, Ctrl+Alt+Enter runs `herdr-attention` (in `bin`). It focuses a blocked agent (one waiting on a permission prompt or question) first, otherwise the agent that finished most recently and hasn't been looked at. Press again for the next one. Unlike Super+U, it doesn't need a desktop notification, so it also finds agents whose turn was under a minute. Ctrl+Alt+arrows switch herdr tabs (left/right) and agents (up/down).
+Inside herdr, Ctrl+Alt+Enter runs `herdr-attention` (in `bin`). It focuses a blocked agent (one waiting on a permission prompt or question) first, otherwise the agent that finished most recently and hasn't been looked at. Press again for the next one. Unlike Super+U, it doesn't need a desktop notification, so it also finds agents whose turn was under a minute. Ctrl+Alt+arrows switch herdr tabs (left/right) and agents (up/down). Ctrl+Alt+1..9 jumps to a workspace by its place in the sidebar, and Ctrl+Alt+Shift+Up/Down steps through workspaces.
 
 ### Starting the next Claude session
 
