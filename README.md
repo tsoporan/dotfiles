@@ -2,6 +2,8 @@
 
 Personal configuration files for Arch Linux + Hyprland, managed with [GNU Stow](https://www.gnu.org/software/stow/).
 
+The machine itself (hardware, LUKS2 disk encryption with a YubiKey, maintenance timers) is in [SYSTEM.md](SYSTEM.md).
+
 ## Stack
 
 - **OS:** [Arch Linux](https://www.archlinux.org/)
