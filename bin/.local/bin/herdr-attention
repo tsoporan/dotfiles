@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Focus the herdr agent that most needs you: a blocked one (permission prompt or
+# question) first, otherwise the one that finished most recently and has not
+# been looked at. Bound to a herdr key; pressing again walks to the next one,
+# because focusing an agent marks its "done" as seen.
+#
+# Unlike claude-notify --jump (Super+U), this does not depend on a desktop
+# notification, so it also finds agents whose turn was too short to notify.
+
+set -euo pipefail
+
+target=$(herdr agent list | jq -r '
+  [.result.agents[]
+   | select((.focused | not) and (.agent_status == "blocked" or .agent_status == "done"))]
+  | sort_by([(if .agent_status == "blocked" then 0 else 1 end), -.state_change_seq])
+  | first | .pane_id // empty')
+
+if [[ -z $target ]]; then
+  herdr notification show "No agent needs you" >/dev/null
+  exit 0
+fi
+herdr agent focus "$target" >/dev/null

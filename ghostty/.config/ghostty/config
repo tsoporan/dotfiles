@@ -81,6 +81,14 @@ async-backend = epoll
 keybind = shift+insert=paste_from_clipboard
 keybind = control+insert=copy_to_clipboard
 
+# Pass Ctrl+Alt+arrows through to herdr: left/right switch tabs, up/down
+# switch agents. Ghostty's defaults move between its own splits, which aren't
+# used here.
+keybind = ctrl+alt+arrow_left=unbind
+keybind = ctrl+alt+arrow_right=unbind
+keybind = ctrl+alt+arrow_up=unbind
+keybind = ctrl+alt+arrow_down=unbind
+
 # Shift+Enter sends literal newline (useful in some TUI apps)
 keybind = shift+enter=text:\n
 
