@@ -108,6 +108,19 @@ Inside herdr the script also puts the context size on the agent's sidebar row an
 
 Inside herdr, Ctrl+Alt+Enter runs `herdr-attention` (in `bin`). It focuses a blocked agent (one waiting on a permission prompt or question) first, otherwise the agent that finished most recently and hasn't been looked at. Press again for the next one. Unlike Super+U, it doesn't need a desktop notification, so it also finds agents whose turn was under a minute. Ctrl+Alt+arrows switch herdr tabs (left/right) and agents (up/down). Ctrl+Alt+1..9 jumps to a workspace by its place in the sidebar, and Ctrl+Alt+Shift+Up/Down steps through workspaces.
 
+### Cleaning up leftover processes
+
+Ctrl+Alt+Backspace in herdr opens `herdr-cleanup` (in `bin`) in a popup. It lists what holds RAM, most suspicious first:
+
+- `orphan`: a process tree whose parent died, started from a terminal or an agent. Usually a leftover dev server, browser or test runner.
+- `gone`: running from a deleted directory, such as a removed worktree.
+- `server`: a terminal-started process listening on a port, with the herdr pane it runs in.
+- `container`: a Docker container.
+- `app`: a detached desktop app over 150 MB.
+- `pane`: each herdr pane and everything under it, for scale.
+
+Memory is PSS, so the column adds up. Enter shows the process tree; Ctrl-X kills the row after asking (SIGTERM, then SIGKILL after five seconds, or `docker stop`). It also runs on its own in any terminal.
+
 ### Starting the next Claude session
 
 `claude-next <name> <prompt-file>` (in `bin`) opens a new herdr or Zellij tab in the current directory with Claude already working on the prompt, and leaves focus where it was. Handoffs end with it.

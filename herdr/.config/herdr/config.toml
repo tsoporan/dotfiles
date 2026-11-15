@@ -62,6 +62,16 @@ type = "shell"
 command = "~/.local/bin/herdr-attention"
 description = "focus agent needing attention"
 
+# What is holding RAM: orphaned dev servers, processes in deleted worktrees,
+# containers and per-pane totals, with Ctrl-X to kill (see ~/.local/bin/herdr-cleanup).
+[[keys.command]]
+key = "ctrl+alt+backspace"
+type = "popup"
+command = "~/.local/bin/herdr-cleanup"
+description = "clean up leftover processes"
+width = "95%"
+height = "95%"
+
 # Tell the focused agent its PR merged (see ~/.local/bin/herdr-pr).
 [[keys.command]]
 key = "prefix+m"

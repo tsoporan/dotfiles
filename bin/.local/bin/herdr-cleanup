@@ -1,0 +1,520 @@
+#!/usr/bin/env python3
+"""Find what is holding RAM that nobody is using, and kill it.
+
+    herdr-cleanup              fzf view: Enter shows the process tree,
+                               Ctrl-X kills the selected row (asks first)
+    herdr-cleanup list         the rows, tab-separated, for fzf
+    herdr-cleanup show <id>    process tree of one row
+    herdr-cleanup kill <id>    kill one row after asking
+
+Rows, most suspicious first:
+    orphan     a process tree whose parent died: started from a terminal or
+               an agent, now owned by systemd. Usually a leftover dev
+               server, browser or test runner.
+    gone       running from a directory that was deleted, such as a removed
+               worktree.
+    server     a process started from a terminal that listens on a TCP port,
+               with the herdr pane it runs in.
+    container  a Docker container, stopped with `docker stop`.
+    app        a detached desktop app (a browser an agent opened) over 150 MB.
+    pane       a herdr pane and everything running under it. Shown for scale;
+               close those from herdr instead.
+
+Memory is PSS, so shared pages are split between processes instead of being
+counted once for each, and the column adds up.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import shlex
+import signal
+import subprocess
+import sys
+import time
+from dataclasses import dataclass, field
+from pathlib import Path
+
+UID = os.getuid()
+SELF = Path(sys.argv[0]).resolve()
+APP_MIN_MB = 150
+# Detached on purpose and tiny: never worth listing.
+EXPECTED_DETACHED = (
+    re.compile(r"claude-notify --wait-click"),
+    re.compile(r"^ssh: .*\[mux\]$"),
+)
+# Listeners that are part of something already shown elsewhere.
+IGNORED_LISTENERS = {"claude", "rootlesskit", "docker-proxy", "slirp4netns"}
+
+
+@dataclass
+class Proc:
+    pid: int
+    ppid: int
+    age: int
+    args: str
+    children: list[int] = field(default_factory=list)
+
+
+@dataclass
+class Row:
+    id: str
+    kind: str
+    mb: int
+    age: int
+    label: str
+    ports: list[str] = field(default_factory=list)
+    pids: list[int] = field(default_factory=list)
+    killable: bool = True
+
+
+def run(*cmd: str) -> str:
+    try:
+        return subprocess.run(
+            cmd, capture_output=True, text=True, timeout=10, check=False
+        ).stdout
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+
+
+def processes() -> dict[int, Proc]:
+    procs: dict[int, Proc] = {}
+    for line in run(
+        "ps", "-u", str(UID), "-o", "pid=,ppid=,etimes=,args="
+    ).splitlines():
+        parts = line.split(None, 3)
+        if len(parts) < 3:
+            continue
+        pid, ppid, age = int(parts[0]), int(parts[1]), int(parts[2])
+        procs[pid] = Proc(pid, ppid, age, parts[3] if len(parts) == 4 else "")
+    for p in procs.values():
+        if p.ppid in procs:
+            procs[p.ppid].children.append(p.pid)
+    return procs
+
+
+def subtree(procs: dict[int, Proc], root: int) -> list[int]:
+    out, stack = [], [root]
+    while stack:
+        pid = stack.pop()
+        if pid in procs:
+            out.append(pid)
+            stack.extend(procs[pid].children)
+    return out
+
+
+def pss_mb(pid: int) -> int:
+    try:
+        with open(f"/proc/{pid}/smaps_rollup") as f:
+            for line in f:
+                if line.startswith("Pss:"):
+                    return int(line.split()[1]) // 1024
+    except OSError:
+        pass
+    return 0
+
+
+def cgroup(pid: int) -> str:
+    try:
+        return Path(f"/proc/{pid}/cgroup").read_text().strip().rsplit("/", 1)[-1]
+    except OSError:
+        return ""
+
+
+def cwd(pid: int) -> str:
+    try:
+        return os.readlink(f"/proc/{pid}/cwd")
+    except OSError:
+        return ""
+
+
+def env_var(pid: int, name: str) -> str:
+    try:
+        for item in Path(f"/proc/{pid}/environ").read_bytes().split(b"\0"):
+            if item.startswith(name.encode() + b"="):
+                return item.split(b"=", 1)[1].decode(errors="replace")
+    except OSError:
+        pass
+    return ""
+
+
+def from_terminal(cg: str) -> bool:
+    """Started from a herdr pane, a Ghostty window or Zellij, not by the desktop."""
+    return cg == "herdr.service" or cg.startswith("app-ghostty") or "zellij" in cg
+
+
+def listeners() -> dict[int, list[str]]:
+    """pid -> listening ports, from `ss`."""
+    out: dict[int, list[str]] = {}
+    for line in run("ss", "-ltnpH").splitlines():
+        cols = line.split()
+        if len(cols) < 6:
+            continue
+        port = cols[3].rsplit(":", 1)[-1]
+        for name, pid in re.findall(r'\("([^"]+)",pid=(\d+)', cols[5]):
+            if name not in IGNORED_LISTENERS and port not in out.setdefault(
+                int(pid), []
+            ):
+                out[int(pid)].append(port)
+    return out
+
+
+def user_systemd(procs: dict[int, Proc]) -> int:
+    for p in procs.values():
+        if p.args.startswith("/usr/lib/systemd/systemd --user"):
+            return p.pid
+    return -1
+
+
+def herdr_panes(procs: dict[int, Proc]) -> tuple[int, dict[int, str]]:
+    """The herdr server pid, and each pane's root process -> a readable label."""
+    server = next(
+        (p.pid for p in procs.values() if p.args == "/usr/bin/herdr server"), -1
+    )
+    if server < 0:
+        return server, {}
+    try:
+        panes = {
+            p["pane_id"]: p
+            for p in json.loads(run("herdr", "pane", "list"))["result"]["panes"]
+        }
+        spaces = {
+            w["workspace_id"]: w.get("label") or w["workspace_id"]
+            for w in json.loads(run("herdr", "workspace", "list"))["result"][
+                "workspaces"
+            ]
+        }
+    except (ValueError, KeyError):
+        panes, spaces = {}, {}
+    roots: dict[int, str] = {}
+    for child in procs[server].children:
+        pane_id = env_var(child, "HERDR_PANE_ID")
+        pane = panes.get(pane_id, {})
+        title = pane.get("terminal_title_stripped") or pane.get("agent") or "shell"
+        space = spaces.get(pane.get("workspace_id", ""), "?")
+        roots[child] = f"{space} › {title}" if pane else pane_id or "herdr pane"
+    return server, roots
+
+
+def running_seconds(text: str) -> int:
+    """Docker's "16 hours ago" or "About a minute ago" as seconds; -1 if unknown."""
+    units = {
+        "second": 1,
+        "minute": 60,
+        "hour": 3600,
+        "day": 86400,
+        "week": 604800,
+        "month": 2592000,
+        "year": 31536000,
+    }
+    match = re.match(
+        r"(?:About )?(an?|\d+|Less than a) (second|minute|hour|day|week|month|year)",
+        text,
+    )
+    if not match:
+        return -1
+    count = match.group(1)
+    return (int(count) if count.isdigit() else 1) * units[match.group(2)]
+
+
+def docker_rows() -> list[Row]:
+    rows = []
+    fmt = "{{.ID}}\t{{.Names}}\t{{.Ports}}\t{{.RunningFor}}"
+    for line in run("docker", "ps", "--no-trunc", "--format", fmt).splitlines():
+        cid, name, ports, running = (line.split("\t") + ["", "", ""])[:4]
+        scope = Path(
+            f"/sys/fs/cgroup/user.slice/user-{UID}.slice/user@{UID}.service/user.slice/docker-{cid}.scope"
+        )
+        mb = 0
+        try:
+            stat = dict(
+                l.split() for l in (scope / "memory.stat").read_text().splitlines()
+            )
+            mb = (int(stat.get("anon", 0)) + int(stat.get("kernel", 0))) // 1048576
+        except (OSError, ValueError):
+            pass
+        published = sorted(set(re.findall(r":(\d+)->", ports)), key=int)
+        rows.append(
+            Row(
+                f"docker:{name}",
+                "container",
+                mb,
+                running_seconds(running),
+                name,
+                published,
+            )
+        )
+    return rows
+
+
+def collect() -> list[Row]:
+    procs = processes()
+    sysd = user_systemd(procs)
+    server, pane_roots = herdr_panes(procs)
+    ports = listeners()
+    mem = {pid: pss_mb(pid) for pid in procs}
+
+    def tree_row(id_: str, kind: str, root: int, label: str) -> Row:
+        pids = subtree(procs, root)
+        found = [p for pid in pids for p in ports.get(pid, [])]
+        return Row(
+            id_,
+            kind,
+            sum(mem.get(p, 0) for p in pids),
+            procs[root].age,
+            label,
+            found,
+            pids,
+        )
+
+    rows: list[Row] = []
+    claimed: set[int] = set()
+
+    # Detached trees: the parent died and systemd adopted them.
+    for p in procs.values():
+        if (
+            p.ppid not in (1, sysd)
+            or p.pid == server
+            or any(r.search(p.args) for r in EXPECTED_DETACHED)
+        ):
+            continue
+        cg = cgroup(p.pid)
+        if from_terminal(cg):
+            row = tree_row(
+                f"pid:{p.pid}", "orphan", p.pid, f"{short(p.args)}  ({cwd(p.pid)})"
+            )
+        elif cg.startswith("app-") and cg.endswith(f"-{p.pid}.scope"):
+            row = tree_row(f"pid:{p.pid}", "app", p.pid, short(p.args))
+            if row.mb < APP_MIN_MB:
+                continue
+        else:
+            continue
+        rows.append(row)
+        claimed.update(row.pids)
+
+    # Running from a deleted directory: report the top of each such tree.
+    for p in procs.values():
+        if p.pid in claimed or not cwd(p.pid).endswith("(deleted)"):
+            continue
+        if cwd(p.ppid).endswith("(deleted)"):
+            continue
+        row = tree_row(
+            f"pid:{p.pid}", "gone", p.pid, f"{short(p.args)}  ({cwd(p.pid)})"
+        )
+        rows.append(row)
+        claimed.update(row.pids)
+
+    def pane_of(pid: int) -> str:
+        while pid in procs and pid not in pane_roots:
+            pid = procs[pid].ppid
+        return pane_roots.get(pid, "")
+
+    for pid in ports:
+        if pid in claimed or pid not in procs or not from_terminal(cgroup(pid)):
+            continue
+        row = tree_row(f"pid:{pid}", "server", pid, short(procs[pid].args))
+        where = pane_of(pid)
+        row.label += f"  [{where}]" if where else f"  ({cwd(pid)})"
+        rows.append(row)
+        claimed.update(row.pids)
+
+    rows += docker_rows()
+
+    for root, label in pane_roots.items():
+        row = tree_row(f"pane:{root}", "pane", root, label)
+        row.killable = False
+        rows.append(row)
+
+    order = {"orphan": 0, "gone": 1, "server": 2, "container": 3, "app": 4, "pane": 5}
+    rows.sort(key=lambda r: (order[r.kind], -r.mb))
+    return rows
+
+
+def short(args: str) -> str:
+    try:
+        words = shlex.split(args)
+    except ValueError:
+        words = args.split()
+    if not words:
+        return args
+    words[0] = os.path.basename(words[0])
+    return " ".join(words)[:90]
+
+
+def fmt_age(seconds: int) -> str:
+    if seconds < 0:
+        return "-"
+    if seconds < 60:
+        return "<1m"
+    for unit, size in (("d", 86400), ("h", 3600), ("m", 60)):
+        if seconds >= size:
+            return f"{seconds // size}{unit}"
+    return f"{seconds}s"
+
+
+def fmt_mb(mb: int) -> str:
+    return f"{mb / 1024:.1f}G" if mb >= 1024 else f"{mb}M"
+
+
+def cmd_list() -> None:
+    for r in collect():
+        ports = ",".join(r.ports[:3]) or "-"
+        print(
+            f"{r.id}\t{r.kind:<9} {fmt_mb(r.mb):>6} {fmt_age(r.age):>4} {ports:<11} {r.label}"
+        )
+
+
+def find(row_id: str) -> Row | None:
+    return next((r for r in collect() if r.id == row_id), None)
+
+
+def cmd_show(row_id: str) -> None:
+    if row_id.startswith("docker:"):
+        print(
+            run(
+                "docker",
+                "ps",
+                "--filter",
+                f"name=^{row_id[7:]}$",
+                "--format",
+                "{{.Names}}\n  image   {{.Image}}\n  status  {{.Status}}\n  ports   {{.Ports}}",
+            )
+        )
+        print(
+            run(
+                "docker",
+                "stats",
+                "--no-stream",
+                "--format",
+                "  memory  {{.MemUsage}}",
+                row_id[7:],
+            )
+        )
+        return
+    procs = processes()
+    root = int(row_id.split(":")[1])
+    if root not in procs:
+        print("gone")
+        return
+
+    def walk(pid: int, depth: int) -> None:
+        p = procs[pid]
+        print(
+            f"{'  ' * depth}{pid:<7} {fmt_mb(pss_mb(pid)):>6} {fmt_age(p.age):>4}  {short(p.args)}"
+        )
+        for child in sorted(p.children):
+            walk(child, depth + 1)
+
+    print(f"cwd: {cwd(root)}\n")
+    walk(root, 0)
+
+
+def cmd_kill(row_id: str) -> None:
+    row = find(row_id)
+    if row is None:
+        input("Already gone. Enter to go back.")
+        return
+    if not row.killable:
+        input("This is a herdr pane: close it from herdr instead. Enter to go back.")
+        return
+    what = (
+        f"{row.kind} {row.label}\n  {len(row.pids) or 1} process(es), {fmt_mb(row.mb)}"
+    )
+    if input(f"Kill {what}?\n[y/N] ").strip().lower() != "y":
+        return
+    if row.kind == "container":
+        subprocess.run(["docker", "stop", row.id[7:]], check=False)
+        return
+    # Children first, so parents that restart workers don't respawn them.
+    for pid in reversed(row.pids):
+        try:
+            os.kill(pid, signal.SIGTERM)
+        except ProcessLookupError:
+            pass
+    deadline = time.time() + 5
+    while time.time() < deadline and any(Path(f"/proc/{p}").exists() for p in row.pids):
+        time.sleep(0.2)
+    left = [p for p in row.pids if Path(f"/proc/{p}").exists()]
+    if left:
+        for pid in left:
+            try:
+                os.kill(pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+        print(f"{len(left)} ignored SIGTERM and were killed.")
+        time.sleep(0.5)
+
+
+def cmd_view() -> None:
+    me = shlex.quote(str(SELF))
+    total = used = 0
+    for line in Path("/proc/meminfo").read_text().splitlines():
+        key, value = line.split(":", 1)
+        if key == "MemTotal":
+            total = int(value.split()[0]) // 1024
+        elif key == "MemAvailable":
+            used = total - int(value.split()[0]) // 1024
+    header = (
+        f"RAM {fmt_mb(used)}/{fmt_mb(total)} · Enter: tree · Ctrl-X: kill · "
+        "Ctrl-R: refresh · Esc: close"
+    )
+    subprocess.run(
+        [
+            "fzf",
+            # FZF_DEFAULT_OPTS may set --height 40% and --border; the herdr popup
+            # already has a frame, so take all of it.
+            "--height",
+            "100%",
+            "--no-border",
+            "--ansi",
+            "--delimiter",
+            "\t",
+            "--with-nth",
+            "2..",
+            "--no-sort",
+            "--layout",
+            "reverse",
+            "--header",
+            header,
+            "--header-first",
+            "--info",
+            "inline-right",
+            "--no-separator",
+            "--prompt",
+            "cleanup> ",
+            "--preview",
+            f"{me} show {{1}}",
+            # Hidden until Enter, so the list keeps the whole popup.
+            "--preview-window",
+            "right,45%,wrap,hidden",
+            "--bind",
+            f"start:reload({me} list)",
+            "--bind",
+            f"ctrl-r:reload({me} list)",
+            "--bind",
+            f"ctrl-x:execute({me} kill {{1}})+reload({me} list)",
+            "--bind",
+            "enter:toggle-preview",
+        ],
+        check=False,
+    )
+
+
+def main() -> None:
+    args = sys.argv[1:]
+    if not args:
+        cmd_view()
+    elif args[0] == "list":
+        cmd_list()
+    elif args[0] == "show" and len(args) == 2:
+        cmd_show(args[1])
+    elif args[0] == "kill" and len(args) == 2:
+        cmd_kill(args[1])
+    else:
+        sys.exit(__doc__)
+
+
+if __name__ == "__main__":
+    main()

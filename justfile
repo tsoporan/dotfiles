@@ -5,7 +5,7 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# stow dry-run, GPG inventory, script syntax
+# stow dry-run, GPG inventory, script checks
 check: check-stow check-gnupg check-scripts
 
 # Every package must stow without conflicts
@@ -61,26 +61,41 @@ check-gnupg:
     fi
     echo "gnupg inventory: ok"
 
-# bash -n on bin scripts; shellcheck when installed
+# Shell scripts: bash -n, then shellcheck. Python scripts: syntax, then ruff.
 check-scripts:
     #!/usr/bin/env bash
     set -euo pipefail
     cd "{{ justfile_directory() }}"
     shopt -s nullglob
-    scripts=(bin/.local/bin/* hypr/.config/hypr/scripts/*)
-    if (( ${#scripts[@]} == 0 )); then
+    shell=() python=()
+    for f in bin/.local/bin/* hypr/.config/hypr/scripts/*; do
+      if [[ $(head -n1 "$f") == *python* ]]; then python+=("$f"); else shell+=("$f"); fi
+    done
+    if (( ${#shell[@]} == 0 )); then
       echo "no scripts" >&2
       exit 1
     fi
-    for f in "${scripts[@]}"; do
+    for f in "${shell[@]}"; do
       bash -n "$f"
     done
     echo "bash -n: ok"
     if command -v shellcheck >/dev/null; then
-      shellcheck "${scripts[@]}"
+      shellcheck "${shell[@]}"
       echo "shellcheck: ok"
     else
       echo "note: shellcheck not installed; ran bash -n only"
+    fi
+    if (( ${#python[@]} )); then
+      for f in "${python[@]}"; do
+        python3 -c 'import ast, sys; ast.parse(open(sys.argv[1]).read(), sys.argv[1])' "$f"
+      done
+      echo "python syntax: ok"
+      if command -v ruff >/dev/null; then
+        ruff check "${python[@]}"
+        ruff format --check "${python[@]}"
+      else
+        echo "note: ruff not installed; checked python syntax only"
+      fi
     fi
 
 # Pending antidote + plugin git pulls. No changes.
