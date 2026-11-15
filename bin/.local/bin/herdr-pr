@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+# Show each Claude session's pull requests on its herdr sidebar row, and say
+# when they merge.
+#
+#   herdr-pr hook          Claude Code PostToolUse hook (matcher "Bash"). When a
+#                          command ran `gh pr create` or `herdr-pr track`, the PR
+#                          URL in its output is added to this session's PRs.
+#   herdr-pr track <url>   Adopt an existing PR: Claude runs this, and the hook
+#                          records the URL it prints.
+#   herdr-pr poll          Run every minute by herdr-pr.timer. Looks up each
+#                          herdr pane's PRs on GitHub, writes the $pr, $pr_bad
+#                          and $pr_done sidebar tokens, and raises a herdr toast
+#                          when one merges, naming any partner PR still open.
+#   herdr-pr nudge         Bound to a herdr key. Tells the agent in the focused
+#                          pane which of its PRs merged and which are still
+#                          open, which used to be typed by hand ("123 is merged").
+#
+# A session can ship several PRs at once (an API change and the frontend
+# change that uses it), so every PR it opens is tracked, not just the latest. A PR
+# leaves the row 12 hours after it merges or closes.
+#
+# PRs are stored per Claude session id, not per pane: herdr resumes the same
+# session id after a restart, so the link survives one.
+#   $XDG_STATE_HOME/herdr-pr/<session>.prs     one "owner/repo number" per line
+#   $XDG_STATE_HOME/herdr-pr/<session>.state   "owner/repo number state" per line,
+#                                              from the last poll, to toast a merge once
+
+set -euo pipefail
+
+state_dir=${XDG_STATE_HOME:-$HOME/.local/state}/herdr-pr
+url_re='https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/pull/[0-9]+'
+keep_finished_seconds=$((12 * 3600))
+
+die() { echo "herdr-pr: $*" >&2; exit 1; }
+
+# join "a" "b" -> "a, b"
+join() { local IFS=,; local s="$*"; echo "${s//,/, }"; }
+
+# "https://github.com/o/r/pull/12" -> "o/r 12"
+ref_from_url() { sed -E 's#https://github\.com/([^/]+/[^/]+)/pull/([0-9]+)#\1 \2#' <<<"$1"; }
+
+cmd_hook() {
+  local input session command output url ref file
+  input=$(cat)
+  # Most Bash calls are not about PRs; skip them before running jq.
+  [[ $input == *'gh pr create'* || $input == *'herdr-pr track'* ]] || exit 0
+  session=$(jq -r '.session_id // empty' <<<"$input")
+  command=$(jq -r '.tool_input.command // empty' <<<"$input")
+  [[ -n $session && ( $command == *'gh pr create'* || $command == *'herdr-pr track'* ) ]] || exit 0
+  # The URL is on stdout after a create, or in stderr when the PR already exists.
+  output=$(jq -r '.tool_response | if type == "object" then [.stdout, .stderr] | map(. // "") | join("\n") else tostring end' <<<"$input")
+  url=$(grep -oE "$url_re" <<<"$output" | tail -n1) || exit 0
+  ref=$(ref_from_url "$url")
+  mkdir -p "$state_dir"
+  file=$state_dir/$session.prs
+  grep -qxF "$ref" "$file" 2>/dev/null || echo "$ref" >>"$file"
+}
+
+cmd_track() {
+  [[ $# -eq 1 ]] || die "usage: herdr-pr track <pull request url>"
+  local url
+  url=$(grep -oE "$url_re" <<<"$1") || die "not a GitHub pull request URL: $1"
+  echo "$url"
+}
+
+# "<state> <seconds since it merged or closed, or 0>" from `gh pr view --json` output.
+pr_state() {
+  jq -r '
+    def failed: (.conclusion // .state // "") | IN("FAILURE", "ERROR", "TIMED_OUT", "CANCELLED", "ACTION_REQUIRED", "STARTUP_FAILURE");
+    def pending: (.__typename == "CheckRun" and .status != "COMPLETED") or ((.state // "") | IN("PENDING", "EXPECTED"));
+    def age: (.mergedAt // .closedAt) as $t | if $t then now - ($t | fromdate) | floor else 0 end;
+    (if .state == "MERGED" then "merged"
+    elif .state == "CLOSED" then "closed"
+    elif any(.statusCheckRollup[]?; failed) then "ci-failed"
+    elif .reviewDecision == "CHANGES_REQUESTED" then "changes"
+    elif any(.statusCheckRollup[]?; pending) then "ci-running"
+    elif .isDraft then "draft"
+    elif .reviewDecision == "APPROVED" then "approved"
+    else "ci-passed" end) + " " + (age | tostring)'
+}
+
+label_for() {
+  case $1 in
+    ci-running) echo "ci…" ;;
+    ci-passed) echo "ci ✓" ;;
+    ci-failed) echo "ci ✗" ;;
+    *) echo "$1" ;;
+  esac
+}
+
+cmd_poll() {
+  local panes
+  # No herdr server, nothing to show.
+  panes=$(herdr pane list 2>/dev/null | jq -r '.result.panes[] | select(.agent_session.value != null) | [.pane_id, .agent_session.value] | @tsv') || exit 0
+  [[ -d $state_dir ]] || exit 0
+
+  # Sessions gone for two weeks are not coming back.
+  find "$state_dir" -type f -mtime +14 -delete
+
+  declare -A view=()  # "o/r n" -> gh JSON, so panes sharing a PR cost one call
+  local pane session ref repo number json state age prev
+  while IFS=$'\t' read -r pane session; do
+    [[ -n $pane && -s $state_dir/$session.prs ]] || continue
+
+    declare -A last=()
+    if [[ -f $state_dir/$session.state ]]; then
+      while read -r repo number state; do last["$repo $number"]=$state; done <"$state_dir/$session.state"
+    fi
+
+    local keep=() lines=() open=() merged_now=()
+    local shown_ok="" shown_bad="" shown_done=""
+    local unreachable=0
+    while read -r ref; do
+      [[ -n $ref ]] || continue
+      read -r repo number <<<"$ref"
+      if [[ -z ${view[$ref]+set} ]]; then
+        view[$ref]=$(timeout 20 gh pr view "$number" -R "$repo" --json state,isDraft,reviewDecision,statusCheckRollup,mergedAt,closedAt 2>/dev/null) || view[$ref]=""
+      fi
+      json=${view[$ref]}
+      if [[ -z $json ]]; then
+        # GitHub unreachable: keep the PR and what the row shows.
+        unreachable=1
+        keep+=("$ref")
+        continue
+      fi
+      read -r state age <<<"$(pr_state <<<"$json")"
+      # Finished long enough ago: stop tracking it.
+      if [[ $state == merged || $state == closed ]] && ((age > keep_finished_seconds)); then
+        continue
+      fi
+      keep+=("$ref")
+      lines+=("$ref $state")
+
+      local item
+      item="#$number $(label_for "$state")"
+      case $state in
+        merged) shown_done+="${shown_done:+ }$item" ;;
+        ci-failed | changes) shown_bad+="${shown_bad:+ }$item" ;;
+        closed) ;;
+        *) shown_ok+="${shown_ok:+ }$item"; open+=("#$number") ;;
+      esac
+      prev=${last[$ref]:-}
+      if [[ $state == merged && -n $prev && $prev != merged ]]; then merged_now+=("$number"); fi
+      if [[ $state == ci-failed || $state == changes ]]; then open+=("#$number"); fi
+    done <"$state_dir/$session.prs"
+    unset last
+
+    printf '%s\n' "${keep[@]}" >"$state_dir/$session.prs.tmp" && mv "$state_dir/$session.prs.tmp" "$state_dir/$session.prs"
+    ((unreachable)) && continue
+    printf '%s\n' "${lines[@]}" >"$state_dir/$session.state"
+
+    # Three tokens so each group can have its own color in the sidebar rows.
+    local args=(--source herdr-pr) t value
+    for t in pr pr_bad pr_done; do
+      case $t in pr) value=$shown_ok ;; pr_bad) value=$shown_bad ;; pr_done) value=$shown_done ;; esac
+      if [[ -n $value ]]; then args+=(--token "$t=$value"); else args+=(--clear-token "$t"); fi
+    done
+    timeout 5 herdr pane report-metadata "$pane" "${args[@]}" >/dev/null || true
+
+    for number in "${merged_now[@]}"; do
+      local body="prefix+m tells its agent"
+      ((${#open[@]})) && body="Still open: ${open[*]} · $body"
+      timeout 5 herdr notification show "#$number merged" --body "$body" --sound "done" >/dev/null || true
+    done
+  done <<<"$panes"
+}
+
+cmd_nudge() {
+  local pane=${HERDR_ACTIVE_PANE_ID:-} session repo number state
+  [[ -n $pane ]] || die "no focused herdr pane"
+  session=$(herdr pane get "$pane" | jq -r '.result.pane.agent_session.value // empty')
+  if [[ -z $session || ! -s $state_dir/$session.state ]]; then
+    herdr notification show "No PR for this pane" --body "Its session has not opened or tracked one." >/dev/null
+    return
+  fi
+  local merged=() open=()
+  while read -r repo number state; do
+    case $state in
+      merged) merged+=("#$number ($repo)") ;;
+      closed) ;;
+      *) open+=("#$number ($repo)") ;;
+    esac
+  done <"$state_dir/$session.state"
+  if ((${#merged[@]} == 0)); then
+    herdr notification show "Nothing merged yet" --body "Open: ${open[*]}" >/dev/null
+    return
+  fi
+  local message
+  message="Merged: $(join "${merged[@]}")."
+  ((${#open[@]})) && message+=" Still open: $(join "${open[@]}")."
+  herdr agent prompt "$pane" "$message" >/dev/null
+}
+
+case ${1:-} in
+  hook) cmd_hook ;;
+  track) shift; cmd_track "$@" ;;
+  poll) cmd_poll ;;
+  nudge) cmd_nudge ;;
+  *) die "usage: herdr-pr {hook|track <url>|poll|nudge}" ;;
+esac

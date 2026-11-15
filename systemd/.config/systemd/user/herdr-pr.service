@@ -1,0 +1,7 @@
+[Unit]
+Description=Show Claude sessions' pull requests on the herdr sidebar
+After=herdr.service
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/herdr-pr poll

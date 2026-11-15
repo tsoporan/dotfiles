@@ -90,6 +90,20 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
 Inside herdr the script also puts the context size on the agent's sidebar row and writes the usage figures for herdr's tab bar.
 
+### Pull requests on the herdr sidebar
+
+`herdr-pr` (in `bin`) shows each Claude session's pull requests under its herdr sidebar row: `#123 ci…`, `ci ✓`, `approved`, red `ci ✗` or `changes`, green `merged`. Every PR a session opens is tracked, so paired PRs (say, an API change and the frontend change that uses it) both show. A Claude Code hook records each PR when a session runs `gh pr create`. To adopt an existing PR, the session runs `herdr-pr track <url>`. PRs are stored per Claude session, so they survive a herdr restart. A PR leaves the row 12 hours after it merges or closes.
+
+`herdr-pr.timer` (in `systemd`) polls GitHub every minute while herdr runs, and raises a herdr toast when a PR merges, naming any of the session's PRs still open. `prefix+m` then tells the focused agent which of its PRs merged and which are still open. Enable the timer once with `systemctl --user enable --now herdr-pr.timer`. The hook goes in `~/.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{ "matcher": "Bash", "hooks": [{ "type": "command", "command": "\"$HOME/.local/bin/herdr-pr\" hook", "timeout": 5 }] }]
+  }
+}
+```
+
 ### Starting the next Claude session
 
 `claude-next <name> <prompt-file>` (in `bin`) opens a new herdr or Zellij tab in the current directory with Claude already working on the prompt, and leaves focus where it was. Handoffs end with it.
