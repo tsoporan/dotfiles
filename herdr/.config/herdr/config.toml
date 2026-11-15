@@ -6,8 +6,37 @@
 onboarding = false
 
 [theme]
-# Use Ghostty's palette (black + electric yellow) instead of a built-in theme.
+# "terminal" takes Ghostty's palette; [theme.custom] then sets every token so
+# herdr's chrome matches the rest of the desktop (Hyprland, waybar, Zellij).
 name = "terminal"
+
+# Black + electric yellow. Greys step up from Ghostty's #0a0a0a background;
+# yellow marks what has focus and agents that are working. Status colors are
+# waybar's.
+[theme.custom]
+# Surfaces
+panel_bg = "#0a0a0a"      # tab bar, popups
+sidebar_bg = "#0d0d0d"    # one step off the panes, so the sidebar reads as chrome
+surface_dim = "#1c1c1c"   # sidebar and section dividers
+surface0 = "#1f1f1f"      # input fields, secondary buttons
+surface1 = "#2a2a2a"
+active_row_bg = "#1a1a1a" # selected workspace or agent row
+selection_bg = "#2a2a2a"  # same as Ghostty's selection
+# Text
+text = "#e0e0e0"
+subtext0 = "#909090"
+overlay0 = "#4a4a4a"      # section labels, unfocused pane borders
+overlay1 = "#707070"      # tab-bar status, "+" new tab
+# Focus
+accent = "#e6fb04"
+# Status
+red = "#ff5555"
+peach = "#ffb86c"
+yellow = "#e6fb04"
+green = "#50fa7b"
+teal = "#8be9fd"
+blue = "#62a0ea"
+mauve = "#c061cb"
 
 [keys]
 # The default ctrl+b is Claude Code's "run in background" key. ctrl+g matches
@@ -17,7 +46,8 @@ previous_agent = "prefix+shift+k"
 next_agent = "prefix+shift+j"
 
 [ui]
-accent = "#e6fb04"
+# Adjacent panes share one divider instead of each drawing its own frame.
+pane_gaps = false
 # List agents as an attention queue (blocked and done first), not by workspace.
 agent_panel_sort = "priority"
 status_indicators = "symbols"
