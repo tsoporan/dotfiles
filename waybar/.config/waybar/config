@@ -15,6 +15,7 @@
     ],
     "modules-right": [
         "custom/media",
+        "custom/agents",
         "custom/updates",
         "custom/systemd-failed",
         "cpu",
@@ -79,6 +80,15 @@
         "on-scroll-down": "playerctl volume 0.05-"
     },
 
+    "custom/agents": {
+        "format": "󰚩 {}",
+        "return-type": "json",
+        "interval": 3,
+        "exec": "waybar-agents",
+        "on-click": "waybar-agents --jump",
+        "escape": true
+    },
+
     "custom/updates": {
         "format": " {}",
         "return-type": "",
@@ -89,9 +99,10 @@
 
     "custom/systemd-failed": {
         "format": "󰀦 {}",
-        "return-type": "",
+        "return-type": "json",
         "interval": 60,
-        "exec": "count=$(systemctl --user list-units --state=failed --no-legend 2>/dev/null | wc -l); [ \"$count\" -gt 0 ] && echo \"$count\" || echo ''"
+        "exec": "waybar-failed-units",
+        "on-click": "ghostty --title=failed-units -e sh -c 'systemctl --user --failed; systemctl --failed; read -r _'"
     },
 
     "disk": {
@@ -118,8 +129,9 @@
     "memory": {
         "format": " {used:0.1f}G",
         "interval": 5,
-        "on-click": "ghostty -e btop",
-        "tooltip-format": "{used:0.1f}G / {total:0.1f}G ({percentage}%)",
+        "on-click": "ghostty --title=cleanup -e herdr-cleanup",
+        "on-click-right": "ghostty -e btop",
+        "tooltip-format": "{used:0.1f}G used of {total:0.1f}G ({percentage}%)\n{avail:0.1f}G available (disk cache counts as available)\nswap {swapUsed:0.1f}G of {swapTotal:0.1f}G\n\nclick: leftover processes · right-click: btop",
         "states": {
             "warning": 70,
             "critical": 90

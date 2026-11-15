@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Waybar custom module: how many systemd units have failed, user and system,
+# with their names in the tooltip. Prints nothing when none have, which hides
+# the module.
+
+set -uo pipefail
+
+user=$(systemctl --user list-units --state=failed --no-legend --plain 2>/dev/null | awk '{print $1}')
+system=$(systemctl list-units --state=failed --no-legend --plain 2>/dev/null | awk '{print $1}')
+names=$(printf '%s\n%s\n' "${user:+${user//$'\n'/ (user)$'\n'} (user)}" "$system" | sed '/^$/d')
+count=$(printf '%s' "$names" | grep -c . || true)
+
+if ((count == 0)); then
+  exit 0
+fi
+jq -cn --arg text "$count" --arg tooltip "Failed units:"$'\n'"$names"$'\n\n'"click: details" \
+  '{text: $text, tooltip: $tooltip, class: "failed"}'

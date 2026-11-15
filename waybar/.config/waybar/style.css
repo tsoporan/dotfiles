@@ -73,6 +73,7 @@ window#waybar {
 }
 
 /* System modules - minimal style */
+#custom-agents,
 #custom-updates,
 #custom-systemd-failed,
 #cpu,
@@ -88,6 +89,15 @@ window#waybar {
 #tray {
     padding: 0 8px;
     color: #808080;
+}
+
+/* herdr agents waiting for you - only visible when some are */
+#custom-agents.done {
+    color: #50fa7b;
+}
+
+#custom-agents.blocked {
+    color: #ff5555;
 }
 
 /* Updates - only visible when there are updates */

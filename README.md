@@ -156,6 +156,12 @@ Super+Shift+1 through Super+0 moves the focused window (`hl.dsp.window.move({ wo
 
 swaync runs as its packaged user service, which Hyprland restarts at login. Starting it as a bare process raced with D-Bus, which also starts the service on the first notification, and the losing copy left the unit marked failed.
 
+### Waybar
+
+- 󰚩 shows how many herdr agents are blocked or finished and waiting for you: green when they have finished, red when any is blocked. The tooltip lists them; a click focuses herdr's window and the agent that most needs you (`waybar-agents` in `bin`). It finds the window by the `herdr: ` title set in herdr's config.
+- Memory is total minus available, so disk cache doesn't count. The tooltip shows what's available and swap. Click opens `herdr-cleanup`; right-click opens btop.
+- 󰀦 counts failed systemd units, user and system, and names them in the tooltip (`waybar-failed-units` in `bin`). Click shows the details.
+
 ## Zsh plugins
 
 [Antidote](https://github.com/mattmc3/antidote) reads `zsh/.zsh_plugins.txt`. That file is in git. The rest is machine-local:

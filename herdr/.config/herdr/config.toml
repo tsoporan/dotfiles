@@ -82,6 +82,9 @@ description = "tell agent its PR merged"
 [ui]
 # Adjacent panes share one divider instead of each drawing its own frame.
 pane_gaps = false
+# Window title for Hyprland and waybar; ~/.local/bin/waybar-agents finds the
+# herdr window by this "herdr: " prefix.
+window_title = "herdr: {workspace}"
 # List agents as an attention queue (blocked and done first), not by workspace.
 agent_panel_sort = "priority"
 status_indicators = "symbols"

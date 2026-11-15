@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Waybar custom module: herdr agents waiting for you.
+#
+#   waybar-agents          one line of JSON for waybar: how many agents are
+#                          blocked (permission prompt or question) or done
+#                          (finished, not yet looked at), each listed in the
+#                          tooltip. Prints nothing when none are, which hides
+#                          the module.
+#   waybar-agents --jump   focus herdr's window, then the agent that most
+#                          needs you (see herdr-attention).
+#
+# herdr's window is found by its title, which herdr's config sets to
+# "herdr: <workspace>".
+
+set -uo pipefail
+
+if [[ ${1:-} == --jump ]]; then
+  addr=$(hyprctl clients -j | jq -r 'first(.[] | select(.title | startswith("herdr: ")) | .address) // empty')
+  [[ -n $addr ]] && hyprctl dispatch "hl.dsp.focus({ window = \"address:$addr\" })" >/dev/null
+  exec herdr-attention
+fi
+
+agents=$(herdr agent list 2>/dev/null) || exit 0
+spaces=$(herdr workspace list 2>/dev/null) || spaces='{"result":{"workspaces":[]}}'
+
+jq -cn --argjson a "$agents" --argjson w "$spaces" '
+  ($w.result.workspaces | map({(.workspace_id): (.label // .workspace_id)}) | add // {}) as $label
+  | [$a.result.agents[] | select(.agent_status == "blocked" or .agent_status == "done")]
+  | sort_by([(if .agent_status == "blocked" then 0 else 1 end), -.state_change_seq])
+  | if length == 0 then empty else
+      (map(select(.agent_status == "blocked")) | length) as $blocked
+      | {
+          text: (length | tostring),
+          class: (if $blocked > 0 then "blocked" else "done" end),
+          tooltip: (["Agents waiting for you:"]
+            + map("\(.agent_status)  \($label[.workspace_id] // "?") › \(.terminal_title_stripped // .agent)")
+            + ["", "click: jump to the first"] | join("\n"))
+        }
+    end'
