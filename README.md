@@ -154,6 +154,8 @@ Super+1 through Super+0 focus workspaces 1 through 10. Pressing the key for the 
 
 Super+Shift+1 through Super+0 moves the focused window (`hl.dsp.window.move({ workspace = N })`).
 
+swaync runs as its packaged user service, which Hyprland restarts at login. Starting it as a bare process raced with D-Bus, which also starts the service on the first notification, and the losing copy left the unit marked failed.
+
 ## Zsh plugins
 
 [Antidote](https://github.com/mattmc3/antidote) reads `zsh/.zsh_plugins.txt`. That file is in git. The rest is machine-local:

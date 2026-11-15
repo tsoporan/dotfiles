@@ -91,10 +91,9 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("systemctl --user start hyprpolkitagent")
 
     -- Kill stale processes from previous session before starting
-    hl.exec_cmd("pkill -x waybar; pkill -x hyprpaper; pkill -x hypridle; pkill -x hyprlock; pkill -x swaync")
+    hl.exec_cmd("pkill -x waybar; pkill -x hyprpaper; pkill -x hypridle; pkill -x hyprlock")
     hl.exec_cmd("sleep 0.5 && waybar")
     hl.exec_cmd("sleep 0.5 && hyprpaper")
-    hl.exec_cmd("sleep 0.5 && swaync")
     hl.exec_cmd("sleep 1 && hypridle")
 
     -- Clipboard: clipse owns history. Do not run cliphist watchers or wl-clip-persist
@@ -104,7 +103,12 @@ hl.on("hyprland.start", function()
     -- GTK / portal session env (Wayland + dark + primary paste)
     hl.exec_cmd("~/.config/hypr/scripts/session-settings.sh")
     -- herdr starts only after the environment is exported, so its panes inherit it.
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all && systemctl --user start herdr.service")
+    -- swaync runs as its packaged user service, not a bare process: D-Bus also
+    -- starts that service on the first notification, and a second copy beside
+    -- a bare one fails and leaves the unit marked failed.
+    hl.exec_cmd("dbus-update-activation-environment --systemd --all && { "
+        .. "systemctl --user reset-failed swaync.service; systemctl --user restart swaync.service; "
+        .. "systemctl --user start herdr.service; }")
     hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
     hl.exec_cmd("systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland")
 end)
