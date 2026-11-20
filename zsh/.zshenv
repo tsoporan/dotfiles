@@ -53,6 +53,7 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # ------------------------------------------------------------------------------
 # PATH
 # ------------------------------------------------------------------------------
+typeset -U path PATH
 export GOPATH="${HOME}/go"
 export GOBIN="${GOPATH}/bin"
 export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$GOBIN:$PATH"
@@ -61,9 +62,3 @@ export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$GOBIN:$PATH"
 # Ripgrep
 # ------------------------------------------------------------------------------
 export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
-
-# ------------------------------------------------------------------------------
-# GTK Scaling (HiDPI)
-# ------------------------------------------------------------------------------
-export GDK_SCALE=1
-export GDK_DPI_SCALE=1.25
