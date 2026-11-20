@@ -94,7 +94,7 @@
         "return-type": "",
         "interval": 3600,
         "exec": "count=$(checkupdates 2>/dev/null | wc -l); [ \"$count\" -gt 0 ] && echo \"$count\" || echo ''",
-        "on-click": "ghostty -e sudo pacman -Syu"
+        "on-click": "ghostty -e bash -c 'sudo pacman -Syu; read -rp \"Done. Press Enter to close...\"'"
     },
 
     "custom/systemd-failed": {

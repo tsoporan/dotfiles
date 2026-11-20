@@ -1,0 +1,34 @@
+# Lazygit configuration — delta pager and black + electric yellow desktop theme.
+gui:
+  nerdFontsVersion: "3"
+  border: single
+  theme:
+    activeBorderColor:
+      - "#e6fb04"
+      - bold
+    inactiveBorderColor:
+      - "#303030"
+    searchingActiveBorderColor:
+      - "#e6fb04"
+      - bold
+    optionsTextColor:
+      - "#62a0ea"
+    selectedLineBgColor:
+      - "#1a1a1a"
+    cherryPickedCommitBgColor:
+      - "#1a1a1a"
+    cherryPickedCommitFgColor:
+      - "#e6fb04"
+    markedBaseCommitBgColor:
+      - "#1a1a1a"
+    markedBaseCommitFgColor:
+      - "#e6fb04"
+    unstagedChangesColor:
+      - "#ff5555"
+    defaultFgColor:
+      - "#e0e0e0"
+
+git:
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never

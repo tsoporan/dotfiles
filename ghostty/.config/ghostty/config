@@ -19,12 +19,12 @@ bold-is-bright = false
 # ------------------------------------------------------------------------------
 # Theme (same black + electric yellow as Hyprland / waybar)
 # ------------------------------------------------------------------------------
-background = #0a0a0a
+background = #000000
 foreground = #e0e0e0
 selection-background = #2a2a2a
 selection-foreground = #e6fb04
 
-palette = 0=#0a0a0a
+palette = 0=#000000
 palette = 1=#c01c28
 palette = 2=#26a269
 palette = 3=#e6fb04

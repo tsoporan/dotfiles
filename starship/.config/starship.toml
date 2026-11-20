@@ -112,50 +112,14 @@ vimcmd_replace_symbol = "[❮](bold yellow)"
 vimcmd_visual_symbol = "[❮](bold yellow)"
 
 # ------------------------------------------------------------------------------
-# Disabled Modules (for faster prompt)
+# Cloud & Infra (only modules listed in `format` above are evaluated)
 # ------------------------------------------------------------------------------
 [aws]
 format = '[$symbol($profile )(\($region\) )]($style)'
 symbol = "󰸏 "
 style = "bold #ff9900"
 
-[azure]
-disabled = true
-
-[gcloud]
-disabled = true
-
-[kubernetes]
-disabled = true
-
-[docker_context]
-disabled = true
-
-[package]
-disabled = true
-
 [terraform]
 format = '[$symbol$workspace]($style) '
 symbol = "󱁢 "
 style = "bold #844fba"
-
-[vagrant]
-disabled = true
-
-[nix_shell]
-disabled = true
-
-[memory_usage]
-disabled = true
-
-[battery]
-disabled = true
-
-[time]
-disabled = true
-
-[username]
-disabled = true
-
-[hostname]
-disabled = true

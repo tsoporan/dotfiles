@@ -1,0 +1,73 @@
+# Black + electric yellow btop theme (matches Ghostty / Hyprland / waybar / herdr)
+
+# Main background (true black for OLED)
+theme[main_bg]="#000000"
+
+# Main text color
+theme[main_fg]="#e0e0e0"
+
+# Title color for boxes
+theme[title]="#e0e0e0"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#e6fb04"
+
+# Background/foreground of selected item in processes box
+theme[selected_bg]="#1a1a1a"
+theme[selected_fg]="#e6fb04"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#505050"
+
+# Graph text and misc process box accents
+theme[graph_text]="#909090"
+theme[meter_bg]="#202020"
+theme[proc_misc]="#8be9fd"
+
+# Box outline colors
+theme[cpu_box]="#303030"
+theme[mem_box]="#303030"
+theme[net_box]="#303030"
+theme[proc_box]="#303030"
+theme[div_line]="#202020"
+
+# Temperature graph colors
+theme[temp_start]="#50fa7b"
+theme[temp_mid]="#e6fb04"
+theme[temp_end]="#ff5555"
+
+# CPU graph colors
+theme[cpu_start]="#50fa7b"
+theme[cpu_mid]="#e6fb04"
+theme[cpu_end]="#ff5555"
+
+# Mem/Disk meters
+theme[free_start]="#26a269"
+theme[free_mid]="#50fa7b"
+theme[free_end]="#8be9fd"
+
+theme[cached_start]="#3584e4"
+theme[cached_mid]="#62a0ea"
+theme[cached_end]="#8be9fd"
+
+theme[available_start]="#e6fb04"
+theme[available_mid]="#ffb86c"
+theme[available_end]="#ff5555"
+
+theme[used_start]="#50fa7b"
+theme[used_mid]="#ffb86c"
+theme[used_end]="#ff5555"
+
+# Network graph colors
+theme[download_start]="#3584e4"
+theme[download_mid]="#62a0ea"
+theme[download_end]="#8be9fd"
+
+theme[upload_start]="#c061cb"
+theme[upload_mid]="#e6fb04"
+theme[upload_end]="#ff5555"
+
+# Process box gradient
+theme[process_start]="#50fa7b"
+theme[process_mid]="#e6fb04"
+theme[process_end]="#ff5555"

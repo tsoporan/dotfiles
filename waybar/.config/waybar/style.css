@@ -12,7 +12,7 @@
 }
 
 window#waybar {
-    background: #0a0a0a;
+    background: #000000;
     color: #c0c0c0;
 }
 
@@ -188,7 +188,7 @@ window#waybar {
 
 /* Tooltips */
 tooltip {
-    background: #0a0a0a;
+    background: #000000;
     border: 1px solid #202020;
     border-radius: 4px;
 }
