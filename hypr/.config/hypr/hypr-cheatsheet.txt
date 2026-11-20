@@ -9,9 +9,9 @@
 |                      | SUPER+Shift+r        | Reload Hyprland                                           |
 |                      | SUPER+Shift+e        | Exit Hyprland                                             |
 | Locking & Idle       | SUPER+Ctrl+l         | Manual Hyprlock                                           |
+| Display              | SUPER+Shift+d        | Toggle HDR on DP-1 (for games)                            |
 | Focus & Layout       | SUPER+f              | Toggle true fullscreen                                    |
 |                      | SUPER+a              | Maximize (keep bar)                                       |
-|                      | SUPER+Shift+a        | True fullscreen                                           |
 |                      | SUPER+s              | Toggle group (tabbed container)                           |
 |                      | SUPER+e              | Toggle dwindle split h/v                                  |
 |                      | SUPER+w              | Cycle group tabs forward                                  |
@@ -25,7 +25,6 @@
 |                      | SUPER+h/j/k/l        | Focus (vi keys: left/down/up/right)                       |
 | Window Movement      | SUPER+Shift+Arrows   | Move window (arrow keys)                                  |
 |                      | SUPER+Shift+h/j/k/l  | Move window (vi keys)                                     |
-| Window Resizing      | SUPER+Ctrl+h/j/k/l   | Resize window (vi keys)                                   |
 | Clipboard & Text     | SUPER+p              | Clipboard history (clipse)                                |
 |                      | SUPER+c              | Copy (Ctrl+C, or Ctrl+Insert in terminals)                |
 |                      | SUPER+v              | Paste (Ctrl+V, or Shift+Insert in terminals)              |

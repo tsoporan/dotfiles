@@ -87,30 +87,23 @@ local menu     = "wofi --show drun --lines 30"
 -- One handler so these start in the same order as the old exec-once lines.
 -- Each exec_cmd is its own shell, so the sleeps still cover the pkill race.
 hl.on("hyprland.start", function()
-    -- Authentication agent (polkit - needed for privilege escalation dialogs)
-    hl.exec_cmd("systemctl --user start hyprpolkitagent")
-
-    -- Kill stale processes from previous session before starting
-    hl.exec_cmd("pkill -x waybar; pkill -x hyprpaper; pkill -x hypridle; pkill -x hyprlock")
-    hl.exec_cmd("sleep 0.5 && waybar")
-    hl.exec_cmd("sleep 0.5 && hyprpaper")
-    hl.exec_cmd("sleep 1 && hypridle")
-
     -- Clipboard: clipse owns history. Do not run cliphist watchers or wl-clip-persist
     -- alongside it; they steal clipboard ownership and copies randomly vanish.
     hl.exec_cmd("~/.config/hypr/scripts/clipboard-listen.sh")
 
     -- GTK / portal session env (Wayland + dark + primary paste)
     hl.exec_cmd("~/.config/hypr/scripts/session-settings.sh")
-    -- herdr starts only after the environment is exported, so its panes inherit it.
-    -- swaync runs as its packaged user service, not a bare process: D-Bus also
-    -- starts that service on the first notification, and a second copy beside
-    -- a bare one fails and leaves the unit marked failed.
+
+    -- Export the compositor environment first so every user unit (including
+    -- herdr panes, portals, and services with ConditionEnvironment=WAYLAND_DISPLAY)
+    -- inherits WAYLAND_DISPLAY and HYPRLAND_INSTANCE_SIGNATURE.
+    -- waybar and hyprpaper carry drop-ins clearing their graphical-session.target
+    -- Requisite/Requires so they start cleanly without uwsm.
     hl.exec_cmd("dbus-update-activation-environment --systemd --all && { "
-        .. "systemctl --user reset-failed swaync.service; systemctl --user restart swaync.service; "
-        .. "systemctl --user start herdr.service; }")
-    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
-    hl.exec_cmd("systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland")
+        .. "systemctl --user reset-failed hyprpolkitagent.service swaync.service waybar.service hyprpaper.service hypridle.service; "
+        .. "systemctl --user restart hyprpolkitagent.service swaync.service waybar.service hyprpaper.service hypridle.service; "
+        .. "systemctl --user start herdr.service; "
+        .. "systemctl --user restart xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland; }")
 end)
 
 
@@ -122,7 +115,7 @@ end)
 
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
-hl.env("SSH_AUTH_SOCK", "/run/user/1000/gnupg/S.gpg-agent.ssh")
+hl.env("SSH_AUTH_SOCK", (os.getenv("XDG_RUNTIME_DIR") or "/run/user/1000") .. "/gnupg/S.gpg-agent.ssh")
 
 -- Wayland application compatibility
 hl.env("GDK_BACKEND", "wayland,x11,*")
@@ -301,9 +294,6 @@ hl.config({
     },
 })
 
--- Per-workspace layouts. See https://wiki.hypr.land/configuring/core/rules/
-hl.workspace_rule({ workspace = "9", layout = "dwindle" })
-
 -- Smart gaps - no gaps when only one window.
 -- Anonymous, so file order is the evaluation order.
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
@@ -321,8 +311,8 @@ hl.window_rule({
 
 hl.config({
     misc = {
-        force_default_wallpaper = -1,
-        disable_hyprland_logo   = false,
+        force_default_wallpaper = 0,
+        disable_hyprland_logo   = true,
         focus_on_activate       = true,
         key_press_enables_dpms  = true,
         mouse_move_enables_dpms = true,
@@ -395,21 +385,12 @@ hl.bind(mainMod .. " + SHIFT + space", hl.dsp.window.float({ action = "toggle" }
 hl.bind(mainMod .. " + space", hl.dsp.focus({ window = "floating" }))
 hl.bind(mainMod .. " + SHIFT + C", hl.dsp.window.center())
 
--- === WINDOW RESIZING ===
--- relative = true keeps the old resizeactive deltas. Without it, x and y are an absolute size.
-hl.bind(mainMod .. " + CTRL + H", hl.dsp.window.resize({ x = -50, y = 0,  relative = true }))
-hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.resize({ x = 0,   y = 50, relative = true }))
-hl.bind(mainMod .. " + CTRL + K", hl.dsp.window.resize({ x = 0,   y = -50, relative = true }))
--- Super+Ctrl+l also locks. Both binds stay, this one first. See SYSTEM CONTROLS.
-hl.bind(mainMod .. " + CTRL + L", hl.dsp.window.resize({ x = 50,  y = 0,  relative = true }))
-
 -- === LAYOUT SWITCHING (native groups + dwindle) ===
 hl.bind(mainMod .. " + S", hl.dsp.group.toggle())
 hl.bind(mainMod .. " + E", hl.dsp.layout("togglesplit"))
 hl.bind(mainMod .. " + W", hl.dsp.group.next())             -- forward through group tabs
 hl.bind(mainMod .. " + SHIFT + W", hl.dsp.group.prev())     -- backward through group tabs
 hl.bind(mainMod .. " + A", hl.dsp.window.fullscreen({ mode = "maximized" })) -- bar stays visible
-hl.bind(mainMod .. " + SHIFT + A", hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 
 -- === APPLICATIONS ===
 hl.bind(mainMod .. " + SHIFT + G", hl.dsp.exec_cmd("lutris"))
@@ -426,7 +407,6 @@ hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.move({ workspace = "special
 
 -- === SYSTEM CONTROLS ===
 hl.bind(mainMod .. " + SHIFT + R", hl.dsp.reload_config())
--- Second Super+Ctrl+l bind. The resize bind above still runs; this one locks.
 hl.bind(mainMod .. " + CTRL + L", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
 hl.bind(mainMod .. " + SHIFT + E", hl.dsp.exit())
 
