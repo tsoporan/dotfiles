@@ -5,8 +5,8 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# stow dry-run, GPG inventory, script checks
-check: check-stow check-gnupg check-scripts
+# stow dry-run, GPG/Claude inventory, script checks, tldraw typecheck
+check: check-stow check-gnupg check-claude check-scripts check-tldraw
 
 # Every package must stow without conflicts
 check-stow:
@@ -61,6 +61,46 @@ check-gnupg:
     fi
     echo "gnupg inventory: ok"
 
+# tldraw/.claude must contain only the tldraw skill, and ~/.claude must not fold into it
+check-claude:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    cd "{{ justfile_directory() }}"
+    failed=0
+    while IFS= read -r f; do
+      case "$f" in
+        tldraw/.claude/skills|tldraw/.claude/skills/tldraw|tldraw/.claude/skills/tldraw/*) ;;
+        *)
+          printf 'unexpected in tldraw/.claude: %s\n' "$f" >&2
+          failed=1
+          ;;
+      esac
+    done < <(find tldraw/.claude -mindepth 1 -print | sort)
+    if [[ -L "${HOME}/.claude" ]]; then
+      printf '~/.claude is a symlink (%s); must be a real directory\n' "$(readlink "${HOME}/.claude")" >&2
+      failed=1
+    elif [[ -d "${HOME}/.claude" ]]; then
+      pkg_abs=$(realpath tldraw/.claude)
+      while IFS= read -r -d '' link; do
+        dest=$(realpath -s -m "$(dirname "$link")/$(readlink "$link")")
+        case "$dest" in
+          "$pkg_abs"|"$pkg_abs"/*) ;;
+          *) continue ;;
+        esac
+        case "$link" in
+          "${HOME}/.claude/skills/tldraw"|"${HOME}/.claude/skills/tldraw"/*) ;;
+          *)
+            printf 'unexpected stow link under ~/.claude: %s -> %s\n' "$link" "$(readlink "$link")" >&2
+            failed=1
+            ;;
+        esac
+      done < <(find "${HOME}/.claude" -type l -print0)
+    fi
+    if (( failed )); then
+      exit 1
+    fi
+    echo "claude inventory: ok"
+
 # Shell scripts: bash -n, then shellcheck. Python scripts: syntax, then ruff.
 check-scripts:
     #!/usr/bin/env bash
@@ -97,6 +137,19 @@ check-scripts:
         echo "note: ruff not installed; checked python syntax only"
       fi
     fi
+
+# tldraw board app: install from the lockfile, then typecheck
+check-tldraw:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! command -v bun >/dev/null; then
+      echo "note: bun not installed; skipped tldraw typecheck"
+      exit 0
+    fi
+    cd "{{ justfile_directory() }}/tldraw/.local/share/tldraw"
+    bun install --frozen-lockfile --silent
+    bun run --silent typecheck
+    echo "tldraw typecheck: ok"
 
 # Pending antidote + plugin git pulls. No changes.
 zsh-plugins-outdated:

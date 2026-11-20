@@ -1,4 +1,12 @@
 .claude/
+# Only the tldraw skill is tracked under tldraw/.claude. If ~/.claude was folded
+# into this package by stow, Claude's own state (credentials too) must stay ignored.
+!tldraw/.claude/
+tldraw/.claude/*
+!tldraw/.claude/skills/
+tldraw/.claude/skills/*
+!tldraw/.claude/skills/tldraw/
+tldraw/.local/share/tldraw/node_modules/
 *.bak
 *.bak.*
 

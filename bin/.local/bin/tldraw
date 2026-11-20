@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# tldraw: a live tldraw board shared by Titus and Claude. `tldraw help` for usage.
+# The app is the `tldraw` stow package, linked at ~/.local/share/tldraw.
+set -euo pipefail
+
+app="$HOME/.local/share/tldraw"
+if [[ ! -d "$app/node_modules" ]]; then
+  (cd "$app" && bun install --frozen-lockfile >&2)
+fi
+exec bun "$app/cli.ts" "$@"

@@ -1,3 +1,5 @@
 --target=$HOME
+--no-folding
+--ignore=node_modules
 --ignore=\.bak
 --ignore=\.zshrc\.local$

@@ -44,6 +44,7 @@ APP_MIN_MB = 150
 EXPECTED_DETACHED = (
     re.compile(r"claude-notify --wait-click"),
     re.compile(r"^ssh: .*\[mux\]$"),
+    re.compile(r"tldraw/server\.ts"),
 )
 # Listeners that are part of something already shown elsewhere.
 IGNORED_LISTENERS = {"claude", "rootlesskit", "docker-proxy", "slirp4netns"}
