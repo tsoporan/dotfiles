@@ -12,8 +12,9 @@
 # Two side outputs, both for herdr:
 #   - inside a herdr pane, the context size goes on the agent's sidebar row as
 #     the $ctx token, and $handoff is set once it is time to hand off;
-#   - the usage figures go to $XDG_RUNTIME_DIR/claude-statusline/usage, which
-#     herdr's tab bar shows.
+#   - the usage figures go to $XDG_RUNTIME_DIR/claude-statusline/usage.<account>
+#     (one file per account, so claude and claude-work don't overwrite each
+#     other), and all of them, labelled, to .../usage, which herdr's tab bar shows.
 
 set -uo pipefail
 
@@ -35,6 +36,9 @@ if [[ -z $fields ]]; then
   exit 0
 fi
 IFS=$'\t' read -r model effort tokens five_hour seven_day dir <<<"$fields"
+[[ $tokens =~ ^[0-9]+$ ]] || tokens=0
+[[ $five_hour =~ ^[0-9]+$ ]] || five_hour="-"
+[[ $seven_day =~ ^[0-9]+$ ]] || seven_day="-"
 
 paint() { printf '\033[%sm%s\033[0m' "$1" "$2"; }
 # level <value> <warn> <crit>: grey, yellow or red.
@@ -70,7 +74,29 @@ printf '%s' "$line"
   if [[ -n $usage ]]; then
     usage_dir=${XDG_RUNTIME_DIR:-/tmp}/claude-statusline
     mkdir -p "$usage_dir"
-    printf '%s' "$usage" >"$usage_dir/usage.$$" && mv "$usage_dir/usage.$$" "$usage_dir/usage"
+    # Usage is per account, and claude-work runs with CLAUDE_CONFIG_DIR=~/.claude-work:
+    # name the account after its config folder ("me" for ~/.claude, "work" for ~/.claude-work).
+    account=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+    account=${account%/}
+    account=${account##*/.claude}
+    account=${account#-}
+    account=${account:-me}
+    (
+      flock 9
+      shopt -s nullglob
+      printf '%s' "$usage" >"$usage_dir/.tmp.$$" && mv "$usage_dir/.tmp.$$" "$usage_dir/usage.$account"
+      # Drop accounts untouched for 2 hours so stale figures leave the tab bar.
+      find "$usage_dir" -maxdepth 1 -name 'usage.*' -mmin +120 -delete
+      # Rebuild the line herdr shows from every active account's file, labelled
+      # once there is more than one.
+      files=("$usage_dir"/usage.*)
+      combined=""
+      for f in "${files[@]}"; do
+        ((${#files[@]} > 1)) && label="${f##*/usage.} " || label=""
+        combined+="${combined:+   }$label$(<"$f")"
+      done
+      printf '%s' "$combined" >"$usage_dir/.tmp.$$" && mv "$usage_dir/.tmp.$$" "$usage_dir/usage"
+    ) 9>"$usage_dir/.lock"
   fi
   if [[ ${HERDR_ENV:-} == 1 && -n ${HERDR_PANE_ID:-} ]]; then
     report=(herdr pane report-metadata "$HERDR_PANE_ID" --source claude-statusline --token "ctx=$ctx")

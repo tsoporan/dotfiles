@@ -145,9 +145,19 @@ cmd_poll() {
     done <"$state_dir/$session.prs"
     unset last
 
+    if ((${#keep[@]} == 0)); then
+      rm -f "$state_dir/$session.prs" "$state_dir/$session.state"
+      timeout 5 herdr pane report-metadata "$pane" --source herdr-pr \
+        --clear-token pr --clear-token pr_bad --clear-token pr_done >/dev/null || true
+      continue
+    fi
     printf '%s\n' "${keep[@]}" >"$state_dir/$session.prs.tmp" && mv "$state_dir/$session.prs.tmp" "$state_dir/$session.prs"
     ((unreachable)) && continue
-    printf '%s\n' "${lines[@]}" >"$state_dir/$session.state"
+    if ((${#lines[@]})); then
+      printf '%s\n' "${lines[@]}" >"$state_dir/$session.state.tmp" && mv "$state_dir/$session.state.tmp" "$state_dir/$session.state"
+    else
+      rm -f "$state_dir/$session.state"
+    fi
 
     # Three tokens so each group can have its own color in the sidebar rows.
     local args=(--source herdr-pr) t value
