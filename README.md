@@ -23,6 +23,7 @@ The machine itself (hardware, LUKS2 disk encryption with a YubiKey, maintenance 
 | `bat` | Syntax-highlighted cat |
 | `bin` | Custom utility scripts |
 | `btop` | System monitor |
+| `tldraw` | Live tldraw whiteboard shared with Claude (app + `tldraw` skill) |
 | `clipse` | Clipse clipboard manager (Hyprland autostarts `clipse -listen`) |
 | `eza` | `ls` replacement; directories use Adwaita blue, not eza’s default purple |
 | `ghostty` | Terminal emulator |
@@ -38,7 +39,7 @@ The machine itself (hardware, LUKS2 disk encryption with a YubiKey, maintenance 
 | `satty` | Screenshot annotation (Enter copies + saves) |
 | `starship` | Shell prompt theme |
 | `swaync` | Notification center |
-| `systemd` | User services (syncthing, wallpaper-rotate, herdr server started by Hyprland) |
+| `systemd` | User services (`wallpaper-rotate`, `herdr`, `herdr-pr`) and `waybar`/`hyprpaper` drop-ins |
 | `wallpapers` | Desktop wallpapers |
 | `waybar` | Status bar |
 | `wofi` | App launcher + window switcher theme |
@@ -60,7 +61,7 @@ Machine-local zsh overrides go in `~/.zshrc.local` (not git).
 
 ### Claude Code notifications
 
-`claude-notify` (in `bin`) sends a desktop notification when a Claude Code turn that ran a minute or longer finishes, or when Claude needs permission. The title is the Zellij session and the Claude session name; the body is the first line of Claude's reply. Clicking it, or pressing Super+U, focuses the window and the Zellij tab and pane, or herdr pane, that Claude runs in. It also renames the Zellij tab to the session name.
+`claude-notify` (in `bin`) sends a desktop notification when a Claude Code turn that ran a minute or longer finishes, or when Claude needs permission. The title is the Zellij session and the Claude session name; the body is the first line of Claude's reply. Clicking it, or pressing Super+U, focuses the window and the Zellij tab and pane, or herdr pane, that Claude runs in. It also renames the Zellij or herdr tab to the session name, unless you named the tab yourself.
 
 The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
@@ -76,6 +77,8 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
 ```
 
 `preferredNotifChannel` turns off Claude Code's own terminal notification, which would otherwise arrive as a duplicate.
+
+While the screen is locked, the same events also go to the phone through [ntfy](https://ntfy.sh): "Finished" or "Needs you" (high priority), titled with the session name. Claude's reply isn't sent, since the ntfy server sees every message. The topic URL lives in `~/.config/claude-notify/ntfy`, outside git, because anyone who knows it can read the pushes. Subscribe to that URL in the ntfy app.
 
 ### Claude Code status line
 
@@ -125,6 +128,24 @@ Memory is PSS, so the column adds up. Enter shows the process tree; Ctrl-X kills
 
 `claude-next <name> <prompt-file>` (in `bin`) opens a new herdr or Zellij tab in the current directory with Claude already working on the prompt, and leaves focus where it was. Handoffs end with it.
 
+### tldraw: a whiteboard shared with Claude
+
+`tldraw` (in `bin`, with the app in the `tldraw` package) opens a [tldraw](https://tldraw.dev) board in the default browser. Claude draws on it and Titus edits by hand. A small Bun server on `localhost:4747` serves the page and relays JavaScript from the CLI to the open tab over a WebSocket. The tab autosaves the board to a `.tldr` file, by default `docs/diagrams/<name>.tldr` in the current repo, which tldraw.com and the VS Code tldraw extension can also open.
+
+```bash
+tldraw open auth-flow                  # opens ./docs/diagrams/auth-flow.tldr in the browser
+tldraw exec auth-flow draw.js          # run JS against the tab (or pipe it on stdin)
+tldraw read auth-flow                  # shapes, arrows, selection as JSON
+tldraw shot auth-flow out.png          # PNG of the board
+tldraw status / tldraw stop
+```
+
+The `tldraw` skill (stowed into `~/.claude/skills/tldraw`) tells Claude when to reach for it (architecture, statecharts, flows, brainstorms), how to use the `board` helpers in `web/board.ts` (bound arrows, frames, ELK auto-layout), and to screenshot its work before describing it. It's named `tldraw` rather than "canvas" so a session doesn't confuse it with Claude's Artifacts, and its description says "canvas" and "whiteboard" mean this board unless Titus says "artifact".
+
+Every API call needs an `X-Tldraw` header, the Host must be `localhost` or `127.0.0.1`, and board paths must be absolute `.tldr` files, so another web page can't drive the board or write files through it, even via DNS rebinding. The server log is `~/.local/state/tldraw/server.log`. tldraw shows a small "license for production" note, which is expected on localhost.
+
+`.stowrc` sets `--no-folding` (and `just check` enforces it via `check-claude`), so `stow tldraw` links only the skill files under `~/.claude/skills/tldraw/` and never folds `~/.claude` into this repo.
+
 ## Usage
 
 Run commands from the repo root (`.stowrc` sets `--target=$HOME`).
@@ -154,7 +175,7 @@ Super+1 through Super+0 focus workspaces 1 through 10. Pressing the key for the 
 
 Super+Shift+1 through Super+0 moves the focused window (`hl.dsp.window.move({ workspace = N })`).
 
-swaync runs as its packaged user service, which Hyprland restarts at login. Starting it as a bare process raced with D-Bus, which also starts the service on the first notification, and the losing copy left the unit marked failed.
+`swaync`, `waybar`, `hyprpaper`, `hypridle`, and `hyprpolkitagent` all run as their packaged systemd user services, restarted by Hyprland after `dbus-update-activation-environment`. Starting `swaync` as a bare process raced with D-Bus, and systemd-managed `waybar`/`hyprpaper`/`hypridle` surface crashes in the failed-units bar module. Drop-ins in `systemd` clear the `graphical-session.target` requirement on `waybar` and `hyprpaper` so they start cleanly without `uwsm`.
 
 ### Waybar
 
