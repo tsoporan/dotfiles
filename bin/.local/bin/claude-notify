@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Desktop notifications and Zellij tab names for Claude Code hooks
+# Desktop notifications and Zellij/herdr tab names for Claude Code hooks
 # (wired up in ~/.claude/settings.json).
 #
 #   UserPromptSubmit  records when the turn started and which window it was
@@ -16,8 +16,8 @@
 # and dismisses it; press again to walk back through older ones. Sending a
 # prompt in a session dismisses that session's notifications.
 #
-# On UserPromptSubmit and Stop the Zellij tab is renamed to the session name,
-# unless the tab was renamed by hand.
+# On UserPromptSubmit and Stop the Zellij or herdr tab is renamed to the
+# session name, unless the tab was renamed by hand.
 #
 # Never writes to stdout: UserPromptSubmit stdout is injected into the prompt.
 
@@ -45,6 +45,15 @@ pending_drop() {
   ) 9>"$state_dir/lock"
 }
 
+# Pop and print the newest pending line atomically.
+pending_pop() {
+  (
+    flock 9 && [[ -s $pending ]] || exit 0
+    tail -n1 "$pending"
+    sed '$d' "$pending" >"$pending.tmp" && mv "$pending.tmp" "$pending"
+  ) 9>"$state_dir/lock"
+}
+
 close_notification() {
   gdbus call --session --dest org.freedesktop.Notifications \
     --object-path /org/freedesktop/Notifications \
@@ -53,7 +62,11 @@ close_notification() {
 
 # focus_target <window> <zellij session> <tab id> <pane id> <herdr pane> <herdr socket>
 focus_target() {
-  [[ -n $1 ]] && hyprctl dispatch "hl.dsp.focus({ window = \"address:$1\" })"
+  local window=$1
+  if [[ -z $window && -n ${5:-} ]]; then
+    window=$(hyprctl clients -j 2>/dev/null | jq -r 'first(.[] | select(.title | startswith("herdr: ")) | .address) // empty')
+  fi
+  [[ -n $window ]] && hyprctl dispatch "hl.dsp.focus({ window = \"address:$window\" })"
   if [[ -n $2 && -n $3 ]]; then
     zellij --session "$2" action go-to-tab-by-id "$3"
     zellij --session "$2" action focus-pane-id "terminal_$4"
@@ -84,13 +97,12 @@ case ${1:-} in
     exit 0
     ;;
   --jump)
-    entry=$(tail -n1 "$pending" 2>/dev/null)
+    entry=$(pending_pop)
     if [[ -z $entry ]]; then
       notify-send -t 1500 -a "Claude Code" "No Claude notifications waiting"
       exit 0
     fi
     IFS=$sep read -r id _ window zj_session tab_id pane_id herdr_pane herdr_socket <<<"$entry"
-    pending_drop 1 "$id"
     focus_target "$window" "$zj_session" "$tab_id" "$pane_id" "$herdr_pane" "$herdr_socket"
     close_notification "$id"
     exit 0
@@ -127,8 +139,10 @@ zellij_tab_id() {
 }
 
 # Rename the tab to the session name. Leaves alone a tab whose name is neither
-# Zellij's default ("Tab #3") nor the name this script last gave it.
+# the default (Zellij's "Tab #3", herdr's "3") nor the name this script last
+# gave it.
 rename_tab() {
+  [[ ${HERDR_ENV:-} == 1 && -n ${HERDR_PANE_ID:-} ]] && { rename_herdr_tab; return; }
   local tab_id name current
   tab_id=$(zellij_tab_id)
   name=$(session_name | cut -c1-32)
@@ -141,8 +155,25 @@ rename_tab() {
   fi
 }
 
+# herdr: shorter, since every tab shares one bar; long names end at a word.
+rename_herdr_tab() {
+  local tab_id name current
+  name=$(session_name)
+  ((${#name} > 24)) && { name=${name:0:23}; name="${name% *}…"; }
+  tab_id=$(herdr pane get "$HERDR_PANE_ID" 2>/dev/null | jq -r '.result.pane.tab_id // empty')
+  [[ -n $tab_id && -n $name ]] || return 0
+  current=$(herdr tab get "$tab_id" 2>/dev/null | jq -r '.result.tab.label // empty')
+  [[ $current == "$name" ]] && return 0
+  if [[ $current =~ ^[0-9]+$ || ( -r $state.tab && $current == "$(<"$state.tab")" ) ]]; then
+    herdr tab rename "$tab_id" "$name" >/dev/null && printf '%s' "$name" >"$state.tab"
+  fi
+}
+
 # The focused window, if it is a terminal: where the prompt was just typed.
+# Skipped over SSH (e.g. Tailscale/Termux into herdr) so an unrelated local
+# terminal is not recorded; focus_target falls back to the "herdr: " window.
 remember_window() {
+  [[ -z ${SSH_CONNECTION:-} ]] || return 0
   local win
   win=$(hyprctl activewindow -j 2>/dev/null) || return 0
   [[ $(jq -r '.class // empty' <<<"$win") =~ ^(com\.mitchellh\.ghostty|Alacritty|kitty|foot|org\.codeberg\.dnkl\.foot)$ ]] || return 0
@@ -166,6 +197,20 @@ send() {
   setsid -f "$0" --wait-click "$session_id" "$title" "$1" "$window" \
     "${ZELLIJ_SESSION_NAME:-}" "$(zellij_tab_id)" "${ZELLIJ_PANE_ID:-}" \
     "$herdr_pane" "${HERDR_SOCKET_PATH:-}" </dev/null 2>/dev/null
+}
+
+# While the screen is locked, also push to the phone through ntfy. The topic
+# URL lives in ~/.config/claude-notify/ntfy (not in git: anyone with it can
+# read the pushes). Only the session name and state are sent, never Claude's
+# reply, since ntfy's server sees every message.
+#   push_phone <state> [priority]
+push_phone() {
+  local conf=${XDG_CONFIG_HOME:-$HOME/.config}/claude-notify/ntfy name
+  [[ -r $conf ]] && pidof -q hyprlock || return 0
+  name=$(session_name)
+  [[ -n $name ]] || { name=$(field .cwd); name=${name##*/}; }
+  setsid -f xh -q -I --timeout 10 --raw "$1" POST "$(<"$conf")" \
+    "Title:$name" "Priority:${2:-default}" Tags:robot </dev/null >/dev/null 2>&1
 }
 
 # The user is back in this session: close its notifications.
@@ -196,10 +241,12 @@ case $event in
     fi
     body=$(field .last_assistant_message | first_line)
     send "${body:-Finished}"
+    push_phone "Finished"
     ;;
   Notification)
     [[ $(field .notification_type) == idle_prompt ]] && exit 0
     send "$(field .message | first_line)"
+    push_phone "Needs you" high
     ;;
 esac
 exit 0

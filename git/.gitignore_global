@@ -15,3 +15,5 @@ __pycache__
 # .git/info/exclude instead (keeps the shared .gitignore clean for teammates).
 **/_local/
 *.local.*
+
+**/.claude/.cc-writes/

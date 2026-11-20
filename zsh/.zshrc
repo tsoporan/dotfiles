@@ -183,7 +183,7 @@ eval "$(starship init zsh)"
 # Local: use gpg-agent with SSH support
 # ------------------------------------------------------------------------------
 export GPG_TTY=${TTY:-$(tty)}
-if [[ -S "$HOME/.ssh/agent-forward.sock" ]] && [[ -n "$ZELLIJ" || -n "$ZELLIJ_SESSION_NAME" ]]; then
+if [[ -S "$HOME/.ssh/agent-forward.sock" ]] && [[ -n "$ZELLIJ" || -n "$ZELLIJ_SESSION_NAME" || -n "$HERDR_ENV" ]]; then
     export SSH_AUTH_SOCK="$HOME/.ssh/agent-forward.sock"
 elif [[ -z "$SSH_AUTH_SOCK" ]] || [[ "$SSH_AUTH_SOCK" == *"gpg-agent"* ]]; then
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
