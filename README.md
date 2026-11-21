@@ -78,7 +78,16 @@ The hooks live in `~/.claude/settings.json`, which is not in this repo:
 
 `preferredNotifChannel` turns off Claude Code's own terminal notification, which would otherwise arrive as a duplicate.
 
-While the screen is locked, the same events also go to the phone through [ntfy](https://ntfy.sh): "Finished" or "Needs you" (high priority), titled with the session name. Claude's reply isn't sent, since the ntfy server sees every message. The topic URL lives in `~/.config/claude-notify/ntfy`, outside git, because anyone who knows it can read the pushes. Subscribe to that URL in the ntfy app.
+### herdr from the phone
+
+[herdr-mobile-relay](https://github.com/0cv/herdr-mobile-relay), a community herdr plugin, puts every herdr agent in a phone web app: status, output, prompts, approvals, and push notifications when an agent needs you. It isn't in this repo; herdr installs it:
+
+1. Turn on MagicDNS and HTTPS certificates in the tailnet's DNS settings.
+2. `sudo tailscale set --operator=$USER` once, so Tailscale Serve doesn't need root.
+3. `herdr plugin install 0cv/herdr-mobile-relay`, then **Tailscale → Always on Tailscale**. This installs the `herdr-mobile-relay` systemd user service on 127.0.0.1:8375 and serves it to the tailnet only on HTTPS port 8443.
+4. **Tailscale → Choose Phone App and Show QR**, pick the app served by this computer, and scan the QR on the phone. The QR holds a one-use pairing invite.
+
+A controller phone can type into any herdr pane, so treat it like an SSH key. Updates are only ever started from the phone. To remove it: `herdr plugin action invoke uninstall --plugin herdr-mobile-relay.events`, then check `tailscale serve status`.
 
 ### Claude Code status line
 

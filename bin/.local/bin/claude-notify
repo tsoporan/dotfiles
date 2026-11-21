@@ -199,20 +199,6 @@ send() {
     "$herdr_pane" "${HERDR_SOCKET_PATH:-}" </dev/null 2>/dev/null
 }
 
-# While the screen is locked, also push to the phone through ntfy. The topic
-# URL lives in ~/.config/claude-notify/ntfy (not in git: anyone with it can
-# read the pushes). Only the session name and state are sent, never Claude's
-# reply, since ntfy's server sees every message.
-#   push_phone <state> [priority]
-push_phone() {
-  local conf=${XDG_CONFIG_HOME:-$HOME/.config}/claude-notify/ntfy name
-  [[ -r $conf ]] && pidof -q hyprlock || return 0
-  name=$(session_name)
-  [[ -n $name ]] || { name=$(field .cwd); name=${name##*/}; }
-  setsid -f xh -q -I --timeout 10 --raw "$1" POST "$(<"$conf")" \
-    "Title:$name" "Priority:${2:-default}" Tags:robot </dev/null >/dev/null 2>&1
-}
-
 # The user is back in this session: close its notifications.
 dismiss_session() {
   local id
@@ -241,12 +227,10 @@ case $event in
     fi
     body=$(field .last_assistant_message | first_line)
     send "${body:-Finished}"
-    push_phone "Finished"
     ;;
   Notification)
     [[ $(field .notification_type) == idle_prompt ]] && exit 0
     send "$(field .message | first_line)"
-    push_phone "Needs you" high
     ;;
 esac
 exit 0
