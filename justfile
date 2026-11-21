@@ -5,8 +5,8 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# stow dry-run, GPG/Claude inventory, script checks, tldraw typecheck
-check: check-stow check-gnupg check-claude check-scripts check-tldraw
+# stow dry-run, GPG/agent skill inventory, script checks, tldraw typecheck
+check: check-stow check-gnupg check-skills check-scripts check-tldraw
 
 # Every package must stow without conflicts
 check-stow:
@@ -61,45 +61,47 @@ check-gnupg:
     fi
     echo "gnupg inventory: ok"
 
-# tldraw/.claude must contain only the tldraw skill, and ~/.claude must not fold into it
-check-claude:
+# tldraw/.{agents,claude} must contain only the tldraw skill, and ~/.{agents,claude} must not fold into it
+check-skills:
     #!/usr/bin/env bash
     set -euo pipefail
     cd "{{ justfile_directory() }}"
     failed=0
-    while IFS= read -r f; do
-      case "$f" in
-        tldraw/.claude/skills|tldraw/.claude/skills/tldraw|tldraw/.claude/skills/tldraw/*) ;;
-        *)
-          printf 'unexpected in tldraw/.claude: %s\n' "$f" >&2
-          failed=1
-          ;;
-      esac
-    done < <(find tldraw/.claude -mindepth 1 -print | sort)
-    if [[ -L "${HOME}/.claude" ]]; then
-      printf '~/.claude is a symlink (%s); must be a real directory\n' "$(readlink "${HOME}/.claude")" >&2
-      failed=1
-    elif [[ -d "${HOME}/.claude" ]]; then
-      pkg_abs=$(realpath tldraw/.claude)
-      while IFS= read -r -d '' link; do
-        dest=$(realpath -s -m "$(dirname "$link")/$(readlink "$link")")
-        case "$dest" in
-          "$pkg_abs"|"$pkg_abs"/*) ;;
-          *) continue ;;
-        esac
-        case "$link" in
-          "${HOME}/.claude/skills/tldraw"|"${HOME}/.claude/skills/tldraw"/*) ;;
+    for dir in .agents .claude; do
+      while IFS= read -r f; do
+        case "$f" in
+          "tldraw/${dir}/skills"|"tldraw/${dir}/skills/tldraw"|"tldraw/${dir}/skills/tldraw"/*) ;;
           *)
-            printf 'unexpected stow link under ~/.claude: %s -> %s\n' "$link" "$(readlink "$link")" >&2
+            printf 'unexpected in tldraw/%s: %s\n' "$dir" "$f" >&2
             failed=1
             ;;
         esac
-      done < <(find "${HOME}/.claude" -type l -print0)
-    fi
+      done < <(find "tldraw/${dir}" -mindepth 1 -print | sort)
+      if [[ -L "${HOME}/${dir}" ]]; then
+        printf '~/%s is a symlink (%s); must be a real directory\n' "$dir" "$(readlink "${HOME}/${dir}")" >&2
+        failed=1
+      elif [[ -d "${HOME}/${dir}" ]]; then
+        pkg_abs=$(realpath "tldraw/${dir}")
+        while IFS= read -r -d '' link; do
+          dest=$(realpath -s -m "$(dirname "$link")/$(readlink "$link")")
+          case "$dest" in
+            "$pkg_abs"|"$pkg_abs"/*) ;;
+            *) continue ;;
+          esac
+          case "$link" in
+            "${HOME}/${dir}/skills/tldraw"|"${HOME}/${dir}/skills/tldraw"/*) ;;
+            *)
+              printf 'unexpected stow link under ~/%s: %s -> %s\n' "$dir" "$link" "$(readlink "$link")" >&2
+              failed=1
+              ;;
+          esac
+        done < <(find "${HOME}/${dir}" -type l -print0)
+      fi
+    done
     if (( failed )); then
       exit 1
     fi
-    echo "claude inventory: ok"
+    echo "skills inventory: ok"
 
 # Shell scripts: bash -n, then shellcheck. Python scripts: syntax, then ruff.
 check-scripts:

@@ -140,11 +140,11 @@ tldraw shot auth-flow out.png          # PNG of the board
 tldraw status / tldraw stop
 ```
 
-The `tldraw` skill (stowed into `~/.claude/skills/tldraw`) tells Claude when to reach for it (architecture, statecharts, flows, brainstorms), how to use the `board` helpers in `web/board.ts` (bound arrows, frames, ELK auto-layout), and to screenshot its work before describing it. It's named `tldraw` rather than "canvas" so a session doesn't confuse it with Claude's Artifacts, and its description says "canvas" and "whiteboard" mean this board unless Titus says "artifact".
+The `tldraw` skill (stowed into `~/.agents/skills/tldraw` and linked into `~/.claude/skills/tldraw`) tells agents when to reach for it (architecture, statecharts, flows, brainstorms), how to use the `board` helpers in `web/board.ts` (bound arrows, frames, ELK auto-layout), and to screenshot their work before describing it. It's named `tldraw` rather than "canvas" so a session doesn't confuse it with Claude's Artifacts, and its description says "canvas" and "whiteboard" mean this board unless Titus says "artifact".
 
 Every API call needs an `X-Tldraw` header, the Host must be `localhost` or `127.0.0.1`, and board paths must be absolute `.tldr` files, so another web page can't drive the board or write files through it, even via DNS rebinding. The server log is `~/.local/state/tldraw/server.log`. tldraw shows a small "license for production" note, which is expected on localhost.
 
-`.stowrc` sets `--no-folding` (and `just check` enforces it via `check-claude`), so `stow tldraw` links only the skill files under `~/.claude/skills/tldraw/` and never folds `~/.claude` into this repo.
+`.stowrc` sets `--no-folding` (and `just check` enforces it via `check-skills`), so `stow tldraw` links only the skill files under `~/.agents/skills/tldraw/` and `~/.claude/skills/tldraw/` and never folds `~/.agents` or `~/.claude` into this repo.
 
 ## Usage
 
